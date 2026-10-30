@@ -3,687 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista della Spesa</title>
+    <title>Spesa Giornaliera The Galleon Pizzeria</title>
+    <!-- Tailwind CSS per una grafica moderna, colorata e pulita -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --accent-color: #27ae60;
-            --whatsapp-color: #25d366;
-            --danger-color: #e74c3c;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --border-color: #bdc3c7;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
         body {
-            font-family: Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: #333;
-            margin: 0;
-            padding: 10px;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 8px;
-        }
-
-        /* Sezione Dati Compilatore Compatta */
-        .meta-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 12px;
-            background: #eef2f3;
-            padding: 8px 10px;
-            border-radius: 6px;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .meta-field {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            min-width: 130px;
-        }
-
-        .meta-field label {
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-bottom: 2px;
-            color: var(--primary-color);
-        }
-
-        .meta-field input {
-            padding: 5px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 0.85rem;
-        }
-
-        /* Sezione Aggiunta Prodotti */
-        .add-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
-            background: #fff;
-            padding: 8px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-        }
-
-        .add-section input, .add-section select {
-            padding: 5px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 0.85rem;
-            flex: 1;
-            min-width: 120px;
-        }
-
-        button {
-            cursor: pointer;
-            padding: 6px 10px;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            transition: opacity 0.2s;
-        }
-
-        button:hover {
-            opacity: 0.85;
-        }
-
-        .btn-add {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .btn-safe-mode {
-            background-color: #f39c12;
-            color: white;
-            font-size: 0.75rem;
-            padding: 6px 10px;
-        }
-
-        .btn-mode {
-            background-color: #2980b9;
-            color: white;
-        }
-
-        .btn-mode.active {
-            background-color: #c0392b;
-        }
-
-        /* Griglia a 4 colonne stile foglio cartaceo originale */
-        .columns-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        @media (max-width: 768px) {
-            .columns-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .columns-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .column-box {
-            border: 1px solid var(--primary-color);
-            border-radius: 4px;
-            background: #fff;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .column-header {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            padding: 6px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-
-        .items-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-grow: 1;
-        }
-
-        .item-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 5px 8px;
-            border-bottom: 1px solid #eee;
-            font-size: 0.85rem;
-            transition: background 0.2s;
-        }
-
-        .item-row:last-child {
-            border-bottom: none;
-        }
-
-        .item-row.selected {
-            background-color: #e8f8f5;
-            font-weight: bold;
-        }
-
-        .item-info {
-            display: flex;
-            align-items: center;
-            flex-grow: 1;
-            cursor: pointer;
-        }
-
-        .item-name {
-            flex-grow: 1;
-            word-break: break-word;
-        }
-
-        .item-qty {
-            width: 36px;
-            padding: 2px;
-            border: 1px solid var(--border-color);
-            border-radius: 3px;
-            text-align: center;
-            font-size: 0.8rem;
-            margin-left: 5px;
-        }
-
-        .temp-badge {
-            font-size: 0.6rem;
-            background: #e67e22;
-            color: white;
-            padding: 1px 3px;
-            border-radius: 3px;
-            margin-left: 4px;
-            text-transform: uppercase;
-        }
-
-        .btn-delete {
-            background: none;
-            border: none;
-            color: var(--danger-color);
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
-            padding: 0 4px;
-            display: none;
-        }
-
-        .safe-mode-active .btn-delete {
-            display: inline-block;
-        }
-
-        /* Sezione Modalità Spesa */
-        .shopping-mode-container {
-            display: none;
-            background: #eafaf1;
-            border: 2px solid var(--accent-color);
-            border-radius: 6px;
-            padding: 10px;
-            margin-bottom: 15px;
-        }
-
-        .shopping-mode-container h3 {
-            margin: 0 0 8px 0;
-            color: #1e8449;
-            font-size: 0.95rem;
-            text-align: center;
-        }
-
-        .shopping-list-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 6px;
-        }
-
-        .shopping-item-card {
-            background: white;
-            border: 1px solid #a9dfbf;
-            padding: 6px 10px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .shopping-item-card.done {
-            background: #d4efdf;
-            text-decoration: line-through;
-            color: #7f8c8d;
-        }
-
-        /* Pulsanti d'azione finali */
-        .actions-footer {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            border-top: 1px solid #ddd;
-            padding-top: 12px;
-        }
-
-        .btn-whatsapp {
-            background-color: var(--whatsapp-color);
-            color: white;
-            font-size: 0.95rem;
-            padding: 8px 16px;
-        }
-
-        .btn-history {
-            background-color: #7f8c8d;
-            color: white;
-            font-size: 0.85rem;
-            padding: 8px 12px;
-        }
-
-        .history-section {
-            margin-top: 15px;
-            border-top: 2px dashed #ccc;
-            padding-top: 10px;
-            display: none;
-            font-size: 0.85rem;
+            font-family: 'Fredoka', cursive, sans-serif;
+            background-color: #f3f4f6;
         }
     </style>
 </head>
-<body>
+<body class="bg-amber-50 text-slate-800 min-h-screen flex flex-col">
 
-<div class="container" id="mainContainer">
-    <h1>Lista della Spesa</h1>
-
-    <!-- Dati Compilatore -->
-    <div class="meta-section">
-        <div class="meta-field">
-            <label for="buyerName">Chi fa la spesa:</label>
-            <input type="text" id="buyerName" placeholder="Tuo nome...">
+    <!-- Header Compatto -->
+    <header class="bg-red-600 text-white shadow-md py-3 px-4 flex flex-wrap justify-between items-center">
+        <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+            🍕 Spesa Giornaliera - The Galleon Pizzeria
+        </h1>
+        <div id="userInfoHeader" class="text-sm bg-red-700 px-3 py-1 rounded-full font-semibold hidden">
+            <span id="displayDate"></span> | <span id="displayAuthor"></span>
+            <button onclick="resetSession()" class="ml-2 bg-white text-red-600 px-2 py-0.5 rounded text-xs hover:bg-amber-100">Modifica</button>
         </div>
-        <div class="meta-field">
-            <label for="buyerDate">Data:</label>
-            <input type="date" id="buyerDate">
-        </div>
-        <div style="display: flex; align-items: flex-end; gap: 5px;">
-            <button type="button" class="btn-mode" id="btnModeToggle" onclick="toggleShoppingMode()">🛒 Spesa</button>
-            <button type="button" class="btn-safe-mode" id="btnToggleSafe" onclick="toggleSafeMode()">🔒 Gestione</button>
-        </div>
-    </div>
+    </header>
 
-    <!-- Aggiunta Prodotti -->
-    <div class="add-section">
-        <input type="text" id="newProductName" placeholder="Nome nuovo prodotto...">
-        <select id="newProductCol">
-            <option value="0">Colonna 1</option>
-            <option value="1">Colonna 2</option>
-            <option value="2">Colonna 3</option>
-            <option value="3">Colonna 4</option>
-        </select>
-        <select id="newProductType">
-            <option value="fixed">Fisso</option>
-            <option value="temp">Solo Oggi</option>
-        </select>
-        <button type="button" class="btn-add" onclick="addNewProduct()">+ Aggiungi</button>
-    </div>
+    <!-- Contenitore Principale -->
+    <main class="flex-grow container mx-auto p-4 max-w-4xl">
 
-    <!-- SEZIONE SPESA RAPIDA -->
-    <div class="shopping-mode-container" id="shoppingModeContainer">
-        <h3>Prodotti Selezionati da Acquistare (Tocca per spuntare)</h3>
-        <div class="shopping-list-grid" id="shoppingListGrid"></div>
-    </div>
+        <!-- SEZIONE 1: LOGIN / CONFIGURAZIONE GIORNALIERA -->
+        <section id="setupSection" class="bg-white rounded-2xl shadow-lg p-6 border-4 border-red-200">
+            <h2 class="text-2xl font-bold text-center text-red-600 mb-4">Inizia la Giornata di Spesa</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <!-- Data -->
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Data di oggi:</label>
+                    <input type="date" id="inputDate" class="w-full p-3 border-2 border-gray-300 rounded-xl text-lg font-semibold bg-gray-50 focus:border-red-500 focus:outline-none">
+                </div>
+                <!-- Nome Compilatore -->
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Nome di chi compila:</label>
+                    <div class="grid grid-cols-3 gap-2 mb-2" id="authorButtons">
+                        <!-- Bottoni autore generati via JS -->
+                    </div>
+                    <input type="text" id="inputAuthor" placeholder="O scrivi un altro nome..." class="w-full p-2 border-2 border-gray-300 rounded-xl text-sm focus:border-red-500 focus:outline-none">
+                </div>
+            </div>
 
-    <!-- GRIGLIA PRINCIPALE A 4 COLONNE -->
-    <div class="columns-grid" id="columnsGrid"></div>
+            <!-- Pulsanti Principali Home -->
+            <div class="grid md:grid-cols-2 gap-4 mt-6">
+                <button onclick="startMode('create')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold p-5 rounded-2xl text-xl shadow-lg transition transform hover:scale-105 flex items-center justify-center gap-3 border-b-4 border-emerald-700">
+                    🛒 CREA LA SPESA
+                </button>
+                <button onclick="startMode('shop')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold p-5 rounded-2xl text-xl shadow-lg transition transform hover:scale-105 flex items-center justify-center gap-3 border-b-4 border-blue-700">
+                    🛍️ VAI AL SUPERMERCATO
+                </button>
+            </div>
 
-    <!-- Azioni Finali -->
-    <div class="actions-footer">
-        <button type="button" class="btn-whatsapp" onclick="sendWhatsApp()">📱 Invia Ordine a Pietro (WhatsApp)</button>
-        <button type="button" class="btn-history" onclick="toggleHistory()">📜 Storico</button>
-    </div>
+            <!-- Pulsante Storico -->
+            <div class="mt-6 text-center">
+                <button onclick="showHistory()" class="text-indigo-600 font-bold hover:underline text-lg">
+                    📊 Visualizza Storico Spese
+                </button>
+            </div>
+        </section>
 
-    <!-- Sezione Storico -->
-    <div class="history-section" id="historySection">
-        <h3 style="margin-top:0; font-size:0.95rem; color:var(--primary-color);">Storico Spese</h3>
-        <div id="historyList"></div>
-    </div>
-</div>
+        <!-- SEZIONE 2: CREA LA SPESA (Catalogo e Quantità) -->
+        <section id="createSection" class="hidden bg-white rounded-2xl shadow-lg p-6 border-4 border-emerald-200">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
+                <h2 class="text-xl font-bold text-emerald-600">Crea la Lista della Spesa</h2>
+                <button onclick="goHome()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-xl font-bold text-sm">⬅️ Indietro</button>
+            </div>
 
-<script>
-    const defaultColumns = [
-        [
-            { name: "LATTUGA", type: "fixed" }, { name: "MELANZANE", type: "fixed" }, { name: "ZUCCHINE", type: "fixed" },
-            { name: "POMODORI", type: "fixed" }, { name: "FUNGHI", type: "fixed" }, { name: "PEPERONI", type: "fixed" },
-            { name: "CIPOLLE", type: "fixed" }, { name: "POM.PERINI", type: "fixed" }, { name: "RUCOLA", type: "fixed" },
-            { name: "RICCIA", type: "fixed" }, { name: "RADICCHIO", type: "fixed" }, { name: "PATATE", type: "fixed" },
-            { name: "PREZZEMOLO", type: "fixed" }, { name: "CAROTE", type: "fixed" }, { name: "AGLIO", type: "fixed" },
-            { name: "CETRIOLI", type: "fixed" }, { name: "LIMONI", type: "fixed" }, { name: "ANANAS", type: "fixed" },
-            { name: "MELE", type: "fixed" }, { name: "PERE", type: "fixed" }, { name: "PISTACCHI", type: "fixed" },
-            { name: "KIWI", type: "fixed" }, { name: "PANE", type: "fixed" }, { name: "CAFFE'", type: "fixed" },
-            { name: "SPIEDINI", type: "fixed" }, { name: "POMODORI SECCHI", type: "fixed" }
-        ],
-        [
-            { name: "SALE", type: "fixed" }, { name: "PEPE", type: "fixed" }, { name: "PISELLI", type: "fixed" },
-            { name: "C.HAMBURGER", type: "fixed" }, { name: "CHIANINA", type: "fixed" }, { name: "NOCI", type: "fixed" },
-            { name: "LIMMY", type: "fixed" }, { name: "SOTTILETTE", type: "fixed" }, { name: "CEDDAR", type: "fixed" },
-            { name: "YOGURT", type: "fixed" }, { name: "PHILADELPHIA", type: "fixed" }, { name: "BURRO", type: "fixed" },
-            { name: "EMMENTHAL", type: "fixed" }, { name: "STRACCHINO", type: "fixed" }, { name: "MOZZARELLE", type: "fixed" },
-            { name: "MOZZ.SENZA LATTOIO", type: "fixed" }, { name: "BOCCONCINI", type: "fixed" }, { name: "PANNA SPRAY", type: "fixed" },
-            { name: "PANNA FRESCA", type: "fixed" }, { name: "CONTEN.PANNA COTTA", type: "fixed" }
-        ],
-        [
-            { name: "PESTO", type: "fixed" }, { name: "MAIS", type: "fixed" }, { name: "CARCIOFI", type: "fixed" },
-            { name: "CAPPERI", type: "fixed" }, { name: "CRAUTI", type: "fixed" }, { name: "CECI", type: "fixed" },
-            { name: "ACETO", type: "fixed" }, { name: "OLIO PICCANTE", type: "fixed" }, { name: "TONNO", type: "fixed" },
-            { name: "SALMONE", type: "fixed" }, { name: "ZUCCHERO", type: "fixed" }, { name: "ZUCCHERO A VELO", type: "fixed" },
-            { name: "UOVA", type: "fixed" }, { name: "CIOCCOLATO FOND", type: "fixed" }, { name: "CROCCANTE", type: "fixed" },
-            { name: "BISCOTTI SECCHI", type: "fixed" }, { name: "SAVOIARDI", type: "fixed" }, { name: "VANILLINA", type: "fixed" },
-            { name: "LATTE", type: "fixed" }, { name: "ROTOLONI", type: "fixed" }
-        ],
-        [
-            { name: "DETERSIVO PIATTI", type: "fixed" }, { name: "SPUGNE PIATTI", type: "fixed" }, { name: "CANDEGGINA", type: "fixed" },
-            { name: "TOV.COLORATI", type: "fixed" }, { name: "STECCHINI", type: "fixed" }, { name: "BICCHIERI", type: "fixed" },
-            { name: "SAPONE MANI", type: "fixed" }, { name: "SPUGNE VASSOI", type: "fixed" }, { name: "MICROFIBRA", type: "fixed" },
-            { name: "ORDINARE DOLCE", type: "fixed" }, { name: "RITIRARE DOLCE", type: "fixed" }, { name: "MARMELLATA", type: "fixed" },
-            { name: "FRUTTI BOSCO", type: "fixed" }, { name: "COCA COLA", type: "fixed" }, { name: "TABASCO", type: "fixed" },
-            { name: "TRANCI SALMONE", type: "fixed" }, { name: "LIEVITO PANINI", type: "fixed" }, { name: "PIZZAIOLO", type: "fixed" },
-            { name: "FARINA PER TORTE", type: "fixed" }, { name: "PELLICOLA", type: "fixed" }
-        ]
-    ];
+            <p class="text-sm text-gray-600 mb-4">Seleziona i prodotti dalla lista e inserisci la quantità o il peso desiderato:</p>
 
-    let shoppingData = JSON.parse(localStorage.getItem('shopping_columns_data')) || defaultColumns;
-    let orderState = JSON.parse(localStorage.getItem('shopping_order_state')) || {};
-    let shopCheckedState = JSON.parse(localStorage.getItem('shopping_shop_checked')) || {};
-    let historyData = JSON.parse(localStorage.getItem('shopping_history')) || [];
-    let safeMode = false;
-    let isShoppingModeActive = false;
+            <!-- Aggiunta Fuori Lista -->
+            <div class="bg-amber-50 p-3 rounded-xl border-2 border-amber-200 mb-6 flex gap-2">
+                <input type="text" id="customItemName" placeholder="Prodotto fuori lista..." class="flex-grow p-2 border rounded-lg text-sm">
+                <input type="text" id="customItemQty" placeholder="Qtà/Peso" class="w-28 p-2 border rounded-lg text-sm">
+                <button onclick="addCustomItem()" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-bold text-sm">➕ Aggiungi</button>
+            </div>
 
-    document.getElementById('buyerDate').valueAsDate = new Date();
+            <!-- Lista Prodotti in Colonna -->
+            <div id="catalogListContainer" class="space-y-2 max-h-[50vh] overflow-y-auto pr-2 mb-6">
+                <!-- Generato via JS -->
+            </div>
 
-    function saveData() {
-        localStorage.setItem('shopping_columns_data', JSON.stringify(shoppingData));
-        localStorage.setItem('shopping_order_state', JSON.stringify(orderState));
-        localStorage.setItem('shopping_shop_checked', JSON.stringify(shopCheckedState));
-    }
+            <!-- Pulsante Conferma Spesa -->
+            <button onclick="saveAndGoToShop()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold p-4 rounded-xl text-lg shadow-lg transition flex items-center justify-center gap-2">
+                💾 Salva e Vai al Supermercato
+            </button>
+        </section>
 
-    function renderApp() {
-        renderColumns();
-        if (isShoppingModeActive) {
-            renderShoppingList();
-        }
-    }
+        <!-- SEZIONE 3: VAI AL SUPERMERCATO (Lista Attiva e Spunte) -->
+        <section id="shopSection" class="hidden bg-white rounded-2xl shadow-lg p-6 border-4 border-blue-200">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
+                <h2 class="text-xl font-bold text-blue-600">Lista della Spesa (Supermercato)</h2>
+                <button onclick="goHome()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-xl font-bold text-sm">⬅️ Indietro</button>
+            </div>
 
-    function renderColumns() {
-        const grid = document.getElementById('columnsGrid');
-        grid.innerHTML = '';
+            <!-- Progresso -->
+            <div class="mb-4 bg-blue-50 p-3 rounded-xl flex justify-between items-center border border-blue-200">
+                <span id="progressText" class="font-bold text-blue-800 text-sm">Prodotti presi: 0 / 0</span>
+                <div class="w-1/2 bg-gray-200 rounded-full h-3 overflow-hidden">
+                    <div id="progressBar" class="bg-blue-600 h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
 
-        shoppingData.forEach((col, colIndex) => {
-            const colBox = document.createElement('div');
-            colBox.className = 'column-box';
+            <!-- Lista della Spesa attiva -->
+            <div id="activeShoppingList" class="space-y-2 max-h-[50vh] overflow-y-auto pr-2 mb-6">
+                <!-- Generato via JS -->
+            </div>
 
-            const header = document.createElement('div');
-            header.className = 'column-header';
-            header.innerText = `Colonna ${colIndex + 1}`;
-            colBox.appendChild(header);
+            <!-- Pulsante Completa Spesa -->
+            <button onclick="completeShopping()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold p-4 rounded-xl text-lg shadow-lg transition">
+                🎉 Termina e Salva in Storico
+            </button>
+        </section>
 
-            const ul = document.createElement('ul');
-            ul.className = 'items-list';
+        <!-- SEZIONE 4: STORICO -->
+        <section id="historySection" class="hidden bg-white rounded-2xl shadow-lg p-6 border-4 border-indigo-200">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
+                <h2 class="text-xl font-bold text-indigo-600">Storico Spese</h2>
+                <button onclick="goHome()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-xl font-bold text-sm">⬅️ Indietro</button>
+            </div>
 
-            col.forEach((item, itemIndex) => {
-                const li = document.createElement('li');
-                const key = `${colIndex}-${item.name}`;
-                const itemState = orderState[key] || { selected: false, qty: '' };
+            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2" id="historyContainer">
+                <!-- Storico inserito via JS -->
+            </div>
+        </section>
 
-                li.className = `item-row ${itemState.selected ? 'selected' : ''}`;
+    </main>
 
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'item-info';
-                infoDiv.onclick = () => toggleSelectItem(colIndex, item.name);
+    <!-- Script Logica dell'App -->
+    <script>
+        // Lista esatta presa dalla foto fornita
+        const defaultCatalog = [
+            // Colonna 1
+            "LATTUAGA", "MELANZANE", "ZUCCHINE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", 
+            "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", 
+            "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", 
+            "PANE", "CAFFE'", "SPIEDINI", "POMODORI SECCHI",
+            // Colonna 2
+            "SALE", "PEPE", "PISELLI", "C.HAMBURGER", "CHIANINA", "NOCI", "LIMMY", 
+            "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "EMMENTHAL", 
+            "STRACCHINO", "MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "PANNA SPRAY", 
+            "PANNA FRESCA", "CONTEN.PANNA COTTA",
+            // Colonna 3
+            "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", 
+            "OLIO PICCANTE", "TONNO", "SALMONE", "ZUCCHERO", "ZUCCHERO A VELO", "UOVA", 
+            "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", 
+            "LATTE", "ROTOLONI",
+            // Colonna 4
+            "DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "TOV.COLORATI", "STECCHINI", 
+            "BICCHIERI", "SAPONE MANI", "SPUGNE VASSOI", "MICROFIBRA", "ORDINARE DOLCE", 
+            "RITIRARE DOLCE", "MARMELLATA", "FRUTTI BOSCO", "COCA COLA", "TABASCO", 
+            "TRANCI SALMONE", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "PELLICOLA", "APEROL"
+        ];
 
-                const spanName = document.createElement('span');
-                spanName.className = 'item-name';
-                spanName.innerHTML = `${item.name} ${item.type === 'temp' ? '<span class="temp-badge">Oggi</span>' : ''}`;
-                infoDiv.appendChild(spanName);
-                li.appendChild(infoDiv);
+        const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
 
-                const qtyInput = document.createElement('input');
-                qtyInput.type = 'text';
-                qtyInput.className = 'item-qty';
-                qtyInput.value = itemState.qty;
-                qtyInput.placeholder = 'Q';
-                qtyInput.oninput = (e) => updateQty(colIndex, item.name, e.target.value);
-                li.appendChild(qtyInput);
+        let currentSession = {
+            date: new Date().toISOString().split('T')[0],
+            author: "",
+            items: [] // { name, qty, checked }
+        };
 
-                const btnDel = document.createElement('button');
-                btnDel.className = 'btn-delete';
-                btnDel.innerText = '✕';
-                btnDel.onclick = (e) => {
-                    e.stopPropagation();
-                    deleteProduct(colIndex, itemIndex);
+        // Inizializzazione
+        window.onload = function() {
+            document.getElementById('inputDate').value = currentSession.date;
+            renderAuthorButtons();
+            initCatalog();
+        };
+
+        function renderAuthorButtons() {
+            const container = document.getElementById('authorButtons');
+            container.innerHTML = '';
+            authors.forEach(name => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = "bg-red-50 hover:bg-red-100 text-red-700 font-semibold py-2 px-3 rounded-xl border border-red-200 text-sm transition";
+                btn.innerText = name;
+                btn.onclick = () => {
+                    document.getElementById('inputAuthor').value = name;
                 };
-                li.appendChild(btnDel);
-
-                ul.appendChild(li);
+                container.appendChild(btn);
             });
-
-            colBox.appendChild(ul);
-            grid.appendChild(colBox);
-        });
-    }
-
-    function toggleSelectItem(colIndex, name) {
-        const key = `${colIndex}-${name}`;
-        if (!orderState[key]) {
-            orderState[key] = { selected: true, qty: '1' };
-        } else {
-            orderState[key].selected = !orderState[key].selected;
         }
-        saveData();
-        renderColumns();
-    }
 
-    function updateQty(colIndex, name, qty) {
-        const key = `${colIndex}-${name}`;
-        if (!orderState[key]) {
-            orderState[key] = { selected: true, qty: qty };
-        } else {
-            orderState[key].qty = qty;
-            if (qty.trim() !== '') {
-                orderState[key].selected = true;
+        function initCatalog() {
+            const container = document.getElementById('catalogListContainer');
+            container.innerHTML = '';
+            defaultCatalog.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between bg-gray-50 p-2 rounded-xl border border-gray-200";
+                row.innerHTML = `
+                    <label class="flex items-center gap-3 flex-grow cursor-pointer">
+                        <input type="checkbox" id="cat-check-${index}" value="${item}" class="w-5 h-5 text-emerald-600 rounded">
+                        <span class="font-medium text-gray-800 text-sm">${item}</span>
+                    </label>
+                    <input type="text" id="cat-qty-${index}" placeholder="Qtà/Peso" class="w-28 p-1.5 border rounded-lg text-sm bg-white">
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function addCustomItem() {
+            const nameInput = document.getElementById('customItemName');
+            const qtyInput = document.getElementById('customItemQty');
+            const name = nameInput.value.trim();
+            const qty = qtyInput.value.trim();
+
+            if (!name) return;
+
+            const container = document.getElementById('catalogListContainer');
+            const row = document.createElement('div');
+            row.className = "flex items-center justify-between bg-amber-50 p-2 rounded-xl border border-amber-200";
+            row.innerHTML = `
+                <label class="flex items-center gap-3 flex-grow cursor-pointer">
+                    <input type="checkbox" checked value="${name}" class="custom-chk w-5 h-5 text-emerald-600 rounded" data-name="${name}">
+                    <span class="font-medium text-gray-800 text-sm">${name} (Fuori Lista)</span>
+                </label>
+                <input type="text" value="${qty}" class="custom-qty w-28 p-1.5 border rounded-lg text-sm bg-white" data-name="${name}">
+            `;
+            container.prepend(row);
+            nameInput.value = '';
+            qtyInput.value = '';
+        }
+
+        function startMode(mode) {
+            const date = document.getElementById('inputDate').value;
+            const authorInput = document.getElementById('inputAuthor').value.trim();
+
+            if (!authorInput) {
+                alert("Per favore, seleziona o scrivi il nome di chi compila!");
+                return;
+            }
+
+            currentSession.date = date;
+            currentSession.author = authorInput;
+
+            document.getElementById('displayDate').innerText = date;
+            document.getElementById('displayAuthor').innerText = authorInput;
+            document.getElementById('userInfoHeader').classList.remove('hidden');
+            document.getElementById('setupSection').classList.add('hidden');
+
+            if (mode === 'create') {
+                document.getElementById('createSection').classList.remove('hidden');
+            } else {
+                // Se va direttamente al supermercato senza passare per crea, carica tutti o quelli salvati
+                prepareActiveShoppingList();
+                document.getElementById('shopSection').classList.remove('hidden');
             }
         }
-        saveData();
-    }
 
-    function toggleShoppingMode() {
-        isShoppingModeActive = !isShoppingModeActive;
-        const container = document.getElementById('shoppingModeContainer');
-        const btn = document.getElementById('btnModeToggle');
-        const grid = document.getElementById('columnsGrid');
+        function saveAndGoToShop() {
+            currentSession.items = [];
+            
+            // Raccogli dal catalogo
+            defaultCatalog.forEach((item, index) => {
+                const chk = document.getElementById(`cat-check-${index}`);
+                const qty = document.getElementById(`cat-qty-${index}`).value;
+                if (chk && chk.checked) {
+                    currentSession.items.push({ name: item, qty: qty || "1", checked: false });
+                }
+            });
 
-        if (isShoppingModeActive) {
-            container.style.display = 'block';
-            grid.style.display = 'none';
-            btn.classList.add('active');
-            btn.innerText = '📝 Modifica';
-            renderShoppingList();
-        } else {
-            container.style.display = 'none';
-            grid.style.display = 'grid';
-            btn.classList.remove('active');
-            btn.innerText = '🛒 Spesa';
-            renderColumns();
+            // Raccogli personalizzati
+            document.querySelectorAll('#catalogListContainer .custom-chk').forEach(chk => {
+                if (chk.checked) {
+                    const name = chk.getAttribute('data-name');
+                    const qtyInput = chk.closest('div').querySelector('.custom-qty');
+                    currentSession.items.push({ name: name, qty: qtyInput ? qtyInput.value || "1" : "1", checked: false });
+                }
+            });
+
+            if (currentSession.items.length === 0) {
+                alert("Seleziona almeno un prodotto prima di continuare!");
+                return;
+            }
+
+            document.getElementById('createSection').classList.add('hidden');
+            prepareActiveShoppingList();
+            document.getElementById('shopSection').classList.remove('hidden');
         }
-    }
 
-    function renderShoppingList() {
-        const listGrid = document.getElementById('shoppingListGrid');
-        listGrid.innerHTML = '';
+        function prepareActiveShoppingList() {
+            const container = document.getElementById('activeShoppingList');
+            container.innerHTML = '';
 
-        let count = 0;
-        shoppingData.forEach((col, colIndex) => {
-            col.forEach(item => {
-                const key = `${colIndex}-${item.name}`;
-                const state = orderState[key];
-                if (state && state.selected) {
-                    count++;
+            if (currentSession.items.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4">Nessun prodotto in lista. Torna a creare la spesa!</p>';
+                updateProgress();
+                return;
+            }
+
+            currentSession.items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = `flex items-center justify-between p-3 rounded-xl border transition ${item.checked ? 'bg-emerald-50 border-emerald-300 opacity-75 line-through' : 'bg-gray-50 border-gray-200'}`;
+                div.innerHTML = `
+                    <label class="flex items-center gap-3 flex-grow cursor-pointer">
+                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-6 h-6 text-blue-600 rounded cursor-pointer">
+                        <span class="font-bold text-base ${item.checked ? 'text-emerald-700' : 'text-gray-800'}">${item.name}</span>
+                    </label>
+                    <span class="bg-white px-3 py-1 rounded-lg border font-semibold text-sm text-blue-600">${item.qty}</span>
+                `;
+                container.appendChild(div);
+            });
+            updateProgress();
+        }
+
+        function toggleCheck(index) {
+            currentSession.items[index].checked = !currentSession.items[index].checked;
+            prepareActiveShoppingList();
+        }
+
+        function updateProgress() {
+            const total = currentSession.items.length;
+            const checkedCount = currentSession.items.filter(i => i.checked).length;
+            const percent = total > 0 ? (checkedCount / total) * 100 : 0;
+
+            document.getElementById('progressText').innerText = `Prodotti presi: ${checkedCount} / ${total}`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+        }
+
+        function completeShopping() {
+            if (currentSession.items.length === 0) {
+                alert("La lista è vuota!");
+                return;
+            }
+
+            // Salva nello storico (localStorage)
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            history.unshift({
+                date: currentSession.date,
+                author: currentSession.author,
+                items: [...currentSession.items],
+                timestamp: new Date().toLocaleString()
+            });
+            localStorage.setItem('galleon_history', JSON.stringify(history));
+
+            alert("Spesa completata e salvata nello storico con successo! 🎉");
+            goHome();
+        }
+
+        function showHistory() {
+            document.getElementById('setupSection').classList.add('hidden');
+            const container = document.getElementById('historyContainer');
+            container.innerHTML = '';
+
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+
+            if (history.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-6">Nessuna spesa salvata nello storico.</p>';
+            } else {
+                history.forEach((session, idx) => {
                     const card = document.createElement('div');
-                    const isDone = shopCheckedState[key] || false;
-                    card.className = `shopping-item-card ${isDone ? 'done' : ''}`;
+                    card.className = "bg-indigo-50 border-2 border-indigo-200 rounded-xl p-4 mb-4";
                     
-                    const qtyText = state.qty ? ` (${state.qty})` : '';
-                    card.innerHTML = `<span>${item.name}${qtyText}</span> <span>${isDone ? '✓' : '☐'}</span>`;
-                    
-                    card.onclick = () => {
-                        shopCheckedState[key] = !shopCheckedState[key];
-                        saveData();
-                        renderShoppingList();
-                    };
+                    let itemsHtml = session.items.map(i => `
+                        <li class="text-sm flex justify-between py-1 border-b border-indigo-100 last:border-0">
+                            <span class="${i.checked ? 'line-through text-emerald-700 font-medium' : 'text-gray-700'}">${i.name}</span>
+                            <span class="font-semibold text-indigo-600">${i.qty}</span>
+                        </li>
+                    `).join('');
 
-                    listGrid.appendChild(card);
-                }
-            });
-        });
-
-        if (count === 0) {
-            listGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666; margin: 5px;">Nessun prodotto selezionato. Torna a "Modifica" e seleziona i prodotti.</p>';
-        }
-    }
-
-    function toggleSafeMode() {
-        safeMode = !safeMode;
-        const container = document.getElementById('mainContainer');
-        const btn = document.getElementById('btnToggleSafe');
-        if (safeMode) {
-            container.classList.add('safe-mode-active');
-            btn.innerText = '🔓 Sbloccato';
-            btn.style.backgroundColor = '#c0392b';
-        } else {
-            container.classList.remove('safe-mode-active');
-            btn.innerText = '🔒 Gestione';
-            btn.style.backgroundColor = '#f39c12';
-        }
-    }
-
-    function addNewProduct() {
-        const nameInput = document.getElementById('newProductName');
-        const colSelect = document.getElementById('newProductCol');
-        const typeSelect = document.getElementById('newProductType');
-
-        const name = nameInput.value.trim().toUpperCase();
-        const colIndex = parseInt(colSelect.value);
-        const type = typeSelect.value;
-
-        if (!name) {
-            alert('Inserisci il nome del prodotto');
-            return;
-        }
-
-        const exists = shoppingData[colIndex].some(item => item.name === name);
-        if (exists) {
-            alert('Prodotto già presente in questa colonna!');
-            return;
-        }
-
-        shoppingData[colIndex].push({ name, type });
-        nameInput.value = '';
-        saveData();
-        renderApp();
-    }
-
-    function deleteProduct(colIndex, itemIndex) {
-        const itemName = shoppingData[colIndex][itemIndex].name;
-        if (confirm(`Eliminare definitivamente "${itemName}"?`)) {
-            shoppingData[colIndex].splice(itemIndex, 1);
-            saveData();
-            renderApp();
-        }
-    }
-
-    function sendWhatsApp() {
-        const buyer = document.getElementById('buyerName').value.trim() || 'Non specificato';
-        const date = document.getElementById('buyerDate').value || 'Data non specificata';
-
-        let text = `🛒 *ORDINE DELLA SPESA*%0A`;
-        text += `👤 *Compilata da:* ${buyer}%0A`;
-        text += `📅 *Data:* ${date}%0A%0A`;
-
-        let hasItems = false;
-        shoppingData.forEach((col, colIndex) => {
-            let colItems = [];
-            col.forEach(item => {
-                const key = `${colIndex}-${item.name}`;
-                const state = orderState[key];
-                if (state && state.selected) {
-                    let line = `- ${item.name}`;
-                    if (state.qty) line += ` [Q.tà: ${state.qty}]`;
-                    colItems.push(line);
-                }
-            });
-            if (colItems.length > 0) {
-                hasItems = true;
-                text += `*Colonna ${colIndex + 1}*%0A` + colItems.join('%0A') + `%0A%0A`;
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-indigo-900">📅 ${session.date} - Compilato da: <span class="text-red-600">${session.author}</span></span>
+                            <button onclick="deleteHistoryItem(${idx})" class="text-red-500 hover:text-red-700 text-xs font-bold">🗑️ Elimina</button>
+                        </div>
+                        <ul class="bg-white rounded-lg p-3 shadow-inner max-h-36 overflow-y-auto">
+                            ${itemsHtml}
+                        </ul>
+                    `;
+                    container.appendChild(card);
+                });
             }
-        });
 
-        if (!hasItems) {
-            alert("Seleziona almeno un prodotto prima di inviare l'ordine!");
-            return;
+            document.getElementById('historySection').classList.remove('hidden');
         }
 
-        const historyEntry = { buyer, date, timestamp: new Date().toLocaleString() };
-        historyData.unshift(historyEntry);
-        if (historyData.length > 15) historyData.pop();
-        localStorage.setItem('shopping_history', JSON.stringify(historyData));
-
-        const phone = "3391318613";
-        const whatsappUrl = `https://wa.me/${phone}?text=${text}`;
-        window.open(whatsappUrl, '_blank');
-    }
-
-    function toggleHistory() {
-        const sec = document.getElementById('historySection');
-        sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
-        
-        const listEl = document.getElementById('historyList');
-        if (historyData.length === 0) {
-            listEl.innerHTML = 'Nessuna spesa salvata.';
-            return;
+        function deleteHistoryItem(idx) {
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            history.splice(idx, 1);
+            localStorage.setItem('galleon_history', JSON.stringify(history));
+            showHistory();
         }
-        listEl.innerHTML = historyData.map(h => `• <strong>${h.buyer}</strong> (${h.date}) - Inviata: ${h.timestamp}<br>`).join('');
-    }
 
-    renderApp();
-</script>
+        function goHome() {
+            document.getElementById('createSection').classList.add('hidden');
+            document.getElementById('shopSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            document.getElementById('setupSection').classList.remove('hidden');
+        }
 
+        function resetSession() {
+            document.getElementById('userInfoHeader').classList.add('hidden');
+            goHome();
+        }
+    </script>
 </body>
 </html>
