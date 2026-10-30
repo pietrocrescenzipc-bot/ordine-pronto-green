@@ -48,7 +48,7 @@
             </div>
             <div class="w-full md:w-1/2 flex flex-col gap-1">
                 <label for="searchInput" class="text-xs font-bold text-slate-500 uppercase">🔍 Cerca Prodotto:</label>
-                <input type="text" id="searchInput" placeholder="Scrivi il nome del prodotto..." class="w-full p-3 border border-slate-300 rounded-xl text-lg bg-slate-50 focus:ring-2 focus:ring-emerald-500 outline-none">
+                <input type="text" id="searchInput" placeholder="Scrivi il nome del prodotto (es. sesamo, patate...)" class="w-full p-3 border border-slate-300 rounded-xl text-lg bg-slate-50 focus:ring-2 focus:ring-emerald-500 outline-none">
             </div>
         </div>
 
@@ -128,7 +128,7 @@
             const headerDatesRow = rawSheetData[1];
             for (let colIdx = 0; colIdx < headerDatesRow.length; colIdx++) {
                 let cellVal = headerDatesRow[colIdx];
-                if (cellVal && String(cellVal).trim() !== "" && cellVal !== 'DATA') {
+                if (cellVal !== undefined && cellVal !== null && String(cellVal).trim() !== "" && String(cellVal) !== 'DATA') {
                     dateColumns.push({ colIndex: colIdx, label: String(cellVal) });
                 }
             }
@@ -137,8 +137,7 @@
             productsList = [];
             for (let rowIdx = 5; rowIdx < rawSheetData.length; rowIdx++) {
                 let prodName = rawSheetData[rowIdx][0];
-                if (prodName && String(prodName).trim() !== "") {
-                    // Cerca anche una colonna di vecchia giacenza (es. colonna precedente se esiste)
+                if (prodName !== undefined && prodName !== null && String(prodName).trim() !== "") {
                     productsList.push({ name: String(prodName).trim(), rowIndex: rowIdx });
                 }
             }
@@ -175,7 +174,7 @@
             currentSelectedDateCol = colIdx;
             productValuesMap = {};
 
-            // Trova la colonna precedente (vecchia giacenza) se disponibile (es. colIdx - 2 o colIdx - 1)
+            // Colonna della vecchia giacenza (colonna precedente)
             let oldColIdx = colIdx >= 2 ? colIdx - 2 : (colIdx >= 1 ? colIdx - 1 : null);
 
             productsList.forEach(p => {
