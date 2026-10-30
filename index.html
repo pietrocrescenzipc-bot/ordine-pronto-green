@@ -3,309 +3,552 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pronto Green - Inserimento Rapido</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SheetJS per Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>Lista della Spesa</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #27ae60;
+            --whatsapp-color: #25d366;
+            --danger-color: #e74c3c;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+        }
+
+        /* Sezione Dati Compilatore */
+        .meta-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            background: #eef2f3;
+            padding: 10px;
+            border-radius: 6px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .meta-field {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .meta-field label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 3px;
+            color: var(--primary-color);
+        }
+
+        .meta-field input {
+            padding: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* Sezione Aggiunta Prodotti */
+        .add-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .add-section input, .add-section select {
+            padding: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            flex: 1;
+            min-width: 130px;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 7px 12px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .btn-add {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-safe-mode {
+            background-color: #f39c12;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        /* Griglia a 4 colonne stile foglio cartaceo */
+        .columns-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .columns-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .columns-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .column-box {
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            background: #fff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .column-header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 6px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .items-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        .item-row.checked {
+            background-color: #e8f8f5;
+            text-decoration: line-through;
+            color: #7f8c8d;
+        }
+
+        .item-name {
+            flex-grow: 1;
+            cursor: pointer;
+            word-break: break-word;
+        }
+
+        .temp-badge {
+            font-size: 0.65rem;
+            background: #e67e22;
+            color: white;
+            padding: 1px 4px;
+            border-radius: 3px;
+            margin-left: 5px;
+            text-transform: uppercase;
+        }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0 4px;
+            display: none; /* Nascosto di default per sicurezza */
+        }
+
+        .safe-mode-active .btn-delete {
+            display: inline-block; /* Visibile solo in modalità protetta */
+        }
+
+        /* Pulsanti d'azione finali */
+        .actions-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        .btn-whatsapp {
+            background-color: var(--whatsapp-color);
+            color: white;
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+
+        .btn-history {
+            background-color: #7f8c8d;
+            color: white;
+        }
+
+        /* Sezione Storico */
+        .history-section {
+            margin-top: 20px;
+            border-top: 2px dashed #ccc;
+            padding-top: 15px;
+            display: none;
+        }
+
+        .history-section h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .history-item {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+<body>
 
-    <!-- Header -->
-    <header class="bg-emerald-700 text-white shadow-md py-4 px-6 flex flex-wrap justify-between items-center gap-4">
-        <div>
-            <h1 class="text-2xl font-bold flex items-center gap-2">🌱 Pronto Green <span class="text-xs bg-emerald-800 px-2 py-1 rounded">Magazzino Semplificato</span></h1>
-            <p class="text-emerald-100 text-sm">Aggiornamento rapido con giacenze precedenti</p>
+<div class="container" id="mainContainer">
+    <h1>Lista della Spesa</h1>
+
+    <!-- Dati Compilatore -->
+    <div class="meta-section">
+        <div class="meta-field">
+            <label for="buyerName">Chi fa la spesa:</label>
+            <input type="text" id="buyerName" placeholder="Tuo nome...">
         </div>
-        <div class="flex items-center gap-3">
-            <label for="excelFile" class="bg-white text-emerald-800 hover:bg-emerald-50 font-bold px-4 py-2 rounded-xl shadow cursor-pointer transition flex items-center gap-2 text-sm">
-                📂 Carica Excel Originale
-                <input type="file" id="excelFile" accept=".xlsx, .xls" class="hidden">
-            </label>
+        <div class="meta-field">
+            <label for="buyerDate">Data:</label>
+            <input type="date" id="buyerDate">
         </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
-
-        <!-- Stato File -->
-        <div id="statusCard" class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm">
-            <div class="flex items-center justify-between flex-wrap gap-2">
-                <div>
-                    <h2 class="font-bold text-amber-900 text-base">⚠️ Carica il file Excel</h2>
-                    <p class="text-amber-700 text-sm">Clicca su "Carica Excel Originale" in alto a destra per iniziare.</p>
-                </div>
-            </div>
+        <div style="display: flex; align-items: flex-end;">
+            <button type="button" class="btn-safe-mode" id="btnToggleSafe" onclick="toggleSafeMode()">🔒 Mod. Gestione</button>
         </div>
+    </div>
 
-        <!-- Controlli: Selezione Data e Ricerca -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div class="w-full md:w-1/2 flex flex-col gap-1">
-                <label for="dateSelect" class="text-xs font-bold text-slate-500 uppercase">📅 Seleziona Data / Settimana:</label>
-                <select id="dateSelect" class="w-full p-3 border border-slate-300 rounded-xl font-semibold text-lg bg-slate-50 focus:ring-2 focus:ring-emerald-500 outline-none cursor-pointer">
-                    <option value="">-- Carica prima un file Excel --</option>
-                </select>
-            </div>
-            <div class="w-full md:w-1/2 flex flex-col gap-1">
-                <label for="searchInput" class="text-xs font-bold text-slate-500 uppercase">🔍 Cerca Prodotto:</label>
-                <input type="text" id="searchInput" placeholder="Scrivi il nome del prodotto (es. sesamo, patate...)" class="w-full p-3 border border-slate-300 rounded-xl text-lg bg-slate-50 focus:ring-2 focus:ring-emerald-500 outline-none">
-            </div>
-        </div>
+    <!-- Aggiunta Prodotti -->
+    <div class="add-section">
+        <input type="text" id="newProductName" placeholder="Nome nuovo prodotto...">
+        <select id="newProductCol">
+            <Col value="0">Colonna 1</Col>
+            <option value="1">Colonna 2</option>
+            <option value="2">Colonna 3</option>
+            <option value="3">Colonna 4</option>
+        </select>
+        <select id="newProductType">
+            <option value="fixed">Fisso (Rimane sempre)</option>
+            <option value="temp">Solo per oggi (Temporaneo)</option>
+        </select>
+        <button type="button" class="btn-add" onclick="addNewProduct()">+ Aggiungi Prodotto</button>
+    </div>
 
-        <!-- Lista Prodotti -->
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden flex-1">
-            <div class="bg-slate-50 px-6 py-3 border-b border-slate-200 flex justify-between items-center">
-                <span class="font-bold text-slate-700 text-sm uppercase">Prodotti e Giacenze</span>
-                <span id="productCount" class="text-xs bg-slate-200 text-slate-700 font-bold px-2.5 py-1 rounded-full">0 prodotti</span>
-            </div>
-            <div id="productsContainer" class="divide-y divide-slate-100 max-h-[550px] overflow-y-auto p-4 grid grid-cols-1 gap-3">
-                <div class="text-center py-12 text-slate-400">
-                    Nessun prodotto disponibile. Carica il file Excel per visualizzare la lista.
-                </div>
-            </div>
-        </div>
+    <!-- Griglia delle 4 Colonne -->
+    <div class="columns-grid" id="columnsGrid">
+        <!-- Generato via JavaScript -->
+    </div>
 
-        <!-- Barra di Esportazione -->
-        <div class="sticky bottom-4 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg border border-slate-200 flex justify-between items-center gap-4">
-            <div>
-                <span id="modifiedStatus" class="text-sm font-semibold text-slate-600">In attesa di file...</span>
-            </div>
-            <button id="exportBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow-md transition flex items-center gap-2 text-base cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                💾 Scarica Excel Aggiornato
-            </button>
-        </div>
+    <!-- Azioni Finali -->
+    <div class="actions-footer">
+        <button type="button" class="btn-whatsapp" onclick="sendWhatsApp()">📱 Invia a Pietro (WhatsApp)</button>
+        <button type="button" class="btn-history" onclick="toggleHistory()">📜 Visualizza Storico</button>
+    </div>
 
-    </main>
+    <!-- Sezione Storico -->
+    <div class="history-section" id="historySection">
+        <h3>Storico Spese Passate</h3>
+        <div id="historyList"></div>
+    </div>
+</div>
 
-    <!-- Script -->
-    <script>
-        let workbookData = null;
-        let currentSheetName = '';
-        let productsList = [];
-        let dateColumns = [];
-        let rawSheetData = [];
-        let currentSelectedDateCol = null;
-        let productValuesMap = {};
+<script>
+    // Dati iniziali basati sul foglio cartaceo originario suddivisi in 4 colonne
+    const defaultColumns = [
+        [
+            { name: "LATTUGA", type: "fixed" }, { name: "MELANZANE", type: "fixed" }, { name: "ZUCCHINE", type: "fixed" },
+            { name: "POMODORI", type: "fixed" }, { name: "FUNGHI", type: "fixed" }, { name: "PEPERONI", type: "fixed" },
+            { name: "CIPOLLE", type: "fixed" }, { name: "POM.PERINI", type: "fixed" }, { name: "RUCOLA", type: "fixed" },
+            { name: "RICCIA", type: "fixed" }, { name: "RADICCHIO", type: "fixed" }, { name: "PATATE", type: "fixed" },
+            { name: "PREZZEMOLO", type: "fixed" }, { name: "CAROTE", type: "fixed" }, { name: "AGLIO", type: "fixed" },
+            { name: "CETRIOLI", type: "fixed" }, { name: "LIMONI", type: "fixed" }, { name: "ANANAS", type: "fixed" },
+            { name: "MELE", type: "fixed" }, { name: "PERE", type: "fixed" }, { name: "PISTACCHI", type: "fixed" },
+            { name: "KIWI", type: "fixed" }, { name: "PANE", type: "fixed" }, { name: "CAFFE'", type: "fixed" },
+            { name: "SPIEDINI", type: "fixed" }, { name: "POMODORI SECCHI", type: "fixed" }
+        ],
+        [
+            { name: "SALE", type: "fixed" }, { name: "PEPE", type: "fixed" }, { name: "PISELLI", type: "fixed" },
+            { name: "C.HAMBURGER", type: "fixed" }, { name: "CHIANINA", type: "fixed" }, { name: "NOCI", type: "fixed" },
+            { name: "LIMMY", type: "fixed" }, { name: "SOTTILETTE", type: "fixed" }, { name: "CEDDAR", type: "fixed" },
+            { name: "YOGURT", type: "fixed" }, { name: "PHILADELPHIA", type: "fixed" }, { name: "BURRO", type: "fixed" },
+            { name: "EMMENTHAL", type: "fixed" }, { name: "STRACCHINO", type: "fixed" }, { name: "MOZZARELLE", type: "fixed" },
+            { name: "MOZZ.SENZA LATTOIO", type: "fixed" }, { name: "BOCCONCINI", type: "fixed" }, { name: "PANNA SPRAY", type: "fixed" },
+            { name: "PANNA FRESCA", type: "fixed" }, { name: "CONTEN.PANNA COTTA", type: "fixed" }
+        ],
+        [
+            { name: "PESTO", type: "fixed" }, { name: "MAIS", type: "fixed" }, { name: "CARCIOFI", type: "fixed" },
+            { name: "CAPPERI", type: "fixed" }, { name: "CRAUTI", type: "fixed" }, { name: "CECI", type: "fixed" },
+            { name: "ACETO", type: "fixed" }, { name: "OLIO PICCANTE", type: "fixed" }, { name: "TONNO", type: "fixed" },
+            { name: "SALMONE", type: "fixed" }, { name: "ZUCCHERO", type: "fixed" }, { name: "ZUCCHERO A VELO", type: "fixed" },
+            { name: "UOVA", type: "fixed" }, { name: "CIOCCOLATO FOND", type: "fixed" }, { name: "CROCCANTE", type: "fixed" },
+            { name: "BISCOTTI SECCHI", type: "fixed" }, { name: "SAVOIARDI", type: "fixed" }, { name: "VANILLINA", type: "fixed" },
+            { name: "LATTE", type: "fixed" }, { name: "ROTOLONI", type: "fixed" }
+        ],
+        [
+            { name: "DETERSIVO PIATTI", type: "fixed" }, { name: "SPUGNE PIATTI", type: "fixed" }, { name: "CANDEGGINA", type: "fixed" },
+            { name: "TOV.COLORATI", type: "fixed" }, { name: "STECCHINI", type: "fixed" }, { name: "BICCHIERI", type: "fixed" },
+            { name: "SAPONE MANI", type: "fixed" }, { name: "SPUGNE VASSOI", type: "fixed" }, { name: "MICROFIBRA", type: "fixed" },
+            { name: "ORDINARE DOLCE", type: "fixed" }, { name: "RITIRARE DOLCE", type: "fixed" }, { name: "MARMELLATA", type: "fixed" },
+            { name: "FRUTTI BOSCO", type: "fixed" }, { name: "COCA COLA", type: "fixed" }, { name: "TABASCO", type: "fixed" },
+            { name: "TRANCI SALMONE", type: "fixed" }, { name: "LIEVITO PANINI", type: "fixed" }, { name: "PIZZAIOLO", type: "fixed" },
+            { name: "FARINA PER TORTE", type: "fixed" }, { name: "PELLICOLA", type: "fixed" }
+        ]
+    ];
 
-        const excelFileInput = document.getElementById('excelFile');
-        const dateSelect = document.getElementById('dateSelect');
-        const searchInput = document.getElementById('searchInput');
-        const productsContainer = document.getElementById('productsContainer');
-        const productCount = document.getElementById('productCount');
-        const exportBtn = document.getElementById('exportBtn');
-        const statusCard = document.getElementById('statusCard');
-        const modifiedStatus = document.getElementById('modifiedStatus');
+    let shoppingData = JSON.parse(localStorage.getItem('shopping_columns_data')) || defaultColumns;
+    let checkedItems = JSON.parse(localStorage.getItem('shopping_checked_state')) || {};
+    let historyData = JSON.parse(localStorage.getItem('shopping_history')) || [];
+    let safeMode = false;
 
-        excelFileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    workbookData = XLSX.read(data, { type: 'array', cellDates: true });
-                    processWorkbook();
-                } catch (err) {
-                    alert("Errore nella lettura del file Excel: " + err.message);
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        });
+    // Imposta la data odierna di default
+    document.getElementById('buyerDate').valueAsDate = new Date();
 
-        function processWorkbook() {
-            if (!workbookData) return;
-            
-            // Trova automaticamente il foglio giusto (Foglio6 o il primo disponibile)
-            currentSheetName = workbookData.SheetNames.includes('Foglio6') ? 'Foglio6' : workbookData.SheetNames[0];
-            const worksheet = workbookData.Sheets[currentSheetName];
-            rawSheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false, defval: "" });
+    function saveData() {
+        localStorage.setItem('shopping_columns_data', JSON.stringify(shoppingData));
+        localStorage.setItem('shopping_checked_state', JSON.stringify(checkedItems));
+    }
 
-            if (rawSheetData.length === 0) {
-                alert("Il file Excel è vuoto.");
-                return;
-            }
+    function renderList() {
+        const grid = document.getElementById('columnsGrid');
+        grid.innerHTML = '';
 
-            // Cerca la riga delle date (cerca dove c'è la parola 'DATA' o date valide)
-            let dateRowIdx = -1;
-            for (let r = 0; r < Math.min(rawSheetData.length, 5); r++) {
-                let row = rawSheetData[r];
-                if (row.some(cell => cell && (String(cell).toUpperCase().includes('DATA') || String(cell).includes('2026')))) {
-                    dateRowIdx = r;
-                    break;
-                }
-            }
-            if (dateRowIdx === -1) dateRowIdx = 1; // fallback predefinito
+        shoppingData.forEach((col, colIndex) => {
+            const colBox = document.createElement('div');
+            colBox.className = 'column-box';
 
-            // Estrai le colonne delle date
-            dateColumns = [];
-            const headerDatesRow = rawSheetData[dateRowIdx];
-            for (let colIdx = 0; colIdx < headerDatesRow.length; colIdx++) {
-                let cellVal = headerDatesRow[colIdx];
-                if (cellVal !== undefined && cellVal !== null) {
-                    let strVal = String(cellVal).trim();
-                    if (strVal !== "" && strVal.toUpperCase() !== 'DATA') {
-                        dateColumns.push({ colIndex: colIdx, label: strVal });
-                    }
-                }
-            }
+            const header = document.createElement('div');
+            header.className = 'column-header';
+            header.innerText = `Colonna ${colIndex + 1}`;
+            colBox.appendChild(header);
 
-            // Trova dove iniziano i prodotti (dalla colonna 0, cercando righe con testo valido dopo eventuali intestazioni)
-            productsList = [];
-            let startRow = dateRowIdx + 1;
-            for (let rowIdx = startRow; rowIdx < rawSheetData.length; rowIdx++) {
-                let prodName = rawSheetData[rowIdx][0];
-                if (prodName !== undefined && prodName !== null) {
-                    let strProd = String(prodName).trim();
-                    if (strProd !== "" && strProd.toUpperCase() !== 'PRODOTTI' && strProd.toUpperCase() !== 'DATA') {
-                        productsList.push({ name: strProd, rowIndex: rowIdx });
-                    }
-                }
-            }
+            const ul = document.createElement('ul');
+            ul.className = 'items-list';
 
-            // Popola il menu delle date
-            dateSelect.innerHTML = '<option value="">-- Seleziona una data --</option>';
-            dateColumns.forEach(d => {
-                let opt = document.createElement('option');
-                opt.value = d.colIndex;
-                opt.textContent = d.label;
-                dateSelect.appendChild(opt);
-            });
+            col.forEach((item, itemIndex) => {
+                const li = document.createElement('li');
+                const itemKey = `${colIndex}-${item.name}`;
+                const isChecked = checkedItems[itemKey] || false;
 
-            statusCard.className = "bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm";
-            statusCard.innerHTML = `<h2 class="font-bold text-emerald-900 text-base">✅ File caricato correttamente!</h2><p class="text-emerald-700 text-sm">Trovati ${productsList.length} prodotti e ${dateColumns.length} date. Seleziona una data.</p>`;
-            
-            if (dateColumns.length > 0) {
-                dateSelect.value = dateColumns[0].colIndex;
-                loadDataForDate(dateColumns[0].colIndex);
-            }
-        }
+                li.className = `item-row ${isChecked ? 'checked' : ''}`;
 
-        dateSelect.addEventListener('change', (e) => {
-            const colIdx = e.target.value;
-            if (colIdx !== "") {
-                loadDataForDate(parseInt(colIdx));
-            } else {
-                productsContainer.innerHTML = '<div class="text-center py-12 text-slate-400">Seleziona una data per visualizzare i prodotti.</div>';
-                exportBtn.disabled = true;
-            }
-        });
+                const spanName = document.createElement('span');
+                spanName.className = 'item-name';
+                spanName.innerHTML = `${item.name} ${item.type === 'temp' ? '<span class="temp-badge">Oggi</span>' : ''}`;
+                spanName.onclick = () => toggleCheck(colIndex, item.name);
 
-        function loadDataForDate(colIdx) {
-            currentSelectedDateCol = colIdx;
-            productValuesMap = {};
+                li.appendChild(spanName);
 
-            // Colonna della vecchia giacenza (colonna precedente)
-            let oldColIdx = colIdx >= 2 ? colIdx - 2 : (colIdx >= 1 ? colIdx - 1 : null);
-
-            productsList.forEach(p => {
-                let val = rawSheetData[p.rowIndex][colIdx];
-                let oldVal = oldColIdx !== null ? rawSheetData[p.rowIndex][oldColIdx] : "-";
-                if (oldVal === "" || oldVal === undefined) oldVal = "-";
-                
-                productValuesMap[p.name] = {
-                    current: val !== undefined && val !== null ? val : "",
-                    old: oldVal
+                const btnDel = document.createElement('button');
+                btnDel.className = 'btn-delete';
+                btnDel.innerText = '✕';
+                btnDel.title = 'Elimina prodotto';
+                btnDel.onclick = (e) => {
+                    e.stopPropagation();
+                    deleteProduct(colIndex, itemIndex);
                 };
+                li.appendChild(btnDel);
+
+                ul.appendChild(li);
             });
 
-            renderProducts();
-            exportBtn.disabled = false;
-            modifiedStatus.textContent = "Pronto per la modifica";
-            modifiedStatus.className = "text-sm font-semibold text-slate-600";
-        }
-
-        function renderProducts() {
-            const filter = searchInput.value.toLowerCase();
-            const filtered = productsList.filter(p => p.name.toLowerCase().includes(filter));
-
-            productCount.textContent = `${filtered.length} prodotti`;
-
-            if (filtered.length === 0) {
-                productsContainer.innerHTML = '<div class="text-center py-8 text-slate-400">Nessun prodotto trovato.</div>';
-                return;
-            }
-
-            let html = '';
-            filtered.forEach(p => {
-                let dataItem = productValuesMap[p.name] || { current: "", old: "-" };
-                let val = dataItem.current;
-                let oldVal = dataItem.old;
-                let safeId = p.name.replace(/[^a-zA-Z0-9]/g, '_');
-
-                html += `
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-white hover:bg-slate-50 rounded-xl border border-slate-100 gap-3 transition">
-                        <div class="flex-1">
-                            <div class="font-bold text-slate-800 text-lg">${p.name}</div>
-                            <div class="text-xs font-semibold text-slate-400">Vecchia giacenza: <span class="text-slate-600 bg-slate-100 px-2 py-0.5 rounded">${oldVal}</span></div>
-                        </div>
-                        <div class="flex items-center gap-2 self-end sm:self-center">
-                            <button onclick="changeVal('${p.name.replace(/'/g, "\\'")}', -1)" class="w-12 h-12 bg-rose-100 text-rose-700 font-extrabold text-2xl rounded-xl hover:bg-rose-200 active:scale-95 transition flex items-center justify-center">-</button>
-                            <input type="text" value="${val}" id="input_${safeId}" onchange="updateVal('${p.name.replace(/'/g, "\\'")}', this.value)" class="w-24 h-12 text-center text-xl font-bold border-2 border-slate-200 rounded-xl bg-slate-50 focus:border-emerald-500 outline-none">
-                            <button onclick="changeVal('${p.name.replace(/'/g, "\\'")}', 1)" class="w-12 h-12 bg-emerald-100 text-emerald-700 font-extrabold text-2xl rounded-xl hover:bg-emerald-200 active:scale-95 transition flex items-center justify-center">+</button>
-                        </div>
-                    </div>
-                `;
-            });
-            productsContainer.innerHTML = html;
-        }
-
-        window.changeVal = function(prodName, delta) {
-            if (!productValuesMap[prodName]) return;
-            let current = parseFloat(productValuesMap[prodName].current);
-            if (isNaN(current)) current = 0;
-            let newVal = current + delta;
-            if (newVal < 0) newVal = 0;
-            productValuesMap[prodName].current = newVal;
-
-            let safeId = prodName.replace(/[^a-zA-Z0-9]/g, '_');
-            let el = document.getElementById(`input_${safeId}`);
-            if (el) el.value = newVal;
-
-            modifiedStatus.textContent = "Modifiche non salvate";
-            modifiedStatus.className = "text-sm font-bold text-amber-600";
-        }
-
-        window.updateVal = function(prodName, val) {
-            if (productValuesMap[prodName]) {
-                productValuesMap[prodName].current = val;
-            }
-            modifiedStatus.textContent = "Modifiche non salvate";
-            modifiedStatus.className = "text-sm font-bold text-amber-600";
-        }
-
-        searchInput.addEventListener('input', () => {
-            renderProducts();
+            colBox.appendChild(ul);
+            grid.appendChild(colBox);
         });
+    }
 
-        exportBtn.addEventListener('click', () => {
-            if (!workbookData || currentSelectedDateCol === null) return;
+    function toggleCheck(colIndex, name) {
+        const key = `${colIndex}-${name}`;
+        checkedItems[key] = !checkedItems[key];
+        saveData();
+        renderList();
+    }
 
-            const worksheet = workbookData.Sheets[currentSheetName];
+    function toggleSafeMode() {
+        safeMode = !safeMode;
+        const container = document.getElementById('mainContainer');
+        const btn = document.getElementById('btnToggleSafe');
+        if (safeMode) {
+            container.classList.add('safe-mode-active');
+            btn.innerText = '🔓 Gestione Attiva';
+            btn.style.backgroundColor = '#e74c3c';
+        } else {
+            container.classList.remove('safe-mode-active');
+            btn.innerText = '🔒 Mod. Gestione';
+            btn.style.backgroundColor = '#f39c12';
+        }
+    }
 
-            productsList.forEach(p => {
-                if (productValuesMap[p.name]) {
-                    let val = productValuesMap[p.name].current;
-                    let cellAddress = XLSX.utils.encode_cell({ r: p.rowIndex, c: currentSelectedDateCol });
-                    if (!worksheet[cellAddress]) {
-                        worksheet[cellAddress] = { t: 's', v: val };
-                    } else {
-                        worksheet[cellAddress].v = val;
-                        worksheet[cellAddress].t = typeof val === 'number' ? 'n' : 's';
-                    }
+    function addNewProduct() {
+        const nameInput = document.getElementById('newProductName');
+        const colSelect = document.getElementById('newProductCol');
+        const typeSelect = document.getElementById('newProductType');
+
+        const name = nameInput.value.trim().toUpperCase();
+        const colIndex = parseInt(colSelect.value);
+        const type = typeSelect.value;
+
+        if (!name) {
+            alert('Inserisci il nome del prodotto');
+            return;
+        }
+
+        // Verifica duplicati
+        const exists = shoppingData[colIndex].some(item => item.name === name);
+        if (exists) {
+            alert('Questo prodotto è già presente in questa colonna!');
+            return;
+        }
+
+        shoppingData[colIndex].push({ name, type });
+        nameInput.value = '';
+        saveData();
+        renderList();
+    }
+
+    function deleteProduct(colIndex, itemIndex) {
+        const itemName = shoppingData[colIndex][itemIndex].name;
+        if (confirm(`Sei sicuro di voler eliminare definitivamente "${itemName}"?`)) {
+            shoppingData[colIndex].splice(itemIndex, 1);
+            saveData();
+            renderList();
+        }
+    }
+
+    function sendWhatsApp() {
+        const buyer = document.getElementById('buyerName').value.trim() || 'Non specificato';
+        const date = document.getElementById('buyerDate').value || 'Data non specificata';
+
+        // Raccogli solo i prodotti spuntati
+        let text = `🛒 *LISTA DELLA SPESA*%0A`;
+        text += `👤 *Compilata da:* ${buyer}%0A`;
+        text += `📅 *Data:* ${date}%0A%0A`;
+
+        let hasItems = false;
+        shoppingData.forEach((col, colIndex) => {
+            let colItems = [];
+            col.forEach(item => {
+                if (checkedItems[`${colIndex}-${item.name}`]) {
+                    colItems.push(`- ${item.name}`);
                 }
             });
-
-            const wbout = XLSX.write(workbookData, { bookType: 'xlsx', type: 'array' });
-            const blob = new Blob([wbout], { type: 'application/octet-stream' });
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = "PRONTO_GREEN_Aggiornato.xlsx";
-            link.click();
-
-            modifiedStatus.textContent = "File esportato con successo!";
-            modifiedStatus.className = "text-sm font-bold text-emerald-600";
+            if (colItems.length > 0) {
+                hasItems = true;
+                text += `*Colonna ${colIndex + 1}*%0A` + colItems.join('%0A') + `%0A%0A`;
+            }
         });
-    </script>
+
+        if (!hasItems) {
+            if (!confirm("Non hai spuntato nessun prodotto. Vuoi inviare l'intera lista o solo i dati di compilazione?")) {
+                return;
+            }
+            // Se insiste, metti tutto
+            text += `_Lista Completa non spuntata inviata._`;
+        }
+
+        // Salva nello storico
+        const historyEntry = { buyer, date, timestamp: new Date().toLocaleString() };
+        historyData.unshift(historyEntry);
+        if (historyData.length > 20) historyData.pop(); // tieni ultimi 20
+        localStorage.setItem('shopping_history', JSON.stringify(historyData));
+        renderHistory();
+
+        // Numero di telefono di Pietro preimpostato
+        const phone = "3391318613";
+        const whatsappUrl = `https://wa.me/${phone}?text=${text}`;
+        window.open(whatsappUrl, '_blank');
+    }
+
+    function toggleHistory() {
+        const sec = document.getElementById('historySection');
+        sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
+        renderHistory();
+    }
+
+    function renderHistory() {
+        const listEl = document.getElementById('historyList');
+        if (historyData.length === 0) {
+            listEl.innerHTML = '<p>Nessuna spesa salvata nello storico.</p>';
+            return;
+        }
+        listEl.innerHTML = historyData.map(h => `
+            <div class="history-item">
+                <strong>Spesa di:</strong> ${h.buyer} | <strong>Data inserita:</strong> ${h.date} <br>
+                <small style="color: #666;">Inviata il: ${h.timestamp}</small>
+            </div>
+        `).join('');
+    }
+
+    // Caricamento iniziale
+    renderList();
+    renderHistory();
+</script>
+
 </body>
 </html>
