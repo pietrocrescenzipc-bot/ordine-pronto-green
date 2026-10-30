@@ -35,7 +35,7 @@
         h1 {
             text-align: center;
             color: var(--primary-color);
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             margin-bottom: 15px;
             text-transform: uppercase;
             border-bottom: 2px solid var(--primary-color);
@@ -49,7 +49,7 @@
             gap: 10px;
             margin-bottom: 15px;
             background: #eef2f3;
-            padding: 10px;
+            padding: 12px;
             border-radius: 6px;
             align-items: center;
             justify-content: space-between;
@@ -63,17 +63,17 @@
         }
 
         .meta-field label {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: bold;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             color: var(--primary-color);
         }
 
         .meta-field input {
-            padding: 6px;
+            padding: 8px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         /* Sezione Aggiunta Prodotti */
@@ -83,27 +83,27 @@
             gap: 8px;
             margin-bottom: 15px;
             background: #fff;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
         }
 
         .add-section input, .add-section select {
-            padding: 6px;
+            padding: 8px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             flex: 1;
             min-width: 130px;
         }
 
         button {
             cursor: pointer;
-            padding: 7px 12px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             transition: opacity 0.2s;
         }
 
@@ -119,14 +119,15 @@
         .btn-safe-mode {
             background-color: #f39c12;
             color: white;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            padding: 8px 12px;
         }
 
         /* Griglia a 4 colonne stile foglio cartaceo */
         .columns-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
@@ -144,7 +145,7 @@
 
         .column-box {
             border: 1px solid var(--primary-color);
-            border-radius: 4px;
+            border-radius: 6px;
             background: #fff;
             overflow: hidden;
             display: flex;
@@ -156,8 +157,8 @@
             color: white;
             text-align: center;
             font-weight: bold;
-            padding: 6px;
-            font-size: 0.85rem;
+            padding: 8px;
+            font-size: 0.9rem;
             text-transform: uppercase;
         }
 
@@ -172,35 +173,41 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 6px 8px;
+            padding: 9px 10px;
             border-bottom: 1px solid #eee;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
             transition: background 0.2s;
+        }
+
+        .item-row:hover {
+            background-color: #f1f4f6;
         }
 
         .item-row:last-child {
             border-bottom: none;
         }
 
+        /* Stile immediato quando il prodotto viene spuntato al supermercato */
         .item-row.checked {
             background-color: #e8f8f5;
             text-decoration: line-through;
-            color: #7f8c8d;
+            color: #95a5a6;
         }
 
         .item-name {
             flex-grow: 1;
-            cursor: pointer;
             word-break: break-word;
         }
 
         .temp-badge {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             background: #e67e22;
             color: white;
-            padding: 1px 4px;
-            border-radius: 3px;
-            margin-left: 5px;
+            padding: 2px 5px;
+            border-radius: 4px;
+            margin-left: 6px;
             text-transform: uppercase;
         }
 
@@ -209,9 +216,9 @@
             border: none;
             color: var(--danger-color);
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            padding: 0 4px;
+            padding: 0 6px;
             display: none; /* Nascosto di default per sicurezza */
         }
 
@@ -223,7 +230,7 @@
         .actions-footer {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
             justify-content: center;
             border-top: 1px solid #ddd;
             padding-top: 15px;
@@ -232,13 +239,14 @@
         .btn-whatsapp {
             background-color: var(--whatsapp-color);
             color: white;
-            font-size: 1rem;
-            padding: 10px 20px;
+            font-size: 1.05rem;
+            padding: 12px 24px;
         }
 
         .btn-history {
             background-color: #7f8c8d;
             color: white;
+            padding: 12px 20px;
         }
 
         /* Sezione Storico */
@@ -258,10 +266,10 @@
         .history-item {
             background: #f9f9f9;
             border: 1px solid #ddd;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 10px 14px;
+            border-radius: 6px;
             margin-bottom: 8px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -289,7 +297,7 @@
     <div class="add-section">
         <input type="text" id="newProductName" placeholder="Nome nuovo prodotto...">
         <select id="newProductCol">
-            <Col value="0">Colonna 1</Col>
+            <option value="0">Colonna 1</option>
             <option value="1">Colonna 2</option>
             <option value="2">Colonna 3</option>
             <option value="3">Colonna 4</option>
@@ -298,7 +306,7 @@
             <option value="fixed">Fisso (Rimane sempre)</option>
             <option value="temp">Solo per oggi (Temporaneo)</option>
         </select>
-        <button type="button" class="btn-add" onclick="addNewProduct()">+ Aggiungi Prodotto</button>
+        <button type="button" class="btn-add" onclick="addNewProduct()">+ Aggiungi</button>
     </div>
 
     <!-- Griglia delle 4 Colonne -->
@@ -308,7 +316,7 @@
 
     <!-- Azioni Finali -->
     <div class="actions-footer">
-        <button type="button" class="btn-whatsapp" onclick="sendWhatsApp()">📱 Invia a Pietro (WhatsApp)</button>
+        <button type="button" class="btn-whatsapp" onclick="sendWhatsApp()">📱 Invia Ordine a Pietro (WhatsApp)</button>
         <button type="button" class="btn-history" onclick="toggleHistory()">📜 Visualizza Storico</button>
     </div>
 
@@ -397,11 +405,13 @@
                 const isChecked = checkedItems[itemKey] || false;
 
                 li.className = `item-row ${isChecked ? 'checked' : ''}`;
+                
+                // Cliccando ovunque sulla riga si spunta il prodotto per la spesa
+                li.onclick = () => toggleCheck(colIndex, item.name);
 
                 const spanName = document.createElement('span');
                 spanName.className = 'item-name';
                 spanName.innerHTML = `${item.name} ${item.type === 'temp' ? '<span class="temp-badge">Oggi</span>' : ''}`;
-                spanName.onclick = () => toggleCheck(colIndex, item.name);
 
                 li.appendChild(spanName);
 
@@ -459,7 +469,6 @@
             return;
         }
 
-        // Verifica duplicati
         const exists = shoppingData[colIndex].some(item => item.name === name);
         if (exists) {
             alert('Questo prodotto è già presente in questa colonna!');
@@ -485,8 +494,7 @@
         const buyer = document.getElementById('buyerName').value.trim() || 'Non specificato';
         const date = document.getElementById('buyerDate').value || 'Data non specificata';
 
-        // Raccogli solo i prodotti spuntati
-        let text = `🛒 *LISTA DELLA SPESA*%0A`;
+        let text = `🛒 *LISTA DELL'ORDINE SPESA*%0A`;
         text += `👤 *Compilata da:* ${buyer}%0A`;
         text += `📅 *Data:* ${date}%0A%0A`;
 
@@ -505,21 +513,18 @@
         });
 
         if (!hasItems) {
-            if (!confirm("Non hai spuntato nessun prodotto. Vuoi inviare l'intera lista o solo i dati di compilazione?")) {
-                return;
-            }
-            // Se insiste, metti tutto
-            text += `_Lista Completa non spuntata inviata._`;
+            alert("Seleziona almeno un prodotto spuntandolo prima di inviare l'ordine!");
+            return;
         }
 
         // Salva nello storico
         const historyEntry = { buyer, date, timestamp: new Date().toLocaleString() };
         historyData.unshift(historyEntry);
-        if (historyData.length > 20) historyData.pop(); // tieni ultimi 20
+        if (historyData.length > 20) historyData.pop();
         localStorage.setItem('shopping_history', JSON.stringify(historyData));
         renderHistory();
 
-        // Numero di telefono di Pietro preimpostato
+        // Invio al numero di Pietro
         const phone = "3391318613";
         const whatsappUrl = `https://wa.me/${phone}?text=${text}`;
         window.open(whatsappUrl, '_blank');
@@ -539,13 +544,13 @@
         }
         listEl.innerHTML = historyData.map(h => `
             <div class="history-item">
-                <strong>Spesa di:</strong> ${h.buyer} | <strong>Data inserita:</strong> ${h.date} <br>
+                <strong>Spesa di:</strong> ${h.buyer} | <strong>Data:</strong> ${h.date} <br>
                 <small style="color: #666;">Inviata il: ${h.timestamp}</small>
             </div>
         `).join('');
     }
 
-    // Caricamento iniziale
+    // Avvio iniziale
     renderList();
     renderHistory();
 </script>
