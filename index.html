@@ -4,176 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spesa Giornaliera The Galleon Pizzeria</title>
-    <!-- Tailwind CSS per una grafica moderna, colorata e pulita -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
         body {
             font-family: 'Fredoka', cursive, sans-serif;
-            background-color: #f3f4f6;
+            background-color: #fffbeb;
         }
     </style>
 </head>
 <body class="bg-amber-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- Header Compatto -->
-    <header class="bg-red-600 text-white shadow-md py-3 px-4 flex flex-wrap justify-between items-center">
-        <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
-            🍕 Spesa Giornaliera - The Galleon Pizzeria
+    <!-- Header Vivace -->
+    <header class="bg-gradient-to-r from-red-600 to-orange-500 text-white shadow-lg py-4 px-6 flex justify-between items-center rounded-b-3xl">
+        <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
+            🍕 Spesa Giornaliera <span class="text-amber-200 text-lg hidden md:inline">The Galleon Pizzeria</span>
         </h1>
-        <div id="userInfoHeader" class="text-sm bg-red-700 px-3 py-1 rounded-full font-semibold hidden">
-            <span id="displayDate"></span> | <span id="displayAuthor"></span>
-            <button onclick="resetSession()" class="ml-2 bg-white text-red-600 px-2 py-0.5 rounded text-xs hover:bg-amber-100">Modifica</button>
+        <div id="userInfoHeader" class="text-sm bg-black/20 px-4 py-2 rounded-2xl font-semibold hidden flex items-center gap-2 backdrop-blur-sm">
+            <span id="displayDate"></span> | 👤 <span id="displayAuthor" class="text-amber-200"></span>
+            <button onclick="resetSession()" class="ml-2 bg-white text-red-600 px-3 py-1 rounded-xl text-xs font-bold hover:bg-amber-100 shadow">Cambia</button>
         </div>
     </header>
 
-    <!-- Contenitore Principale -->
-    <main class="flex-grow container mx-auto p-4 max-w-4xl">
+    <main class="flex-grow container mx-auto p-4 md:p-6 max-w-5xl">
 
-        <!-- SEZIONE 1: LOGIN / CONFIGURAZIONE GIORNALIERA -->
-        <section id="setupSection" class="bg-white rounded-2xl shadow-lg p-6 border-4 border-red-200">
-            <h2 class="text-2xl font-bold text-center text-red-600 mb-4">Inizia la Giornata di Spesa</h2>
+        <!-- SETUP INIZIALE -->
+        <section id="setupSection" class="bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-orange-200 mt-4">
+            <h2 class="text-3xl font-bold text-center text-orange-600 mb-6">Benvenuti! Chi compila la spesa oggi? ✨</h2>
             
-            <div class="grid md:grid-cols-2 gap-6 mb-6">
-                <!-- Data -->
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
                 <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Data di oggi:</label>
-                    <input type="date" id="inputDate" class="w-full p-3 border-2 border-gray-300 rounded-xl text-lg font-semibold bg-gray-50 focus:border-red-500 focus:outline-none">
+                    <label class="block text-gray-700 font-bold mb-2 text-lg">📅 Data di oggi:</label>
+                    <input type="date" id="inputDate" class="w-full p-4 border-3 border-orange-200 rounded-2xl text-xl font-semibold bg-orange-50/50 focus:border-orange-500 focus:outline-none text-center">
                 </div>
-                <!-- Nome Compilatore -->
                 <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Nome di chi compila:</label>
-                    <div class="grid grid-cols-3 gap-2 mb-2" id="authorButtons">
-                        <!-- Bottoni autore generati via JS -->
-                    </div>
-                    <input type="text" id="inputAuthor" placeholder="O scrivi un altro nome..." class="w-full p-2 border-2 border-gray-300 rounded-xl text-sm focus:border-red-500 focus:outline-none">
+                    <label class="block text-gray-700 font-bold mb-2 text-lg">👦👧 Seleziona il tuo nome:</label>
+                    <div class="grid grid-cols-3 gap-2 mb-3" id="authorButtons"></div>
+                    <input type="text" id="inputAuthor" placeholder="O scrivi un altro nome..." class="w-full p-3 border-2 border-gray-200 rounded-2xl text-base focus:border-orange-500 focus:outline-none bg-gray-50">
                 </div>
             </div>
 
-            <!-- Pulsanti Principali Home -->
-            <div class="grid md:grid-cols-2 gap-4 mt-6">
-                <button onclick="startMode('create')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold p-5 rounded-2xl text-xl shadow-lg transition transform hover:scale-105 flex items-center justify-center gap-3 border-b-4 border-emerald-700">
+            <!-- Pulsanti Giganti Home -->
+            <div class="grid md:grid-cols-2 gap-6 mt-6">
+                <button onclick="startMode('create')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold p-6 rounded-3xl text-2xl shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-4 border-b-6 border-teal-800">
                     🛒 CREA LA SPESA
                 </button>
-                <button onclick="startMode('shop')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold p-5 rounded-2xl text-xl shadow-lg transition transform hover:scale-105 flex items-center justify-center gap-3 border-b-4 border-blue-700">
+                <button onclick="goToSupermarket()" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold p-6 rounded-3xl text-2xl shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-4 border-b-6 border-indigo-800">
                     🛍️ VAI AL SUPERMERCATO
                 </button>
             </div>
 
-            <!-- Pulsante Storico -->
-            <div class="mt-6 text-center">
-                <button onclick="showHistory()" class="text-indigo-600 font-bold hover:underline text-lg">
+            <div class="mt-8 text-center">
+                <button onclick="showHistory()" class="text-indigo-600 font-bold hover:underline text-xl bg-indigo-50 px-6 py-3 rounded-2xl border-2 border-indigo-200 inline-block shadow-sm">
                     📊 Visualizza Storico Spese
                 </button>
             </div>
         </section>
 
-        <!-- SEZIONE 2: CREA LA SPESA (Catalogo e Quantità) -->
-        <section id="createSection" class="hidden bg-white rounded-2xl shadow-lg p-6 border-4 border-emerald-200">
-            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
-                <h2 class="text-xl font-bold text-emerald-600">Crea la Lista della Spesa</h2>
-                <button onclick="goHome()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-xl font-bold text-sm">⬅️ Indietro</button>
+        <!-- CREA LA SPESA -->
+        <section id="createSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-emerald-200 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-100">
+                <h2 class="text-2xl font-bold text-emerald-700">🛒 Seleziona i prodotti da comprare</h2>
+                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-2xl font-bold text-base shadow-sm">⬅️ Indietro</button>
             </div>
-
-            <p class="text-sm text-gray-600 mb-4">Seleziona i prodotti dalla lista e inserisci la quantità o il peso desiderato:</p>
 
             <!-- Aggiunta Fuori Lista -->
-            <div class="bg-amber-50 p-3 rounded-xl border-2 border-amber-200 mb-6 flex gap-2">
-                <input type="text" id="customItemName" placeholder="Prodotto fuori lista..." class="flex-grow p-2 border rounded-lg text-sm">
-                <input type="text" id="customItemQty" placeholder="Qtà/Peso" class="w-28 p-2 border rounded-lg text-sm">
-                <button onclick="addCustomItem()" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-bold text-sm">➕ Aggiungi</button>
+            <div class="bg-amber-50 p-4 rounded-2xl border-2 border-amber-300 mb-6 flex flex-wrap md:flex-nowrap gap-3 items-center">
+                <span class="font-bold text-amber-800 text-sm">✨ Fuori Lista:</span>
+                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-amber-200 rounded-xl text-base bg-white">
+                <input type="text" id="customItemQty" placeholder="Qtà o Peso" class="w-36 p-3 border-2 border-amber-200 rounded-xl text-base bg-white">
+                <button onclick="addCustomItem()" class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl font-bold text-base shadow">➕ Aggiungi</button>
             </div>
 
-            <!-- Lista Prodotti in Colonna -->
-            <div id="catalogListContainer" class="space-y-2 max-h-[50vh] overflow-y-auto pr-2 mb-6">
-                <!-- Generato via JS -->
-            </div>
+            <!-- Griglia dei Prodotti in 4 colonne -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 max-h-[55vh] overflow-y-auto pr-2 mb-6 p-2 bg-gray-50/50 rounded-2xl border-2 border-gray-100" id="catalogColumnsContainer"></div>
 
-            <!-- Pulsante Conferma Spesa -->
-            <button onclick="saveAndGoToShop()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold p-4 rounded-xl text-lg shadow-lg transition flex items-center justify-center gap-2">
-                💾 Salva e Vai al Supermercato
+            <button onclick="saveCreatedShoppingList()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold p-5 rounded-2xl text-xl shadow-xl transition flex items-center justify-center gap-3">
+                💾 Salva Spesa e Continua 🚀
             </button>
         </section>
 
-        <!-- SEZIONE 3: VAI AL SUPERMERCATO (Lista Attiva e Spunte) -->
-        <section id="shopSection" class="hidden bg-white rounded-2xl shadow-lg p-6 border-4 border-blue-200">
-            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
-                <h2 class="text-xl font-bold text-blue-600">Lista della Spesa (Supermercato)</h2>
-                <button onclick="goHome()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-xl font-bold text-sm">⬅️ Indietro</button>
+        <!-- SCHERMATA POST-SALVATAGGIO (Possibilità di aggiungere ancora prima di tornare alla Home) -->
+        <section id="postSaveSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-teal-200 mt-4">
+            <div class="text-center mb-6">
+                <span class="text-5xl">🎉</span>
+                <h2 class="text-3xl font-bold text-teal-700 mt-2">Spesa Salvata con Successo!</h2>
+                <p class="text-gray-600 text-base mt-1">Vuoi aggiungere altri prodotti prima di chiudere o hai finito?</p>
             </div>
 
-            <!-- Progresso -->
-            <div class="mb-4 bg-blue-50 p-3 rounded-xl flex justify-between items-center border border-blue-200">
-                <span id="progressText" class="font-bold text-blue-800 text-sm">Prodotti presi: 0 / 0</span>
-                <div class="w-1/2 bg-gray-200 rounded-full h-3 overflow-hidden">
-                    <div id="progressBar" class="bg-blue-600 h-full transition-all duration-300" style="width: 0%"></div>
+            <div class="bg-teal-50 p-4 rounded-2xl border-2 border-teal-200 mb-6">
+                <h3 class="font-bold text-teal-900 mb-3 text-lg">➕ Aggiungi un altro prodotto al volo:</h3>
+                <div class="flex flex-wrap md:flex-nowrap gap-3 items-center">
+                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-base bg-white">
+                    <input type="text" id="extraPostQty" placeholder="Qtà o Peso" class="w-36 p-3 border-2 border-teal-200 rounded-xl text-base bg-white">
+                    <button onclick="addExtraItemAfterSave()" class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-xl font-bold text-base shadow">➕ Aggiungi</button>
                 </div>
             </div>
 
-            <!-- Lista della Spesa attiva -->
-            <div id="activeShoppingList" class="space-y-2 max-h-[50vh] overflow-y-auto pr-2 mb-6">
-                <!-- Generato via JS -->
+            <div class="mb-6">
+                <h4 class="font-bold text-gray-700 mb-2">Prodotti attualmente in lista:</h4>
+                <div id="savedItemsSummaryList" class="max-h-44 overflow-y-auto bg-gray-50 p-3 rounded-2xl border border-gray-200 space-y-2"></div>
             </div>
 
-            <!-- Pulsante Completa Spesa -->
-            <button onclick="completeShopping()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold p-4 rounded-xl text-lg shadow-lg transition">
-                🎉 Termina e Salva in Storico
+            <button onclick="goHome()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold p-5 rounded-2xl text-xl shadow-xl transition flex items-center justify-center gap-3">
+                🏠 Finito! Torna alla Home
             </button>
         </section>
 
-        <!-- SEZIONE 4: STORICO -->
-        <section id="historySection" class="hidden bg-white rounded-2xl shadow-lg p-6 border-4 border-indigo-200">
-            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
-                <h2 class="text-xl font-bold text-indigo-600">Storico Spese</h2>
-                <button onclick="goHome()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-xl font-bold text-sm">⬅️ Indietro</button>
+        <!-- VAI AL SUPERMERCATO -->
+        <section id="shopSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-blue-200 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-100">
+                <h2 class="text-2xl font-bold text-blue-700">🛍️ Lista della Spesa al Supermercato</h2>
+                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-2xl font-bold text-base shadow-sm">⬅️ Indietro</button>
             </div>
 
-            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2" id="historyContainer">
-                <!-- Storico inserito via JS -->
+            <div class="mb-6 bg-blue-50 p-4 rounded-2xl flex justify-between items-center border-2 border-blue-200">
+                <span id="progressText" class="font-bold text-blue-900 text-lg">Prodotti presi: 0 / 0</span>
+                <div class="w-1/2 bg-white rounded-full h-4 overflow-hidden border border-blue-200 shadow-inner">
+                    <div id="progressBar" class="bg-blue-600 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
+                </div>
             </div>
+
+            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3 max-h-[55vh] overflow-y-auto pr-2 mb-6 p-2 bg-gray-50/50 rounded-2xl border-2 border-gray-100"></div>
+
+            <button onclick="completeShopping()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold p-5 rounded-2xl text-xl shadow-xl transition">
+                🎉 Termina e Salva nello Storico!
+            </button>
+        </section>
+
+        <!-- STORICO -->
+        <section id="historySection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-indigo-200 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-100">
+                <h2 class="text-2xl font-bold text-indigo-700">📊 Storico delle Spese</h2>
+                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-2xl font-bold text-base shadow-sm">⬅️ Indietro</button>
+            </div>
+
+            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2" id="historyContainer"></div>
         </section>
 
     </main>
 
-    <!-- Script Logica dell'App -->
     <script>
-        // Lista esatta presa dalla foto fornita
-        const defaultCatalog = [
-            // Colonna 1
-            "LATTUAGA", "MELANZANE", "ZUCCHINE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", 
-            "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", 
-            "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", 
-            "PANE", "CAFFE'", "SPIEDINI", "POMODORI SECCHI",
-            // Colonna 2
-            "SALE", "PEPE", "PISELLI", "C.HAMBURGER", "CHIANINA", "NOCI", "LIMMY", 
-            "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "EMMENTHAL", 
-            "STRACCHINO", "MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "PANNA SPRAY", 
-            "PANNA FRESCA", "CONTEN.PANNA COTTA",
-            // Colonna 3
-            "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", 
-            "OLIO PICCANTE", "TONNO", "SALMONE", "ZUCCHERO", "ZUCCHERO A VELO", "UOVA", 
-            "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", 
-            "LATTE", "ROTOLONI",
-            // Colonna 4
-            "DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "TOV.COLORATI", "STECCHINI", 
-            "BICCHIERI", "SAPONE MANI", "SPUGNE VASSOI", "MICROFIBRA", "ORDINARE DOLCE", 
-            "RITIRARE DOLCE", "MARMELLATA", "FRUTTI BOSCO", "COCA COLA", "TABASCO", 
-            "TRANCI SALMONE", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "PELLICOLA", "APEROL"
-        ];
+        const col1 = ["LATTUAGA", "MELANZANE", "ZUCCHINE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE", "CAFFE'", "SPIEDINI", "POMODORI SECCHI"];
+        const col2 = ["SALE", "PEPE", "PISELLI", "C.HAMBURGER", "CHIANINA", "NOCI", "LIMMY", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "EMMENTHAL", "STRACCHINO", "MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "PANNA SPRAY", "PANNA FRESCA", "CONTEN.PANNA COTTA"];
+        const col3 = ["PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "TONNO", "SALMONE", "ZUCCHERO", "ZUCCHERO A VELO", "UOVA", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "LATTE", "ROTOLONI"];
+        const col4 = ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SAPONE MANI", "SPUGNE VASSOI", "MICROFIBRA", "ORDINARE DOLCE", "RITIRARE DOLCE", "MARMELLATA", "FRUTTI BOSCO", "COCA COLA", "TABASCO", "TRANCI SALMONE", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "PELLICOLA", "APEROL"];
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
+        let currentSession = { date: new Date().toISOString().split('T')[0], author: "", items: [] };
 
-        let currentSession = {
-            date: new Date().toISOString().split('T')[0],
-            author: "",
-            items: [] // { name, qty, checked }
-        };
-
-        // Inizializzazione
         window.onload = function() {
             document.getElementById('inputDate').value = currentSession.date;
             renderAuthorButtons();
-            initCatalog();
+            initCatalogColumns();
         };
 
         function renderAuthorButtons() {
@@ -182,29 +165,37 @@
             authors.forEach(name => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = "bg-red-50 hover:bg-red-100 text-red-700 font-semibold py-2 px-3 rounded-xl border border-red-200 text-sm transition";
+                btn.className = "bg-orange-50 hover:bg-orange-100 text-orange-800 font-bold py-3 px-3 rounded-2xl border-2 border-orange-200 text-base transition shadow-sm";
                 btn.innerText = name;
-                btn.onclick = () => {
-                    document.getElementById('inputAuthor').value = name;
-                };
+                btn.onclick = () => document.getElementById('inputAuthor').value = name;
                 container.appendChild(btn);
             });
         }
 
-        function initCatalog() {
-            const container = document.getElementById('catalogListContainer');
+        function initCatalogColumns() {
+            const container = document.getElementById('catalogColumnsContainer');
             container.innerHTML = '';
-            defaultCatalog.forEach((item, index) => {
-                const row = document.createElement('div');
-                row.className = "flex items-center justify-between bg-gray-50 p-2 rounded-xl border border-gray-200";
-                row.innerHTML = `
-                    <label class="flex items-center gap-3 flex-grow cursor-pointer">
-                        <input type="checkbox" id="cat-check-${index}" value="${item}" class="w-5 h-5 text-emerald-600 rounded">
-                        <span class="font-medium text-gray-800 text-sm">${item}</span>
-                    </label>
-                    <input type="text" id="cat-qty-${index}" placeholder="Qtà/Peso" class="w-28 p-1.5 border rounded-lg text-sm bg-white">
-                `;
-                container.appendChild(row);
+            const columnsData = [col1, col2, col3, col4];
+
+            columnsData.forEach((colArray, colIdx) => {
+                const colDiv = document.createElement('div');
+                colDiv.className = "space-y-2 bg-white p-3 rounded-2xl border-2 border-gray-200 shadow-sm";
+                colDiv.innerHTML = `<h3 class="font-bold text-center text-orange-600 pb-2 border-b border-gray-100 text-sm">Colonna ${colIdx + 1}</h3>`;
+                
+                colArray.forEach((item, itemIdx) => {
+                    const globalId = `${colIdx}-${itemIdx}`;
+                    const row = document.createElement('div');
+                    row.className = "flex flex-col gap-1 p-2 bg-gray-50 hover:bg-emerald-50/50 rounded-xl border border-gray-200 transition";
+                    row.innerHTML = `
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="cat-check-${globalId}" value="${item}" class="w-5 h-5 text-emerald-600 rounded cursor-pointer">
+                            <span class="font-semibold text-gray-800 text-xs leading-tight">${item}</span>
+                        </label>
+                        <input type="text" id="cat-qty-${globalId}" placeholder="Qtà o peso..." class="w-full p-1.5 border border-gray-300 rounded-lg text-xs bg-white focus:border-emerald-500 focus:outline-none">
+                    `;
+                    colDiv.appendChild(row);
+                });
+                container.appendChild(colDiv);
             });
         }
 
@@ -213,20 +204,20 @@
             const qtyInput = document.getElementById('customItemQty');
             const name = nameInput.value.trim();
             const qty = qtyInput.value.trim();
-
             if (!name) return;
 
-            const container = document.getElementById('catalogListContainer');
+            const container = document.getElementById('catalogColumnsContainer');
+            let firstCol = container.querySelector('div');
             const row = document.createElement('div');
-            row.className = "flex items-center justify-between bg-amber-50 p-2 rounded-xl border border-amber-200";
+            row.className = "flex flex-col gap-1 p-2 bg-amber-50 rounded-xl border-2 border-amber-300 shadow-sm";
             row.innerHTML = `
-                <label class="flex items-center gap-3 flex-grow cursor-pointer">
-                    <input type="checkbox" checked value="${name}" class="custom-chk w-5 h-5 text-emerald-600 rounded" data-name="${name}">
-                    <span class="font-medium text-gray-800 text-sm">${name} (Fuori Lista)</span>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked value="${name}" class="custom-chk w-5 h-5 text-emerald-600 rounded cursor-pointer" data-name="${name}">
+                    <span class="font-bold text-amber-900 text-xs">${name} (Fuori Lista)</span>
                 </label>
-                <input type="text" value="${qty}" class="custom-qty w-28 p-1.5 border rounded-lg text-sm bg-white" data-name="${name}">
+                <input type="text" value="${qty}" class="custom-qty w-full p-1.5 border border-amber-300 rounded-lg text-xs bg-white focus:outline-none" data-name="${name}">
             `;
-            container.prepend(row);
+            firstCol.prepend(row);
             nameInput.value = '';
             qtyInput.value = '';
         }
@@ -234,15 +225,12 @@
         function startMode(mode) {
             const date = document.getElementById('inputDate').value;
             const authorInput = document.getElementById('inputAuthor').value.trim();
-
             if (!authorInput) {
-                alert("Per favore, seleziona o scrivi il nome di chi compila!");
+                alert("Seleziona o scrivi il nome di chi compila la spesa!");
                 return;
             }
-
             currentSession.date = date;
             currentSession.author = authorInput;
-
             document.getElementById('displayDate').innerText = date;
             document.getElementById('displayAuthor').innerText = authorInput;
             document.getElementById('userInfoHeader').classList.remove('hidden');
@@ -250,27 +238,42 @@
 
             if (mode === 'create') {
                 document.getElementById('createSection').classList.remove('hidden');
-            } else {
-                // Se va direttamente al supermercato senza passare per crea, carica tutti o quelli salvati
-                prepareActiveShoppingList();
-                document.getElementById('shopSection').classList.remove('hidden');
             }
         }
 
-        function saveAndGoToShop() {
+        function goToSupermarket() {
+            const date = document.getElementById('inputDate').value;
+            const authorInput = document.getElementById('inputAuthor').value.trim();
+            if (!authorInput) {
+                alert("Seleziona o scrivi il nome prima di andare al supermercato!");
+                return;
+            }
+            currentSession.date = date;
+            currentSession.author = authorInput;
+            document.getElementById('displayDate').innerText = date;
+            document.getElementById('displayAuthor').innerText = authorInput;
+            document.getElementById('userInfoHeader').classList.remove('hidden');
+            document.getElementById('setupSection').classList.add('hidden');
+
+            prepareActiveShoppingList();
+            document.getElementById('shopSection').classList.remove('hidden');
+        }
+
+        function saveCreatedShoppingList() {
             currentSession.items = [];
-            
-            // Raccogli dal catalogo
-            defaultCatalog.forEach((item, index) => {
-                const chk = document.getElementById(`cat-check-${index}`);
-                const qty = document.getElementById(`cat-qty-${index}`).value;
-                if (chk && chk.checked) {
-                    currentSession.items.push({ name: item, qty: qty || "1", checked: false });
-                }
+            const columnsData = [col1, col2, col3, col4];
+            columnsData.forEach((colArray, colIdx) => {
+                colArray.forEach((item, itemIdx) => {
+                    const globalId = `${colIdx}-${itemIdx}`;
+                    const chk = document.getElementById(`cat-check-${globalId}`);
+                    const qty = document.getElementById(`cat-qty-${globalId}`).value;
+                    if (chk && chk.checked) {
+                        currentSession.items.push({ name: item, qty: qty || "1", checked: false });
+                    }
+                });
             });
 
-            // Raccogli personalizzati
-            document.querySelectorAll('#catalogListContainer .custom-chk').forEach(chk => {
+            document.querySelectorAll('#catalogColumnsContainer .custom-chk').forEach(chk => {
                 if (chk.checked) {
                     const name = chk.getAttribute('data-name');
                     const qtyInput = chk.closest('div').querySelector('.custom-qty');
@@ -279,34 +282,75 @@
             });
 
             if (currentSession.items.length === 0) {
-                alert("Seleziona almeno un prodotto prima di continuare!");
+                alert("Seleziona almeno un prodotto!");
                 return;
             }
 
+            // Salva provvisoriamente nello storico/memoria attiva delle liste create
+            saveActiveListToStorage();
+
+            // Passa alla schermata di post-salvataggio con possibilità di aggiungere ancora
             document.getElementById('createSection').classList.add('hidden');
-            prepareActiveShoppingList();
-            document.getElementById('shopSection').classList.remove('hidden');
+            renderPostSaveSummary();
+            document.getElementById('postSaveSection').classList.remove('hidden');
+        }
+
+        function renderPostSaveSummary() {
+            const container = document.getElementById('savedItemsSummaryList');
+            container.innerHTML = '';
+            currentSession.items.forEach(i => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-white p-2 rounded-xl border border-teal-100 text-sm";
+                div.innerHTML = `<span class="font-semibold text-gray-800">${i.name}</span><span class="font-bold text-teal-600">${i.qty}</span>`;
+                container.appendChild(div);
+            });
+        }
+
+        function addExtraItemAfterSave() {
+            const nameInput = document.getElementById('extraPostName');
+            const qtyInput = document.getElementById('extraPostQty');
+            const name = nameInput.value.trim();
+            const qty = qtyInput.value.trim();
+            if (!name) return;
+
+            currentSession.items.push({ name: name, qty: qty || "1", checked: false });
+            saveActiveListToStorage();
+            renderPostSaveSummary();
+
+            nameInput.value = '';
+            qtyInput.value = '';
+        }
+
+        function saveActiveListToStorage() {
+            // Salva o aggiorna l'ultima spesa creata
+            localStorage.setItem('galleon_current_active_list', JSON.stringify(currentSession));
         }
 
         function prepareActiveShoppingList() {
+            // Se c'è una lista salvata in precedenza, la carica per chi va al supermercato
+            let saved = localStorage.getItem('galleon_current_active_list');
+            if (saved) {
+                let parsed = JSON.parse(saved);
+                currentSession.items = parsed.items;
+                if(parsed.author && !currentSession.author) currentSession.author = parsed.author;
+            }
+
             const container = document.getElementById('activeShoppingList');
             container.innerHTML = '';
-
             if (currentSession.items.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-4">Nessun prodotto in lista. Torna a creare la spesa!</p>';
+                container.innerHTML = '<p class="text-center text-gray-500 py-6 col-span-2">Nessun prodotto in lista. Torna a creare la spesa!</p>';
                 updateProgress();
                 return;
             }
-
             currentSession.items.forEach((item, index) => {
                 const div = document.createElement('div');
-                div.className = `flex items-center justify-between p-3 rounded-xl border transition ${item.checked ? 'bg-emerald-50 border-emerald-300 opacity-75 line-through' : 'bg-gray-50 border-gray-200'}`;
+                div.className = `flex items-center justify-between p-4 rounded-2xl border-2 transition ${item.checked ? 'bg-emerald-50 border-emerald-300 opacity-70 line-through' : 'bg-gray-50 border-gray-200'}`;
                 div.innerHTML = `
                     <label class="flex items-center gap-3 flex-grow cursor-pointer">
-                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-6 h-6 text-blue-600 rounded cursor-pointer">
-                        <span class="font-bold text-base ${item.checked ? 'text-emerald-700' : 'text-gray-800'}">${item.name}</span>
+                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-6 h-6 text-blue-600 rounded-lg cursor-pointer">
+                        <span class="font-bold text-lg ${item.checked ? 'text-emerald-800' : 'text-gray-800'}">${item.name}</span>
                     </label>
-                    <span class="bg-white px-3 py-1 rounded-lg border font-semibold text-sm text-blue-600">${item.qty}</span>
+                    <span class="bg-white px-4 py-2 rounded-xl border-2 border-blue-200 font-extrabold text-blue-600 text-sm shadow-sm">${item.qty}</span>
                 `;
                 container.appendChild(div);
             });
@@ -315,6 +359,7 @@
 
         function toggleCheck(index) {
             currentSession.items[index].checked = !currentSession.items[index].checked;
+            saveActiveListToStorage();
             prepareActiveShoppingList();
         }
 
@@ -322,28 +367,17 @@
             const total = currentSession.items.length;
             const checkedCount = currentSession.items.filter(i => i.checked).length;
             const percent = total > 0 ? (checkedCount / total) * 100 : 0;
-
             document.getElementById('progressText').innerText = `Prodotti presi: ${checkedCount} / ${total}`;
             document.getElementById('progressBar').style.width = `${percent}%`;
         }
 
         function completeShopping() {
-            if (currentSession.items.length === 0) {
-                alert("La lista è vuota!");
-                return;
-            }
-
-            // Salva nello storico (localStorage)
+            if (currentSession.items.length === 0) return;
             let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
-            history.unshift({
-                date: currentSession.date,
-                author: currentSession.author,
-                items: [...currentSession.items],
-                timestamp: new Date().toLocaleString()
-            });
+            history.unshift({ date: currentSession.date, author: currentSession.author, items: [...currentSession.items], timestamp: new Date().toLocaleString() });
             localStorage.setItem('galleon_history', JSON.stringify(history));
-
-            alert("Spesa completata e salvata nello storico con successo! 🎉");
+            localStorage.removeItem('galleon_current_active_list');
+            alert("Spesa completata e salvata nello storico! 🎉");
             goHome();
         }
 
@@ -351,36 +385,29 @@
             document.getElementById('setupSection').classList.add('hidden');
             const container = document.getElementById('historyContainer');
             container.innerHTML = '';
-
             let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
-
             if (history.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-6">Nessuna spesa salvata nello storico.</p>';
+                container.innerHTML = '<p class="text-center text-gray-500 py-6 text-lg">Nessuno storico salvato.</p>';
             } else {
                 history.forEach((session, idx) => {
                     const card = document.createElement('div');
-                    card.className = "bg-indigo-50 border-2 border-indigo-200 rounded-xl p-4 mb-4";
-                    
+                    card.className = "bg-indigo-50/70 border-3 border-indigo-200 rounded-2xl p-5 shadow-sm";
                     let itemsHtml = session.items.map(i => `
-                        <li class="text-sm flex justify-between py-1 border-b border-indigo-100 last:border-0">
-                            <span class="${i.checked ? 'line-through text-emerald-700 font-medium' : 'text-gray-700'}">${i.name}</span>
-                            <span class="font-semibold text-indigo-600">${i.qty}</span>
+                        <li class="text-sm flex justify-between py-1.5 border-b border-indigo-100 last:border-0">
+                            <span class="${i.checked ? 'line-through text-emerald-700 font-bold' : 'text-gray-700'}">${i.name}</span>
+                            <span class="font-extrabold text-indigo-600">${i.qty}</span>
                         </li>
                     `).join('');
-
                     card.innerHTML = `
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="font-bold text-indigo-900">📅 ${session.date} - Compilato da: <span class="text-red-600">${session.author}</span></span>
-                            <button onclick="deleteHistoryItem(${idx})" class="text-red-500 hover:text-red-700 text-xs font-bold">🗑️ Elimina</button>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-indigo-900 text-lg">📅 ${session.date} - <span class="text-red-600">${session.author}</span></span>
+                            <button onclick="deleteHistoryItem(${idx})" class="text-red-500 hover:text-red-700 text-sm font-bold bg-white px-3 py-1 rounded-xl shadow-sm">🗑️ Elimina</button>
                         </div>
-                        <ul class="bg-white rounded-lg p-3 shadow-inner max-h-36 overflow-y-auto">
-                            ${itemsHtml}
-                        </ul>
+                        <ul class="bg-white rounded-xl p-4 shadow-inner max-h-40 overflow-y-auto border border-indigo-100">${itemsHtml}</ul>
                     `;
                     container.appendChild(card);
                 });
             }
-
             document.getElementById('historySection').classList.remove('hidden');
         }
 
@@ -393,6 +420,7 @@
 
         function goHome() {
             document.getElementById('createSection').classList.add('hidden');
+            document.getElementById('postSaveSection').classList.add('hidden');
             document.getElementById('shopSection').classList.add('hidden');
             document.getElementById('historySection').classList.add('hidden');
             document.getElementById('setupSection').classList.remove('hidden');
