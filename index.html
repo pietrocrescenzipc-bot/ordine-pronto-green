@@ -16,130 +16,130 @@
 <body class="bg-amber-50 text-slate-800 min-h-screen flex flex-col">
 
     <!-- Header Vivace -->
-    <header class="bg-gradient-to-r from-red-600 to-orange-500 text-white shadow-lg py-4 px-6 flex justify-between items-center rounded-b-3xl">
-        <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
-            🍕 Spesa Giornaliera <span class="text-amber-200 text-lg hidden md:inline">The Galleon Pizzeria</span>
+    <header class="bg-gradient-to-r from-red-600 to-orange-500 text-white shadow-lg py-3 px-6 flex justify-between items-center rounded-b-3xl">
+        <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+            🍕 Spesa Giornaliera <span class="text-amber-200 text-sm hidden md:inline">The Galleon Pizzeria</span>
         </h1>
-        <div id="userInfoHeader" class="text-sm bg-black/20 px-4 py-2 rounded-2xl font-semibold hidden flex items-center gap-2 backdrop-blur-sm">
+        <div id="userInfoHeader" class="text-xs md:text-sm bg-black/20 px-3 py-1.5 rounded-2xl font-semibold hidden flex items-center gap-2 backdrop-blur-sm">
             <span id="displayDate"></span> | 👤 <span id="displayAuthor" class="text-amber-200"></span>
-            <button onclick="resetSession()" class="ml-2 bg-white text-red-600 px-3 py-1 rounded-xl text-xs font-bold hover:bg-amber-100 shadow">Cambia</button>
+            <button onclick="resetSession()" class="ml-2 bg-white text-red-600 px-2.5 py-1 rounded-xl text-xs font-bold hover:bg-amber-100 shadow">Cambia</button>
         </div>
     </header>
 
-    <main class="flex-grow container mx-auto p-4 md:p-6 max-w-5xl">
+    <main class="flex-grow container mx-auto p-3 md:p-5 max-w-6xl">
 
         <!-- SETUP INIZIALE -->
-        <section id="setupSection" class="bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-orange-200 mt-4">
-            <h2 class="text-3xl font-bold text-center text-orange-600 mb-6">Benvenuti! Chi compila la spesa oggi? ✨</h2>
+        <section id="setupSection" class="bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-orange-200 mt-2">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-orange-600 mb-6">Benvenuti! Chi compila la spesa oggi? ✨</h2>
             
-            <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
-                    <label class="block text-gray-700 font-bold mb-2 text-lg">📅 Data di oggi:</label>
-                    <input type="date" id="inputDate" class="w-full p-4 border-3 border-orange-200 rounded-2xl text-xl font-semibold bg-orange-50/50 focus:border-orange-500 focus:outline-none text-center">
+                    <label class="block text-gray-700 font-bold mb-2 text-base">📅 Data di oggi:</label>
+                    <input type="date" id="inputDate" class="w-full p-3 border-3 border-orange-200 rounded-2xl text-lg font-semibold bg-orange-50/50 focus:border-orange-500 focus:outline-none text-center">
                 </div>
                 <div>
-                    <label class="block text-gray-700 font-bold mb-2 text-lg">👦👧 Seleziona il tuo nome:</label>
-                    <div class="grid grid-cols-3 gap-2 mb-3" id="authorButtons"></div>
-                    <input type="text" id="inputAuthor" placeholder="O scrivi un altro nome..." class="w-full p-3 border-2 border-gray-200 rounded-2xl text-base focus:border-orange-500 focus:outline-none bg-gray-50">
+                    <label class="block text-gray-700 font-bold mb-2 text-base">👦👧 Seleziona il tuo nome:</label>
+                    <div class="grid grid-cols-3 gap-2 mb-2" id="authorButtons"></div>
+                    <input type="text" id="inputAuthor" placeholder="O scrivi un altro nome..." class="w-full p-2.5 border-2 border-gray-200 rounded-2xl text-sm focus:border-orange-500 focus:outline-none bg-gray-50">
                 </div>
             </div>
 
             <!-- Pulsanti Giganti Home -->
-            <div class="grid md:grid-cols-2 gap-6 mt-6">
-                <button onclick="startMode('create')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold p-6 rounded-3xl text-2xl shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-4 border-b-6 border-teal-800">
+            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                <button onclick="startMode('create')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold p-5 rounded-3xl text-xl shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-3 border-b-6 border-teal-800">
                     🛒 CREA LA SPESA
                 </button>
-                <button onclick="goToSupermarket()" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold p-6 rounded-3xl text-2xl shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-4 border-b-6 border-indigo-800">
+                <button onclick="goToSupermarket()" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold p-5 rounded-3xl text-xl shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-3 border-b-6 border-indigo-800">
                     🛍️ VAI AL SUPERMERCATO
                 </button>
             </div>
 
-            <div class="mt-8 text-center">
-                <button onclick="showHistory()" class="text-indigo-600 font-bold hover:underline text-xl bg-indigo-50 px-6 py-3 rounded-2xl border-2 border-indigo-200 inline-block shadow-sm">
+            <div class="mt-6 text-center">
+                <button onclick="showHistory()" class="text-indigo-600 font-bold hover:underline text-base bg-indigo-50 px-5 py-2.5 rounded-2xl border-2 border-indigo-200 inline-block shadow-sm">
                     📊 Visualizza Storico Spese
                 </button>
             </div>
         </section>
 
-        <!-- CREA LA SPESA -->
-        <section id="createSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-emerald-200 mt-4">
-            <div class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-100">
-                <h2 class="text-2xl font-bold text-emerald-700">🛒 Seleziona i prodotti da comprare</h2>
-                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-2xl font-bold text-base shadow-sm">⬅️ Indietro</button>
+        <!-- CREA LA SPESA (Compatta e con tasti grandi + / -) -->
+        <section id="createSection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-6 border-4 border-emerald-200 mt-2">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
+                <h2 class="text-xl font-bold text-emerald-700">🛒 Seleziona i prodotti</h2>
+                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-2xl font-bold text-sm shadow-sm">⬅️ Indietro</button>
             </div>
 
             <!-- Aggiunta Fuori Lista -->
-            <div class="bg-amber-50 p-4 rounded-2xl border-2 border-amber-300 mb-6 flex flex-wrap md:flex-nowrap gap-3 items-center">
-                <span class="font-bold text-amber-800 text-sm">✨ Fuori Lista:</span>
-                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-amber-200 rounded-xl text-base bg-white">
-                <input type="text" id="customItemQty" placeholder="Qtà o Peso" class="w-36 p-3 border-2 border-amber-200 rounded-xl text-base bg-white">
-                <button onclick="addCustomItem()" class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl font-bold text-base shadow">➕ Aggiungi</button>
+            <div class="bg-amber-50 p-3 rounded-2xl border-2 border-amber-300 mb-4 flex flex-wrap md:flex-nowrap gap-2 items-center">
+                <span class="font-bold text-amber-800 text-xs">✨ Fuori Lista:</span>
+                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow p-2 border-2 border-amber-200 rounded-xl text-sm bg-white">
+                <input type="text" id="customItemQty" placeholder="Qtà/Peso" class="w-28 p-2 border-2 border-amber-200 rounded-xl text-sm bg-white text-center">
+                <button onclick="addCustomItem()" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow">➕ Aggiungi</button>
             </div>
 
-            <!-- Griglia dei Prodotti in 4 colonne -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 max-h-[55vh] overflow-y-auto pr-2 mb-6 p-2 bg-gray-50/50 rounded-2xl border-2 border-gray-100" id="catalogColumnsContainer"></div>
+            <!-- Griglia Prodotti Compatta con 4 Colonne -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 max-h-[50vh] overflow-y-auto pr-1 mb-4 p-2 bg-gray-50/50 rounded-2xl border-2 border-gray-100" id="catalogColumnsContainer"></div>
 
-            <button onclick="saveCreatedShoppingList()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold p-5 rounded-2xl text-xl shadow-xl transition flex items-center justify-center gap-3">
+            <button onclick="saveCreatedShoppingList()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold p-4 rounded-2xl text-lg shadow-xl transition flex items-center justify-center gap-2">
                 💾 Salva Spesa e Continua 🚀
             </button>
         </section>
 
-        <!-- SCHERMATA POST-SALVATAGGIO (Possibilità di aggiungere ancora prima di tornare alla Home) -->
-        <section id="postSaveSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-teal-200 mt-4">
-            <div class="text-center mb-6">
-                <span class="text-5xl">🎉</span>
-                <h2 class="text-3xl font-bold text-teal-700 mt-2">Spesa Salvata con Successo!</h2>
-                <p class="text-gray-600 text-base mt-1">Vuoi aggiungere altri prodotti prima di chiudere o hai finito?</p>
+        <!-- SCHERMATA POST-SALVATAGGIO -->
+        <section id="postSaveSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-teal-200 mt-2">
+            <div class="text-center mb-4">
+                <span class="text-4xl">🎉</span>
+                <h2 class="text-2xl font-bold text-teal-700 mt-1">Spesa Salvata con Successo!</h2>
+                <p class="text-gray-600 text-sm mt-1">Puoi aggiungere altri prodotti oppure tornare alla home.</p>
             </div>
 
-            <div class="bg-teal-50 p-4 rounded-2xl border-2 border-teal-200 mb-6">
-                <h3 class="font-bold text-teal-900 mb-3 text-lg">➕ Aggiungi un altro prodotto al volo:</h3>
-                <div class="flex flex-wrap md:flex-nowrap gap-3 items-center">
-                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-base bg-white">
-                    <input type="text" id="extraPostQty" placeholder="Qtà o Peso" class="w-36 p-3 border-2 border-teal-200 rounded-xl text-base bg-white">
-                    <button onclick="addExtraItemAfterSave()" class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-xl font-bold text-base shadow">➕ Aggiungi</button>
+            <div class="bg-teal-50 p-3 rounded-2xl border-2 border-teal-200 mb-4">
+                <h3 class="font-bold text-teal-900 mb-2 text-sm">➕ Aggiungi un altro prodotto al volo:</h3>
+                <div class="flex flex-wrap md:flex-nowrap gap-2 items-center">
+                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-2.5 border-2 border-teal-200 rounded-xl text-sm bg-white">
+                    <input type="text" id="extraPostQty" placeholder="Qtà/Peso" class="w-28 p-2.5 border-2 border-teal-200 rounded-xl text-sm bg-white text-center">
+                    <button onclick="addExtraItemAfterSave()" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow">➕ Aggiungi</button>
                 </div>
             </div>
 
-            <div class="mb-6">
-                <h4 class="font-bold text-gray-700 mb-2">Prodotti attualmente in lista:</h4>
-                <div id="savedItemsSummaryList" class="max-h-44 overflow-y-auto bg-gray-50 p-3 rounded-2xl border border-gray-200 space-y-2"></div>
+            <div class="mb-4">
+                <h4 class="font-bold text-gray-700 mb-2 text-sm">Prodotti attualmente in lista:</h4>
+                <div id="savedItemsSummaryList" class="max-h-36 overflow-y-auto bg-gray-50 p-3 rounded-2xl border border-gray-200 space-y-2"></div>
             </div>
 
-            <button onclick="goHome()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold p-5 rounded-2xl text-xl shadow-xl transition flex items-center justify-center gap-3">
+            <button onclick="goHome()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold p-4 rounded-2xl text-lg shadow-xl transition flex items-center justify-center gap-2">
                 🏠 Finito! Torna alla Home
             </button>
         </section>
 
         <!-- VAI AL SUPERMERCATO -->
-        <section id="shopSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-blue-200 mt-4">
-            <div class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-100">
-                <h2 class="text-2xl font-bold text-blue-700">🛍️ Lista della Spesa al Supermercato</h2>
-                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-2xl font-bold text-base shadow-sm">⬅️ Indietro</button>
+        <section id="shopSection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-6 border-4 border-blue-200 mt-2">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
+                <h2 class="text-xl font-bold text-blue-700">🛍️ Lista della Spesa al Supermercato</h2>
+                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-2xl font-bold text-sm shadow-sm">⬅️ Indietro</button>
             </div>
 
-            <div class="mb-6 bg-blue-50 p-4 rounded-2xl flex justify-between items-center border-2 border-blue-200">
-                <span id="progressText" class="font-bold text-blue-900 text-lg">Prodotti presi: 0 / 0</span>
-                <div class="w-1/2 bg-white rounded-full h-4 overflow-hidden border border-blue-200 shadow-inner">
+            <div class="mb-4 bg-blue-50 p-3 rounded-2xl flex justify-between items-center border-2 border-blue-200">
+                <span id="progressText" class="font-bold text-blue-900 text-base">Prodotti presi: 0 / 0</span>
+                <div class="w-1/2 bg-white rounded-full h-3.5 overflow-hidden border border-blue-200 shadow-inner">
                     <div id="progressBar" class="bg-blue-600 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
                 </div>
             </div>
 
-            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3 max-h-[55vh] overflow-y-auto pr-2 mb-6 p-2 bg-gray-50/50 rounded-2xl border-2 border-gray-100"></div>
+            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-2.5 max-h-[55vh] overflow-y-auto pr-1 mb-4 p-2 bg-gray-50/50 rounded-2xl border-2 border-gray-100"></div>
 
-            <button onclick="completeShopping()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold p-5 rounded-2xl text-xl shadow-xl transition">
+            <button onclick="completeShopping()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold p-4 rounded-2xl text-lg shadow-xl transition">
                 🎉 Termina e Salva nello Storico!
             </button>
         </section>
 
         <!-- STORICO -->
-        <section id="historySection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-indigo-200 mt-4">
-            <div class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-100">
-                <h2 class="text-2xl font-bold text-indigo-700">📊 Storico delle Spese</h2>
-                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-2xl font-bold text-base shadow-sm">⬅️ Indietro</button>
+        <section id="historySection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-6 border-4 border-indigo-200 mt-2">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
+                <h2 class="text-xl font-bold text-indigo-700">📊 Storico delle Spese</h2>
+                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-2xl font-bold text-sm shadow-sm">⬅️ Indietro</button>
             </div>
 
-            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2" id="historyContainer"></div>
+            <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1" id="historyContainer"></div>
         </section>
 
     </main>
@@ -157,7 +157,30 @@
             document.getElementById('inputDate').value = currentSession.date;
             renderAuthorButtons();
             initCatalogColumns();
+            loadAutoSave();
         };
+
+        function autoSaveDraft() {
+            // Mantiene in memoria lo stato corrente per non perdere nulla durante lo scroll o spostamenti
+            localStorage.setItem('galleon_draft_session', JSON.stringify(currentSession));
+        }
+
+        function loadAutoSave() {
+            let draft = localStorage.getItem('galleon_draft_session');
+            if (draft) {
+                try {
+                    let parsed = JSON.parse(draft);
+                    if (parsed.author) {
+                        currentSession = parsed;
+                        document.getElementById('inputAuthor').value = currentSession.author;
+                        if (currentSession.date) document.getElementById('inputDate').value = currentSession.date;
+                        document.getElementById('displayDate').innerText = currentSession.date;
+                        document.getElementById('displayAuthor').innerText = currentSession.author;
+                        document.getElementById('userInfoHeader').classList.remove('hidden');
+                    }
+                } catch(e) {}
+            }
+        }
 
         function renderAuthorButtons() {
             const container = document.getElementById('authorButtons');
@@ -165,9 +188,13 @@
             authors.forEach(name => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = "bg-orange-50 hover:bg-orange-100 text-orange-800 font-bold py-3 px-3 rounded-2xl border-2 border-orange-200 text-base transition shadow-sm";
+                btn.className = "bg-orange-50 hover:bg-orange-100 text-orange-800 font-bold py-2 px-2 rounded-xl border-2 border-orange-200 text-xs md:text-sm transition shadow-sm";
                 btn.innerText = name;
-                btn.onclick = () => document.getElementById('inputAuthor').value = name;
+                btn.onclick = () => {
+                    document.getElementById('inputAuthor').value = name;
+                    currentSession.author = name;
+                    autoSaveDraft();
+                };
                 container.appendChild(btn);
             });
         }
@@ -179,19 +206,23 @@
 
             columnsData.forEach((colArray, colIdx) => {
                 const colDiv = document.createElement('div');
-                colDiv.className = "space-y-2 bg-white p-3 rounded-2xl border-2 border-gray-200 shadow-sm";
-                colDiv.innerHTML = `<h3 class="font-bold text-center text-orange-600 pb-2 border-b border-gray-100 text-sm">Colonna ${colIdx + 1}</h3>`;
+                colDiv.className = "space-y-1.5 bg-white p-2.5 rounded-2xl border-2 border-gray-200 shadow-sm";
+                colDiv.innerHTML = `<h3 class="font-bold text-center text-orange-600 pb-1 border-b border-gray-100 text-xs">Colonna ${colIdx + 1}</h3>`;
                 
                 colArray.forEach((item, itemIdx) => {
                     const globalId = `${colIdx}-${itemIdx}`;
                     const row = document.createElement('div');
-                    row.className = "flex flex-col gap-1 p-2 bg-gray-50 hover:bg-emerald-50/50 rounded-xl border border-gray-200 transition";
+                    row.className = "flex items-center justify-between gap-1 p-1.5 bg-gray-50 hover:bg-emerald-50/50 rounded-xl border border-gray-200 transition text-xs";
                     row.innerHTML = `
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" id="cat-check-${globalId}" value="${item}" class="w-5 h-5 text-emerald-600 rounded cursor-pointer">
-                            <span class="font-semibold text-gray-800 text-xs leading-tight">${item}</span>
+                        <label class="flex items-center gap-1.5 cursor-pointer flex-grow overflow-hidden">
+                            <input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="autoSaveDraft()" class="w-4 h-4 text-emerald-600 rounded cursor-pointer shrink-0">
+                            <span class="font-semibold text-gray-800 truncate" title="${item}">${item}</span>
                         </label>
-                        <input type="text" id="cat-qty-${globalId}" placeholder="Qtà o peso..." class="w-full p-1.5 border border-gray-300 rounded-lg text-xs bg-white focus:border-emerald-500 focus:outline-none">
+                        <div class="flex items-center gap-1 shrink-0">
+                            <button type="button" onclick="adjustQty('${globalId}', -1)" class="bg-gray-200 hover:bg-gray-300 font-bold w-5 h-5 rounded flex items-center justify-center text-xs">-</button>
+                            <input type="text" id="cat-qty-${globalId}" value="1" oninput="autoSaveDraft()" class="w-10 p-0.5 border border-gray-300 rounded text-center text-xs bg-white">
+                            <button type="button" onclick="adjustQty('${globalId}', 1)" class="bg-gray-200 hover:bg-gray-300 font-bold w-5 h-5 rounded flex items-center justify-center text-xs">+</button>
+                        </div>
                     `;
                     colDiv.appendChild(row);
                 });
@@ -199,27 +230,38 @@
             });
         }
 
+        function adjustQty(globalId, delta) {
+            const input = document.getElementById(`cat-qty-${globalId}`);
+            let val = parseFloat(input.value) || 1;
+            val = Math.max(1, val + delta);
+            input.value = val;
+            autoSaveDraft();
+        }
+
         function addCustomItem() {
             const nameInput = document.getElementById('customItemName');
             const qtyInput = document.getElementById('customItemQty');
             const name = nameInput.value.trim();
-            const qty = qtyInput.value.trim();
+            const qty = qtyInput.value.trim() || "1";
             if (!name) return;
 
             const container = document.getElementById('catalogColumnsContainer');
             let firstCol = container.querySelector('div');
             const row = document.createElement('div');
-            row.className = "flex flex-col gap-1 p-2 bg-amber-50 rounded-xl border-2 border-amber-300 shadow-sm";
+            row.className = "flex items-center justify-between gap-1 p-1.5 bg-amber-50 rounded-xl border-2 border-amber-300 shadow-sm text-xs custom-row";
             row.innerHTML = `
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" checked value="${name}" class="custom-chk w-5 h-5 text-emerald-600 rounded cursor-pointer" data-name="${name}">
-                    <span class="font-bold text-amber-900 text-xs">${name} (Fuori Lista)</span>
+                <label class="flex items-center gap-1.5 cursor-pointer flex-grow overflow-hidden">
+                    <input type="checkbox" checked value="${name}" class="custom-chk w-4 h-4 text-emerald-600 rounded cursor-pointer shrink-0" data-name="${name}" onchange="autoSaveDraft()">
+                    <span class="font-bold text-amber-900 truncate">${name} (Fuori)</span>
                 </label>
-                <input type="text" value="${qty}" class="custom-qty w-full p-1.5 border border-amber-300 rounded-lg text-xs bg-white focus:outline-none" data-name="${name}">
+                <div class="flex items-center gap-1 shrink-0">
+                    <input type="text" value="${qty}" class="custom-qty w-12 p-0.5 border border-amber-300 rounded text-center text-xs bg-white" data-name="${name}" oninput="autoSaveDraft()">
+                </div>
             `;
             firstCol.prepend(row);
             nameInput.value = '';
             qtyInput.value = '';
+            autoSaveDraft();
         }
 
         function startMode(mode) {
@@ -235,6 +277,7 @@
             document.getElementById('displayAuthor').innerText = authorInput;
             document.getElementById('userInfoHeader').classList.remove('hidden');
             document.getElementById('setupSection').classList.add('hidden');
+            autoSaveDraft();
 
             if (mode === 'create') {
                 document.getElementById('createSection').classList.remove('hidden');
@@ -286,10 +329,7 @@
                 return;
             }
 
-            // Salva provvisoriamente nello storico/memoria attiva delle liste create
             saveActiveListToStorage();
-
-            // Passa alla schermata di post-salvataggio con possibilità di aggiungere ancora
             document.getElementById('createSection').classList.add('hidden');
             renderPostSaveSummary();
             document.getElementById('postSaveSection').classList.remove('hidden');
@@ -300,7 +340,7 @@
             container.innerHTML = '';
             currentSession.items.forEach(i => {
                 const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-white p-2 rounded-xl border border-teal-100 text-sm";
+                div.className = "flex justify-between items-center bg-white p-2 rounded-xl border border-teal-100 text-xs";
                 div.innerHTML = `<span class="font-semibold text-gray-800">${i.name}</span><span class="font-bold text-teal-600">${i.qty}</span>`;
                 container.appendChild(div);
             });
@@ -310,10 +350,10 @@
             const nameInput = document.getElementById('extraPostName');
             const qtyInput = document.getElementById('extraPostQty');
             const name = nameInput.value.trim();
-            const qty = qtyInput.value.trim();
+            const qty = qtyInput.value.trim() || "1";
             if (!name) return;
 
-            currentSession.items.push({ name: name, qty: qty || "1", checked: false });
+            currentSession.items.push({ name: name, qty: qty, checked: false });
             saveActiveListToStorage();
             renderPostSaveSummary();
 
@@ -322,35 +362,37 @@
         }
 
         function saveActiveListToStorage() {
-            // Salva o aggiorna l'ultima spesa creata
             localStorage.setItem('galleon_current_active_list', JSON.stringify(currentSession));
+            autoSaveDraft();
         }
 
         function prepareActiveShoppingList() {
-            // Se c'è una lista salvata in precedenza, la carica per chi va al supermercato
             let saved = localStorage.getItem('galleon_current_active_list');
             if (saved) {
                 let parsed = JSON.parse(saved);
-                currentSession.items = parsed.items;
-                if(parsed.author && !currentSession.author) currentSession.author = parsed.author;
+                if(parsed.items && parsed.items.length > 0) {
+                    currentSession.items = parsed.items;
+                }
+                if(parsed.author) currentSession.author = parsed.author;
+                if(parsed.date) currentSession.date = parsed.date;
             }
 
             const container = document.getElementById('activeShoppingList');
             container.innerHTML = '';
             if (currentSession.items.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-6 col-span-2">Nessun prodotto in lista. Torna a creare la spesa!</p>';
+                container.innerHTML = '<p class="text-center text-gray-500 py-6 col-span-2 text-sm">Nessun prodotto in lista. Torna a creare la spesa!</p>';
                 updateProgress();
                 return;
             }
             currentSession.items.forEach((item, index) => {
                 const div = document.createElement('div');
-                div.className = `flex items-center justify-between p-4 rounded-2xl border-2 transition ${item.checked ? 'bg-emerald-50 border-emerald-300 opacity-70 line-through' : 'bg-gray-50 border-gray-200'}`;
+                div.className = `flex items-center justify-between p-3 rounded-2xl border-2 transition ${item.checked ? 'bg-emerald-50 border-emerald-300 opacity-70 line-through' : 'bg-gray-50 border-gray-200'}`;
                 div.innerHTML = `
                     <label class="flex items-center gap-3 flex-grow cursor-pointer">
                         <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-6 h-6 text-blue-600 rounded-lg cursor-pointer">
-                        <span class="font-bold text-lg ${item.checked ? 'text-emerald-800' : 'text-gray-800'}">${item.name}</span>
+                        <span class="font-bold text-base ${item.checked ? 'text-emerald-800' : 'text-gray-800'}">${item.name}</span>
                     </label>
-                    <span class="bg-white px-4 py-2 rounded-xl border-2 border-blue-200 font-extrabold text-blue-600 text-sm shadow-sm">${item.qty}</span>
+                    <span class="bg-white px-3 py-1.5 rounded-xl border-2 border-blue-200 font-extrabold text-blue-600 text-xs shadow-sm">${item.qty}</span>
                 `;
                 container.appendChild(div);
             });
@@ -377,6 +419,7 @@
             history.unshift({ date: currentSession.date, author: currentSession.author, items: [...currentSession.items], timestamp: new Date().toLocaleString() });
             localStorage.setItem('galleon_history', JSON.stringify(history));
             localStorage.removeItem('galleon_current_active_list');
+            localStorage.removeItem('galleon_draft_session');
             alert("Spesa completata e salvata nello storico! 🎉");
             goHome();
         }
@@ -387,23 +430,23 @@
             container.innerHTML = '';
             let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
             if (history.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-6 text-lg">Nessuno storico salvato.</p>';
+                container.innerHTML = '<p class="text-center text-gray-500 py-6 text-base">Nessuno storico salvato.</p>';
             } else {
                 history.forEach((session, idx) => {
                     const card = document.createElement('div');
-                    card.className = "bg-indigo-50/70 border-3 border-indigo-200 rounded-2xl p-5 shadow-sm";
+                    card.className = "bg-indigo-50/70 border-3 border-indigo-200 rounded-2xl p-4 shadow-sm";
                     let itemsHtml = session.items.map(i => `
-                        <li class="text-sm flex justify-between py-1.5 border-b border-indigo-100 last:border-0">
+                        <li class="text-xs flex justify-between py-1 border-b border-indigo-100 last:border-0">
                             <span class="${i.checked ? 'line-through text-emerald-700 font-bold' : 'text-gray-700'}">${i.name}</span>
                             <span class="font-extrabold text-indigo-600">${i.qty}</span>
                         </li>
                     `).join('');
                     card.innerHTML = `
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="font-bold text-indigo-900 text-lg">📅 ${session.date} - <span class="text-red-600">${session.author}</span></span>
-                            <button onclick="deleteHistoryItem(${idx})" class="text-red-500 hover:text-red-700 text-sm font-bold bg-white px-3 py-1 rounded-xl shadow-sm">🗑️ Elimina</button>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-indigo-900 text-base">📅 ${session.date} - <span class="text-red-600">${session.author}</span></span>
+                            <button onclick="deleteHistoryItem(${idx})" class="text-red-500 hover:text-red-700 text-xs font-bold bg-white px-2.5 py-1 rounded-xl shadow-sm">🗑️ Elimina</button>
                         </div>
-                        <ul class="bg-white rounded-xl p-4 shadow-inner max-h-40 overflow-y-auto border border-indigo-100">${itemsHtml}</ul>
+                        <ul class="bg-white rounded-xl p-3 shadow-inner max-h-36 overflow-y-auto border border-indigo-100">${itemsHtml}</ul>
                     `;
                     container.appendChild(card);
                 });
@@ -427,6 +470,7 @@
         }
 
         function resetSession() {
+            localStorage.removeItem('galleon_draft_session');
             document.getElementById('userInfoHeader').classList.add('hidden');
             goHome();
         }
