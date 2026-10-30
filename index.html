@@ -80,7 +80,7 @@
     <!-- Script -->
     <script>
         let workbookData = null;
-        let currentSheetName = 'Foglio6';
+        let currentSheetName = '';
         let productsList = [];
         let dateColumns = [];
         let rawSheetData = [];
@@ -114,35 +114,55 @@
 
         function processWorkbook() {
             if (!workbookData) return;
+            
+            // Trova automaticamente il foglio giusto (Foglio6 o il primo disponibile)
             currentSheetName = workbookData.SheetNames.includes('Foglio6') ? 'Foglio6' : workbookData.SheetNames[0];
             const worksheet = workbookData.Sheets[currentSheetName];
             rawSheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false, defval: "" });
 
-            if (rawSheetData.length < 6) {
-                alert("Il formato del file Excel non è valido.");
+            if (rawSheetData.length === 0) {
+                alert("Il file Excel è vuoto.");
                 return;
             }
 
-            // Estrai le date dalla riga 1
+            // Cerca la riga delle date (cerca dove c'è la parola 'DATA' o date valide)
+            let dateRowIdx = -1;
+            for (let r = 0; r < Math.min(rawSheetData.length, 5); r++) {
+                let row = rawSheetData[r];
+                if (row.some(cell => cell && (String(cell).toUpperCase().includes('DATA') || String(cell).includes('2026')))) {
+                    dateRowIdx = r;
+                    break;
+                }
+            }
+            if (dateRowIdx === -1) dateRowIdx = 1; // fallback predefinito
+
+            // Estrai le colonne delle date
             dateColumns = [];
-            const headerDatesRow = rawSheetData[1];
+            const headerDatesRow = rawSheetData[dateRowIdx];
             for (let colIdx = 0; colIdx < headerDatesRow.length; colIdx++) {
                 let cellVal = headerDatesRow[colIdx];
-                if (cellVal !== undefined && cellVal !== null && String(cellVal).trim() !== "" && String(cellVal) !== 'DATA') {
-                    dateColumns.push({ colIndex: colIdx, label: String(cellVal) });
+                if (cellVal !== undefined && cellVal !== null) {
+                    let strVal = String(cellVal).trim();
+                    if (strVal !== "" && strVal.toUpperCase() !== 'DATA') {
+                        dateColumns.push({ colIndex: colIdx, label: strVal });
+                    }
                 }
             }
 
-            // Estrai i prodotti dalla colonna 0, riga 5 in poi
+            // Trova dove iniziano i prodotti (dalla colonna 0, cercando righe con testo valido dopo eventuali intestazioni)
             productsList = [];
-            for (let rowIdx = 5; rowIdx < rawSheetData.length; rowIdx++) {
+            let startRow = dateRowIdx + 1;
+            for (let rowIdx = startRow; rowIdx < rawSheetData.length; rowIdx++) {
                 let prodName = rawSheetData[rowIdx][0];
-                if (prodName !== undefined && prodName !== null && String(prodName).trim() !== "") {
-                    productsList.push({ name: String(prodName).trim(), rowIndex: rowIdx });
+                if (prodName !== undefined && prodName !== null) {
+                    let strProd = String(prodName).trim();
+                    if (strProd !== "" && strProd.toUpperCase() !== 'PRODOTTI' && strProd.toUpperCase() !== 'DATA') {
+                        productsList.push({ name: strProd, rowIndex: rowIdx });
+                    }
                 }
             }
 
-            // Popola menu date
+            // Popola il menu delle date
             dateSelect.innerHTML = '<option value="">-- Seleziona una data --</option>';
             dateColumns.forEach(d => {
                 let opt = document.createElement('option');
@@ -152,7 +172,7 @@
             });
 
             statusCard.className = "bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm";
-            statusCard.innerHTML = `<h2 class="font-bold text-emerald-900 text-base">✅ File caricato correttamente!</h2><p class="text-emerald-700 text-sm">Trovati ${productsList.length} prodotti e ${dateColumns.length} date. Seleziona una data per iniziare.</p>`;
+            statusCard.innerHTML = `<h2 class="font-bold text-emerald-900 text-base">✅ File caricato correttamente!</h2><p class="text-emerald-700 text-sm">Trovati ${productsList.length} prodotti e ${dateColumns.length} date. Seleziona una data.</p>`;
             
             if (dateColumns.length > 0) {
                 dateSelect.value = dateColumns[0].colIndex;
