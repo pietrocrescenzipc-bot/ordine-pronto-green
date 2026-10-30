@@ -61,11 +61,14 @@
             </div>
         </section>
 
-        <!-- CREA LA SPESA (Prodotti più grandi e colorati per genere) -->
+        <!-- CREA LA SPESA -->
         <section id="createSection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-6 border-4 border-emerald-200 mt-2">
-            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100 flex-wrap gap-2">
                 <h2 class="text-xl font-bold text-emerald-700">🛒 Seleziona i prodotti</h2>
-                <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-2xl font-bold text-sm shadow-sm">⬅️ Indietro</button>
+                <div class="flex gap-2">
+                    <button onclick="resetCatalogSelection()" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-2 rounded-2xl font-bold text-xs shadow-sm transition">🗑️ Azzera Spesa</button>
+                    <button onclick="goHome()" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-2xl font-bold text-sm shadow-sm">⬅️ Indietro</button>
+                </div>
             </div>
 
             <!-- Aggiunta Fuori Lista -->
@@ -76,7 +79,7 @@
                 <button onclick="addCustomItem()" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow">➕ Aggiungi</button>
             </div>
 
-            <!-- Griglia Prodotti Colorati e Grandi -->
+            <!-- Griglia Prodotti (Testi lunghi visibili e partono da 0) -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-3 max-h-[52vh] overflow-y-auto pr-1 mb-4 p-2 bg-gray-50/50 rounded-2xl border-2 border-gray-100" id="catalogColumnsContainer"></div>
 
             <button onclick="goToReviewScreen()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold p-4 rounded-2xl text-lg shadow-xl transition flex items-center justify-center gap-2">
@@ -84,7 +87,7 @@
             </button>
         </section>
 
-        <!-- SCHERMATA DI CONTROLLO (Riepilogo prima di confermare) -->
+        <!-- SCHERMATA DI CONTROLLO -->
         <section id="reviewSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-amber-300 mt-2">
             <div class="text-center mb-4">
                 <span class="text-4xl">📋</span>
@@ -133,7 +136,7 @@
             </button>
         </section>
 
-        <!-- VAI AL SUPERMERCATO -->
+        <!-- VAI AL SUPERMERCATO (Mantiene i prodotti non spuntati finché non completati) -->
         <section id="shopSection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-6 border-4 border-blue-200 mt-2">
             <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-100">
                 <h2 class="text-xl font-bold text-blue-700">🛍️ Lista della Spesa al Supermercato</h2>
@@ -182,25 +185,24 @@
             loadAutoSave();
         };
 
-        // Funzione per assegnare un colore vivace in base al tipo di prodotto
         function getProductTheme(name) {
             name = name.toUpperCase();
             if (["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI"].includes(name)) {
-                return { bg: "bg-emerald-50 border-emerald-300 text-emerald-900", badge: "bg-emerald-500 text-white" }; // Frutta/Verdura
+                return { bg: "bg-emerald-50 border-emerald-300 text-emerald-900" };
             }
             if (["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"].includes(name)) {
-                return { bg: "bg-rose-50 border-rose-300 text-rose-900", badge: "bg-rose-500 text-white" }; // Carne/Pesce
+                return { bg: "bg-rose-50 border-rose-300 text-rose-900" };
             }
             if (["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"].includes(name)) {
-                return { bg: "bg-sky-50 border-sky-300 text-sky-900", badge: "bg-sky-500 text-white" }; // Latticini
+                return { bg: "bg-sky-50 border-sky-300 text-sky-900" };
             }
             if (["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "SPUGNE VASSOI", "MICROFIBRA", "ROTOLONI", "PELLICOLA"].includes(name)) {
-                return { bg: "bg-purple-50 border-purple-300 text-purple-900", badge: "bg-purple-500 text-white" }; // Pulizia
+                return { bg: "bg-purple-50 border-purple-300 text-purple-900" };
             }
             if (["COCA COLA", "APEROL", "CAFFE'", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "MARMELLATA", "FRUTTI BOSCO", "ORDINARE DOLCE", "RITIRARE DOLCE"].includes(name)) {
-                return { bg: "bg-amber-50 border-amber-300 text-amber-900", badge: "bg-amber-500 text-white" }; // Dolci/Bevande
+                return { bg: "bg-amber-50 border-amber-300 text-amber-900" };
             }
-            return { bg: "bg-slate-50 border-slate-300 text-slate-900", badge: "bg-slate-500 text-white" }; // Altro
+            return { bg: "bg-slate-50 border-slate-300 text-slate-900" };
         }
 
         function autoSaveDraft() {
@@ -219,6 +221,26 @@
                         document.getElementById('displayDate').innerText = currentSession.date;
                         document.getElementById('displayAuthor').innerText = currentSession.author;
                         document.getElementById('userInfoHeader').classList.remove('hidden');
+                        
+                        // Ripristina selezioni catalogo se presenti nel draft
+                        if (parsed.items) {
+                            parsed.items.forEach(i => {
+                                const columnsData = [col1, col2, col3, col4];
+                                columnsData.forEach((colArray, colIdx) => {
+                                    colArray.forEach((item, itemIdx) => {
+                                        if (item === i.name) {
+                                            const globalId = `${colIdx}-${itemIdx}`;
+                                            const chk = document.getElementById(`cat-check-${globalId}`);
+                                            const qty = document.getElementById(`cat-qty-${globalId}`);
+                                            if (chk && qty) {
+                                                chk.checked = true;
+                                                qty.value = i.qty;
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
                     }
                 } catch(e) {}
             }
@@ -255,15 +277,16 @@
                     const globalId = `${colIdx}-${itemIdx}`;
                     const theme = getProductTheme(item);
                     const row = document.createElement('div');
-                    row.className = `flex items-center justify-between gap-2 p-2.5 rounded-2xl border-2 ${theme.bg} transition shadow-xs text-sm`;
+                    // Usiamo flex-wrap per permettere a diciture lunghe di andare a capo correttamente
+                    row.className = `flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-2.5 rounded-2xl border-2 ${theme.bg} transition shadow-xs text-sm`;
                     row.innerHTML = `
-                        <label class="flex items-center gap-2 cursor-pointer flex-grow overflow-hidden">
+                        <label class="flex items-center gap-2 cursor-pointer flex-grow w-full sm:w-auto">
                             <input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="autoSaveDraft()" class="w-5 h-5 text-emerald-600 rounded cursor-pointer shrink-0">
-                            <span class="font-bold truncate text-base" title="${item}">${item}</span>
+                            <span class="font-bold text-sm sm:text-base leading-tight break-words" title="${item}">${item}</span>
                         </label>
-                        <div class="flex items-center gap-1.5 shrink-0">
+                        <div class="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
                             <button type="button" onclick="adjustQty('${globalId}', -1)" class="bg-white hover:bg-gray-100 font-extrabold w-7 h-7 rounded-lg border border-gray-300 flex items-center justify-center text-sm shadow-xs">-</button>
-                            <input type="text" id="cat-qty-${globalId}" value="1" oninput="autoSaveDraft()" class="w-12 p-1 border border-gray-300 rounded-lg text-center font-bold text-sm bg-white">
+                            <input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="autoSaveDraft()" class="w-12 p-1 border border-gray-300 rounded-lg text-center font-bold text-sm bg-white">
                             <button type="button" onclick="adjustQty('${globalId}', 1)" class="bg-white hover:bg-gray-100 font-extrabold w-7 h-7 rounded-lg border border-gray-300 flex items-center justify-center text-sm shadow-xs">+</button>
                         </div>
                     `;
@@ -275,10 +298,29 @@
 
         function adjustQty(globalId, delta) {
             const input = document.getElementById(`cat-qty-${globalId}`);
-            let val = parseFloat(input.value) || 1;
-            val = Math.max(1, val + delta);
-            input.value = val;
+            let val = parseFloat(input.value) || 0;
+            val = Math.max(0, val + delta);
+            input.value = val === 0 ? "" : val;
             autoSaveDraft();
+        }
+
+        function resetCatalogSelection() {
+            if (!confirm("Vuoi davvero azzerare tutti i prodotti selezionati e le quantità?")) return;
+            const columnsData = [col1, col2, col3, col4];
+            columnsData.forEach((colArray, colIdx) => {
+                colArray.forEach((item, itemIdx) => {
+                    const globalId = `${colIdx}-${itemIdx}`;
+                    const chk = document.getElementById(`cat-check-${globalId}`);
+                    const qty = document.getElementById(`cat-qty-${globalId}`);
+                    if (chk) chk.checked = false;
+                    if (qty) qty.value = "";
+                });
+            });
+            document.querySelectorAll('.custom-row').forEach(r => r.remove());
+            currentSession.items = [];
+            localStorage.removeItem('galleon_draft_session');
+            localStorage.removeItem('galleon_current_active_list');
+            alert("Spesa azzerata con successo!");
         }
 
         function addCustomItem() {
@@ -291,13 +333,13 @@
             const container = document.getElementById('catalogColumnsContainer');
             let firstCol = container.querySelector('div');
             const row = document.createElement('div');
-            row.className = "flex items-center justify-between gap-2 p-2.5 bg-amber-100 rounded-2xl border-2 border-amber-400 shadow-xs text-sm custom-row";
+            row.className = "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-2.5 bg-amber-100 rounded-2xl border-2 border-amber-400 shadow-xs text-sm custom-row";
             row.innerHTML = `
-                <label class="flex items-center gap-2 cursor-pointer flex-grow overflow-hidden">
+                <label class="flex items-center gap-2 cursor-pointer flex-grow w-full sm:w-auto">
                     <input type="checkbox" checked value="${name}" class="custom-chk w-5 h-5 text-emerald-600 rounded cursor-pointer shrink-0" data-name="${name}" onchange="autoSaveDraft()">
-                    <span class="font-bold text-amber-900 truncate text-base">${name} (Fuori)</span>
+                    <span class="font-bold text-amber-900 text-sm sm:text-base leading-tight break-words">${name} (Fuori)</span>
                 </label>
-                <div class="flex items-center gap-1.5 shrink-0">
+                <div class="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
                     <input type="text" value="${qty}" class="custom-qty w-14 p-1 border border-amber-300 rounded-lg text-center font-bold text-sm bg-white" data-name="${name}" oninput="autoSaveDraft()">
                 </div>
             `;
@@ -345,7 +387,6 @@
             document.getElementById('shopSection').classList.remove('hidden');
         }
 
-        // Raccoglie i prodotti selezionati e mostra la schermata di controllo
         function goToReviewScreen() {
             currentSession.items = [];
             const columnsData = [col1, col2, col3, col4];
@@ -373,7 +414,6 @@
                 return;
             }
 
-            // Mostra schermata di controllo
             renderReviewList();
             document.getElementById('createSection').classList.add('hidden');
             document.getElementById('reviewSection').classList.remove('hidden');
@@ -385,7 +425,7 @@
             currentSession.items.forEach(i => {
                 const div = document.createElement('div');
                 div.className = "flex justify-between items-center bg-white p-3 rounded-2xl border-2 border-amber-200 text-base shadow-xs";
-                div.innerHTML = `<span class="font-bold text-gray-800">${i.name}</span><span class="font-extrabold text-amber-700 bg-amber-50 px-3 py-1 rounded-xl border border-amber-200">${i.qty}</span>`;
+                div.innerHTML = `<span class="font-bold text-gray-800 break-words">${i.name}</span><span class="font-extrabold text-amber-700 bg-amber-50 px-3 py-1 rounded-xl border border-amber-200 shrink-0 ml-2">${i.qty}</span>`;
                 container.appendChild(div);
             });
         }
@@ -408,7 +448,7 @@
             currentSession.items.forEach(i => {
                 const div = document.createElement('div');
                 div.className = "flex justify-between items-center bg-white p-2.5 rounded-xl border border-teal-100 text-sm";
-                div.innerHTML = `<span class="font-semibold text-gray-800">${i.name}</span><span class="font-bold text-teal-600">${i.qty}</span>`;
+                div.innerHTML = `<span class="font-semibold text-gray-800 break-words">${i.name}</span><span class="font-bold text-teal-600 shrink-0 ml-2">${i.qty}</span>`;
                 container.appendChild(div);
             });
         }
@@ -453,13 +493,14 @@
             }
             currentSession.items.forEach((item, index) => {
                 const div = document.createElement('div');
+                // I prodotti non spuntati rimangono visibili fino all'acquisto effettivo
                 div.className = `flex items-center justify-between p-3.5 rounded-2xl border-2 transition ${item.checked ? 'bg-emerald-50 border-emerald-300 opacity-70 line-through' : 'bg-gray-50 border-gray-200'}`;
                 div.innerHTML = `
-                    <label class="flex items-center gap-3 flex-grow cursor-pointer">
-                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-6 h-6 text-blue-600 rounded-lg cursor-pointer">
-                        <span class="font-bold text-lg ${item.checked ? 'text-emerald-800' : 'text-gray-800'}">${item.name}</span>
+                    <label class="flex items-center gap-3 flex-grow cursor-pointer overflow-hidden">
+                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-6 h-6 text-blue-600 rounded-lg cursor-pointer shrink-0">
+                        <span class="font-bold text-base ${item.checked ? 'text-emerald-800' : 'text-gray-800'} break-words">${item.name}</span>
                     </label>
-                    <span class="bg-white px-3.5 py-1.5 rounded-xl border-2 border-blue-200 font-extrabold text-blue-600 text-sm shadow-sm">${item.qty}</span>
+                    <span class="bg-white px-3.5 py-1.5 rounded-xl border-2 border-blue-200 font-extrabold text-blue-600 text-sm shadow-sm shrink-0 ml-2">${item.qty}</span>
                 `;
                 container.appendChild(div);
             });
@@ -504,12 +545,12 @@
                     card.className = "bg-indigo-50/70 border-3 border-indigo-200 rounded-2xl p-4 shadow-sm";
                     let itemsHtml = session.items.map(i => `
                         <li class="text-sm flex justify-between py-1.5 border-b border-indigo-100 last:border-0">
-                            <span class="${i.checked ? 'line-through text-emerald-700 font-bold' : 'text-gray-700'}">${i.name}</span>
-                            <span class="font-extrabold text-indigo-600">${i.qty}</span>
+                            <span class="${i.checked ? 'line-through text-emerald-700 font-bold' : 'text-gray-700'} break-words">${i.name}</span>
+                            <span class="font-extrabold text-indigo-600 shrink-0 ml-2">${i.qty}</span>
                         </li>
                     `).join('');
                     card.innerHTML = `
-                        <div class="flex justify-between items-center mb-2">
+                        <div class="flex justify-between items-center mb-2 flex-wrap gap-1">
                             <span class="font-bold text-indigo-900 text-base">📅 ${session.date} - <span class="text-red-600">${session.author}</span></span>
                             <button onclick="deleteHistoryItem(${idx})" class="text-red-500 hover:text-red-700 text-xs font-bold bg-white px-2.5 py-1 rounded-xl shadow-sm">🗑️ Elimina</button>
                         </div>
