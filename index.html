@@ -3,314 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spesa Giornaliera The Galleon Pizzeria</title>
+    <title>Spesa Giornaliera | The Galleon Pizzeria Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f1f5f9;
+            background-color: #0f172a;
+            color: #e2e8f0;
         }
-        .btn-fluid {
+        .pro-card {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-pro {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
         }
-        .btn-fluid:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        .btn-pro:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
         }
-        .btn-fluid:active {
+        .btn-pro:active {
             transform: translateY(1px);
         }
         #sideMenu {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-900 min-h-screen flex flex-col">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
 
-    <!-- Header Moderno -->
-    <header class="bg-gradient-to-r from-slate-900 via-orange-900 to-red-900 text-white shadow-xl py-4 px-5 flex justify-between items-center rounded-b-3xl sticky top-0 z-40 backdrop-blur-md border-b border-white/10">
-        <div class="flex items-center gap-3">
-            <button onclick="toggleSidebar()" class="bg-white/10 hover:bg-white/20 p-2.5 rounded-2xl transition flex items-center justify-center text-white focus:outline-none shadow-sm">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Header Professionale -->
+    <header class="bg-slate-900/80 border-b border-slate-800 backdrop-blur-xl sticky top-0 z-40 px-4 md:px-8 py-4 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-3.5">
+            <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-2xl transition text-slate-200 border border-slate-700/60 shadow-xs flex items-center justify-center focus:outline-none">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
             </button>
-            <h1 class="text-base md:text-xl font-extrabold flex items-center gap-2 tracking-tight">
-                🍕 <span class="bg-gradient-to-r from-orange-400 to-amber-200 bg-clip-text text-transparent">The Galleon Spesa</span>
-            </h1>
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center shadow-md text-lg">
+                    🍕
+                </div>
+                <div>
+                    <h1 class="text-sm md:text-base font-extrabold tracking-tight text-white leading-none">The Galleon</h1>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-400">Pizzeria Management</span>
+                </div>
+            </div>
         </div>
-        <div id="userInfoHeader" class="text-xs md:text-sm bg-black/30 px-3.5 py-2 rounded-2xl font-bold hidden flex items-center gap-2.5 backdrop-blur-md border border-white/15 shadow-inner">
-            <span id="displayDate" class="text-slate-300"></span> | 👤 <span id="displayAuthor" class="text-amber-400"></span>
-            <button onclick="resetSession()" class="ml-1 bg-white text-red-600 px-3 py-1 rounded-xl text-xs font-extrabold hover:bg-red-50 transition shadow">Cambia</button>
+
+        <div id="userInfoHeader" class="text-xs md:text-sm bg-slate-800/90 border border-slate-700/80 px-4 py-2 rounded-2xl font-bold hidden flex items-center gap-3 shadow-inner">
+            <span id="displayDate" class="text-slate-300"></span> 
+            <span class="text-slate-600">•</span> 
+            <span class="text-amber-400 flex items-center gap-1">👤 <span id="displayAuthor"></span></span>
+            <button onclick="resetSession()" class="ml-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded-xl text-xs font-extrabold transition">Cambia</button>
         </div>
     </header>
 
-    <!-- Overlay Sfondo Menu Laterale -->
-    <div id="menuOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 z-50 hidden backdrop-blur-xs transition-opacity"></div>
+    <!-- Overlay Sfondo Menu -->
+    <div id="menuOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/70 z-50 hidden backdrop-blur-sm transition-opacity"></div>
 
-    <!-- Menù Laterale (Drawer) -->
-    <div id="sideMenu" class="fixed top-0 left-0 bottom-0 w-80 bg-white z-50 shadow-2xl transform -translate-x-full flex flex-col p-6 border-r border-slate-100">
-        <div class="flex justify-between items-center pb-5 border-b border-slate-100 mb-6">
-            <h2 class="font-extrabold text-xl text-slate-900 flex items-center gap-2.5">🧭 Menu Navigazione</h2>
-            <button onclick="toggleSidebar()" class="bg-slate-100 hover:bg-slate-200 p-2.5 rounded-2xl text-slate-600 font-bold transition">✕</button>
+    <!-- Menù Laterale Pro (Drawer) -->
+    <div id="sideMenu" class="fixed top-0 left-0 bottom-0 w-80 bg-slate-900 border-r border-slate-800 z-50 shadow-2xl transform -translate-x-full flex flex-col p-6 text-slate-200">
+        <div class="flex justify-between items-center pb-5 border-b border-slate-800 mb-6">
+            <div class="flex items-center gap-2.5">
+                <span class="text-xl">🧭</span>
+                <span class="font-extrabold text-lg text-white">Navigazione Pro</span>
+            </div>
+            <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-slate-400 hover:text-white transition">✕</button>
         </div>
 
-        <nav class="space-y-2.5 flex-grow">
-            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3.5 shadow-xs">
-                🏠 Home principale
+        <nav class="space-y-2 flex-grow">
+            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
+                🏠 Home Principale
             </button>
-            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3.5 shadow-xs">
-                ➕ Inserisci nuovo prodotto
+            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
+                ➕ Inserisci Nuovo Prodotto
             </button>
-            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-700 hover:bg-rose-50 hover:text-rose-600 transition flex items-center gap-3.5 shadow-xs">
-                🗑️ Gestisci ed elimina prodotti
+            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
+                🗑️ Gestisci Catalogo & Prodotti
             </button>
-            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-3.5 shadow-xs">
-                📊 Storico delle spese
+            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
+                📊 Storico & Statistiche Spesa
             </button>
         </nav>
 
-        <div class="pt-4 border-t border-slate-100 text-center text-xs text-slate-400 font-semibold">
-            The Galleon Pizzeria • Professional Edition
+        <div class="pt-4 border-t border-slate-800 text-center text-xs text-slate-500 font-medium">
+            The Galleon OS • v4.1 Enterprise
         </div>
     </div>
 
-    <main class="flex-grow container mx-auto p-4 md:p-6 max-w-7xl">
+    <main class="flex-grow container mx-auto p-4 md:p-8 max-w-6xl">
 
         <!-- SETUP INIZIALE -->
-        <section id="setupSection" class="bg-white rounded-3xl shadow-xl p-6 md:p-10 border border-slate-100 mt-2">
+        <section id="setupSection" class="pro-card rounded-3xl p-6 md:p-10 mt-4 border border-slate-100">
             <div class="text-center max-w-xl mx-auto mb-8">
-                <span class="text-5xl">⚓</span>
-                <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">Benvenuti in The Galleon</h2>
-                <p class="text-slate-500 text-sm md:text-base mt-1">Seleziona la data e il tuo nome per iniziare la gestione della spesa giornaliera.</p>
+                <div class="inline-flex p-3.5 rounded-2xl bg-orange-50 text-orange-600 text-3xl shadow-inner mb-3">
+                    📋
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Gestione Spesa Giornaliera</h2>
+                <p class="text-slate-500 text-sm mt-1.5">Ottimizza gli ordini della pizzeria con precisione professionale.</p>
             </div>
             
-            <div class="grid md:grid-cols-2 gap-6 mb-8 max-w-3xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto bg-slate-50 p-6 rounded-3xl border border-slate-200/80 shadow-inner">
                 <div>
-                    <label class="block text-slate-700 font-bold mb-2 text-sm">📅 Data di oggi:</label>
-                    <input type="date" id="inputDate" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-base font-bold bg-slate-50 focus:border-orange-500 focus:outline-none text-center shadow-inner">
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">📅 Data di oggi</label>
+                    <input type="date" id="inputDate" class="w-full p-3.5 border-2 border-slate-200 rounded-2xl text-base font-bold bg-white text-slate-900 focus:border-orange-500 focus:outline-none text-center shadow-xs">
                 </div>
                 <div>
-                    <label class="block text-slate-700 font-bold mb-2 text-sm">👦👧 Seleziona il tuo nome:</label>
-                    <div class="grid grid-cols-3 gap-2.5 mb-3" id="authorButtons"></div>
-                    <input type="text" id="inputAuthor" placeholder="O scrivi un altro nome..." class="w-full p-3.5 border-2 border-slate-200 rounded-2xl text-sm focus:border-orange-500 focus:outline-none bg-slate-50 font-bold">
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Operatore</label>
+                    <div class="grid grid-cols-3 gap-2 mb-2.5" id="authorButtons"></div>
+                    <input type="text" id="inputAuthor" placeholder="O scrivi nome..." class="w-full p-3 border-2 border-slate-200 rounded-2xl text-sm bg-white text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
                 </div>
             </div>
 
-            <!-- Pulsanti Home Premium -->
-            <div class="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto mt-6">
-                <button onclick="startMode('create')" class="btn-fluid bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold p-5 rounded-2xl text-lg flex items-center justify-center gap-3 shadow-lg">
+            <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-6">
+                <button onclick="startMode('create')" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4.5 rounded-2xl text-base flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
                     🛒 CREA LA SPESA
                 </button>
-                <button onclick="goToSupermarket()" class="btn-fluid bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold p-5 rounded-2xl text-lg flex items-center justify-center gap-3 shadow-lg">
+                <button onclick="goToSupermarket()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
                     🛍️ VAI AL SUPERMERCATO
                 </button>
             </div>
 
             <div class="mt-8 text-center">
-                <button onclick="showHistory()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-indigo-700 font-bold px-6 py-3.5 rounded-2xl border border-slate-200 inline-block text-sm shadow-xs">
-                    📊 Visualizza Storico Spese
+                <button onclick="showHistory()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl border border-slate-300 inline-block text-xs uppercase tracking-wider shadow-xs">
+                    📊 Visualizza Storico e Statistiche Avanzate
                 </button>
             </div>
         </section>
 
-        <!-- CREA LA SPESA (Con Categorie Altamente Distinte e Marcatamente Colorate) -->
-        <section id="createSection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-8 border border-slate-100 mt-2">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100 flex-wrap gap-3">
+        <!-- CREA LA SPESA -->
+        <section id="createSection" class="hidden pro-card rounded-3xl p-5 md:p-8 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
                 <div>
-                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">🛒 Seleziona i Prodotti</h2>
-                    <p class="text-slate-500 text-xs md:text-sm">Scegli quantità e inserisci eventuali note rapide.</p>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Ordine</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Seleziona i prodotti suddivisi per reparto.</p>
                 </div>
-                <div class="flex gap-2.5">
-                    <button onclick="resetCatalogSelection()" class="btn-fluid bg-rose-50 hover:bg-rose-100 text-rose-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-rose-200 shadow-xs">🗑️ Azzera</button>
-                    <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
+                <div class="flex gap-2">
+                    <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Azzera</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
                 </div>
             </div>
 
-            <!-- Aggiunta Fuori Lista Rapida -->
-            <div class="bg-amber-50/80 p-4 rounded-2xl border-2 border-amber-300 mb-6 flex flex-wrap lg:flex-nowrap gap-3 items-center shadow-sm">
-                <span class="font-extrabold text-amber-900 text-xs uppercase tracking-wide whitespace-nowrap">✨ Aggiunta rapida:</span>
-                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-amber-200 rounded-xl text-sm bg-white font-bold focus:outline-none focus:border-amber-500 shadow-inner">
-                <input type="text" id="customItemQty" placeholder="Qtà" class="w-24 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold focus:outline-none focus:border-amber-500 shadow-inner">
-                <input type="text" id="customItemNote" placeholder="Nota (es. cassa)" class="w-32 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold focus:outline-none focus:border-amber-500 shadow-inner">
-                <button onclick="addCustomItem()" class="btn-fluid bg-amber-500 hover:bg-amber-600 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
+            <!-- Aggiunta Rapida -->
+            <div class="bg-amber-50/80 p-4 rounded-2xl border-2 border-amber-300 mb-6 flex flex-wrap lg:flex-nowrap gap-3 items-center shadow-inner">
+                <span class="font-extrabold text-amber-900 text-xs uppercase tracking-wider whitespace-nowrap">✨ Aggiunta rapida:</span>
+                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-amber-200 rounded-xl text-sm bg-white font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
+                <input type="text" id="customItemQty" placeholder="Qtà" class="w-20 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
+                <input type="text" id="customItemNote" placeholder="Nota (es. cassa)" class="w-28 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
+                <button onclick="addCustomItem()" class="btn-pro bg-amber-500 hover:bg-amber-600 text-white px-4 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
             </div>
 
-            <!-- Griglia Categorie con Colori Fortemente Marcati -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[62vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-50/70 rounded-2xl border border-slate-200 shadow-inner" id="catalogCategoriesContainer"></div>
+            <!-- Griglia Categorie -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner" id="catalogCategoriesContainer"></div>
 
-            <button onclick="goToReviewScreen()" class="btn-fluid w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold p-4.5 rounded-2xl text-lg shadow-xl flex items-center justify-center gap-2.5">
-                🔍 Controlla se hai ordinato tutto 🚀
+            <button onclick="goToReviewScreen()" class="btn-pro w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4.5 rounded-2xl text-base shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
+                🔍 Controlla Riepilogo Ordine 🚀
             </button>
         </section>
 
-        <!-- GESTIONE / ELIMINA PRODOTTI DAL CATALOGO -->
-        <section id="manageProductsSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-100 mt-2">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+        <!-- GESTIONE CATALOGO -->
+        <section id="manageProductsSection" class="hidden pro-card rounded-3xl p-5 md:p-8 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
                 <div>
-                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">🗑️ Gestione Catalogo</h2>
-                    <p class="text-slate-500 text-sm">Elimina definitivamente i prodotti non necessari.</p>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
+                    <p class="text-slate-500 text-sm">Elimina o monitora i prodotti presenti nei reparti.</p>
                 </div>
-                <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
+                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
             </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[62vh] overflow-y-auto pr-2 p-3 bg-slate-50/70 rounded-2xl border border-slate-200 shadow-inner" id="manageCatalogContainer"></div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[60vh] overflow-y-auto pr-2 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner" id="manageCatalogContainer"></div>
         </section>
 
-        <!-- INSERISCI NUOVO PRODOTTO CON SCELTA CATEGORIA -->
-        <section id="addProductSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-100 mt-2 max-w-xl mx-auto">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
-                <h2 class="text-xl font-extrabold text-slate-900">➕ Inserisci Nuovo Prodotto</h2>
-                <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
+        <!-- AGGIUNGI PRODOTTO -->
+        <section id="addProductSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 max-w-xl mx-auto">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">➕ Nuovo Prodotto in Catalogo</h2>
+                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
             </div>
             <div class="space-y-5">
                 <div>
-                    <label class="block text-slate-700 font-bold mb-2 text-sm">Nome del Prodotto:</label>
-                    <input type="text" id="newProdNameInput" placeholder="Es. MOZZARELLA DI BUFALA" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-inner">
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Nome Prodotto</label>
+                    <input type="text" id="newProdNameInput" placeholder="Es. RUCOLA FRESCA" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
                 </div>
                 <div>
-                    <label class="block text-slate-700 font-bold mb-2 text-sm">Categoria Merceologica (Supermercato):</label>
-                    <select id="newProdCategorySelect" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 focus:border-orange-500 focus:outline-none font-bold shadow-inner">
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Reparto / Categoria</label>
+                    <select id="newProdCategorySelect" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
                         <option value="ortofrutta">🍏 Ortofrutta e Freschi</option>
                         <option value="macelleria">🥩 Macelleria e Pescheria</option>
-                        <option value="latticini">🧀 Latticini e Salumi</option>
+                        <option value="latticini">🧀 Latticini, Salumi e Uova</option>
                         <option value="dispensa">🥫 Dispensa e Scatolame</option>
                         <option value="bevande">🍷 Bevande e Alcolici</option>
                         <option value="pulizia">🧹 Pulizia e Detergenti</option>
                     </select>
                 </div>
-                <button onclick="saveNewCatalogProduct()" class="btn-fluid w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg">
-                    💾 Salva Definitivamente
+                <button onclick="saveNewCatalogProduct()" class="btn-pro w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-orange-500/20">
+                    💾 Salva nel Catalogo
                 </button>
             </div>
         </section>
 
         <!-- SCHERMATA DI CONTROLLO -->
-        <section id="reviewSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-100 mt-2">
+        <section id="reviewSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
             <div class="text-center mb-6">
-                <span class="text-5xl">📋</span>
-                <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Controlla se hai ordinato tutto</h2>
-                <p class="text-slate-500 text-sm mt-1">Verifica la lista. Puoi eliminare eventuali errori prima di confermare.</p>
+                <div class="inline-flex p-3 rounded-2xl bg-amber-100 text-amber-800 text-3xl mb-2">📋</div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
+                <p class="text-slate-500 text-sm mt-1">Verifica i quantitativi prima della conferma ufficiale.</p>
             </div>
 
             <div class="mb-6">
-                <div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/40 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner"></div>
+                <div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner"></div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
-                <button onclick="backToCreateFromReview()" class="btn-fluid bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-sm shadow">
-                    ✏️ Torna alla spesa (Modifica)
+                <button onclick="backToCreateFromReview()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-sm shadow-xs">
+                    ✏️ Modifica Spesa
                 </button>
-                <button onclick="confirmAndSaveShoppingList()" class="btn-fluid bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl">
-                    ✅ Conferma e Salva Ordine
+                <button onclick="confirmAndSaveShoppingList()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
+                    ✅ Conferma e Registra Ordine
                 </button>
             </div>
         </section>
 
         <!-- SCHERMATA POST-SALVATAGGIO -->
-        <section id="postSaveSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-100 mt-2">
+        <section id="postSaveSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
             <div class="text-center mb-6">
-                <span class="text-5xl">🎉</span>
-                <h2 class="text-2xl font-extrabold text-teal-800 mt-2">Spesa Salvata con Successo!</h2>
-                <p class="text-slate-500 text-sm mt-1">Puoi aggiungere altri prodotti al volo o tornare alla home.</p>
+                <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Registrato con Successo!</h2>
+                <p class="text-slate-500 text-sm mt-1">L'ordine è pronto per essere spuntato al supermercato o archiviato.</p>
             </div>
 
-            <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-sm">
-                <h3 class="font-extrabold text-teal-950 mb-3 text-xs md:text-sm uppercase tracking-wide">➕ Aggiungi prodotto al volo:</h3>
+            <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs">
+                <h3 class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiunta extra al volo:</h3>
                 <div class="flex flex-wrap lg:flex-nowrap gap-3 items-center">
-                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm bg-white font-bold focus:outline-none focus:border-teal-500 shadow-inner">
-                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold focus:outline-none focus:border-teal-500 shadow-inner">
-                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-32 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold focus:outline-none focus:border-teal-500 shadow-inner">
-                    <button onclick="addExtraItemAfterSave()" class="btn-fluid bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
+                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm bg-white font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-32 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <button onclick="addExtraItemAfterSave()" class="btn-pro bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
                 </div>
             </div>
 
             <div class="mb-6">
-                <h4 class="font-bold text-slate-700 mb-2.5 text-sm">Prodotti in lista (puoi eliminarli):</h4>
+                <h4 class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo elementi attivi:</h4>
                 <div id="savedItemsSummaryList" class="max-h-48 overflow-y-auto bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner"></div>
             </div>
 
-            <button onclick="goHome()" class="btn-fluid w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl flex items-center justify-center gap-2">
-                🏠 Finito! Torna alla Home principale
+            <button onclick="goHome()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
+                🏠 Torna alla Home Principale
             </button>
         </section>
 
         <!-- VAI AL SUPERMERCATO -->
-        <section id="shopSection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-8 border border-slate-100 mt-2">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
-                <h2 class="text-xl md:text-2xl font-extrabold text-blue-700">🛍️ Lista della Spesa al Supermercato</h2>
-                <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
+        <section id="shopSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
+                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
             </div>
 
-            <div class="mb-6 bg-blue-50 p-4 rounded-2xl flex justify-between items-center border-2 border-blue-200 shadow-sm">
+            <div class="mb-6 bg-blue-50 p-4 rounded-2xl flex justify-between items-center border-2 border-blue-200 shadow-xs">
                 <span id="progressText" class="font-extrabold text-blue-950 text-sm md:text-base">Prodotti presi: 0 / 0</span>
                 <div class="w-1/2 bg-white rounded-full h-3.5 overflow-hidden border-2 border-blue-200 shadow-inner">
                     <div id="progressBar" class="bg-blue-600 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
                 </div>
             </div>
 
-            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-50/70 rounded-2xl border border-slate-200 shadow-inner"></div>
+            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner"></div>
 
-            <button onclick="completeShopping()" class="btn-fluid w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold p-4.5 rounded-2xl text-lg shadow-xl">
-                🎉 Termina e Salva nello Storico!
+            <button onclick="completeShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base shadow-xl shadow-blue-600/20">
+                🎉 Termina Spesa e Salva nello Storico!
             </button>
         </section>
 
-        <!-- STORICO -->
-        <section id="historySection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-8 border border-slate-100 mt-2">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
-                <h2 class="text-xl md:text-2xl font-extrabold text-indigo-700">📊 Storico delle Spese</h2>
-                <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
+        <!-- STORICO & STATISTICHE AVANZATE -->
+        <section id="historySection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico & Statistiche Spesa</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Analisi approfondita dei consumi e trend degli ordini passati.</p>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="exportHistoryExcel()" class="btn-pro bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
+                        📊 Esporta Excel
+                    </button>
+                    <button onclick="exportHistoryJSON()" class="btn-pro bg-slate-800 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
+                        📥 Esporta JSON
+                    </button>
+                    <button onclick="window.print()" class="btn-pro bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
+                        🖨️ Stampa Report
+                    </button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-bold text-xs shadow-xs">⬅️ Home</button>
+                </div>
             </div>
 
-            <div class="space-y-4 max-h-[62vh] overflow-y-auto pr-2" id="historyContainer"></div>
+            <!-- Pannello Statistiche KPI -->
+            <div id="statsDashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
+
+            <!-- Lista Storico -->
+            <div class="space-y-4 max-h-[50vh] overflow-y-auto pr-2" id="historyContainer"></div>
         </section>
 
     </main>
 
     <script>
-        // Categorie con colori fortissimamente distintivi, badge ed emoji dedicate
-        let catalog = JSON.parse(localStorage.getItem('galleon_supermarket_catalog_v2')) || {
+        let catalog = JSON.parse(localStorage.getItem('galleon_supermarket_catalog_v3')) || {
             ortofrutta: {
                 title: "🍏 Ortofrutta e Freschi",
-                headerBg: "bg-emerald-600 text-white",
-                cardBg: "bg-emerald-50/70 border-emerald-300 hover:border-emerald-500",
+                headerBg: "bg-emerald-700 text-white",
+                cardBg: "bg-emerald-50/80 border-emerald-300",
                 textCol: "text-emerald-950",
                 items: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE"]
             },
             macelleria: {
                 title: "🥩 Macelleria e Pescheria",
-                headerBg: "bg-rose-600 text-white",
-                cardBg: "bg-rose-50/70 border-rose-300 hover:border-rose-500",
+                headerBg: "bg-rose-700 text-white",
+                cardBg: "bg-rose-50/80 border-rose-300",
                 textCol: "text-rose-950",
                 items: ["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"]
             },
             latticini: {
                 title: "🧀 Latticini, Salumi e Uova",
-                headerBg: "bg-sky-600 text-white",
-                cardBg: "bg-sky-50/70 border-sky-300 hover:border-sky-500",
+                headerBg: "bg-sky-700 text-white",
+                cardBg: "bg-sky-50/80 border-sky-300",
                 textCol: "text-sky-950",
                 items: ["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"]
             },
             dispensa: {
                 title: "🥫 Dispensa e Scatolame",
-                headerBg: "bg-amber-600 text-white",
-                cardBg: "bg-amber-50/70 border-amber-300 hover:border-amber-500",
+                headerBg: "bg-amber-700 text-white",
+                cardBg: "bg-amber-50/80 border-amber-300",
                 textCol: "text-amber-950",
                 items: ["SALE", "PEPE", "PISELLI", "NOCI", "LIMMY", "CONTEN.PANNA COTTA", "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "MARMELLATA", "FRUTTI BOSCO", "CAFFE'", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "TABASCO", "ROTOLONI", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SPUGNE VASSOI", "PELLICOLA", "ORDINARE DOLCE", "RITIRARE DOLCE"]
             },
             bevande: {
                 title: "🍷 Bevande e Alcolici",
-                headerBg: "bg-indigo-600 text-white",
-                cardBg: "bg-indigo-50/70 border-indigo-300 hover:border-indigo-500",
+                headerBg: "bg-indigo-700 text-white",
+                cardBg: "bg-indigo-50/80 border-indigo-300",
                 textCol: "text-indigo-950",
                 items: ["COCA COLA", "APEROL"]
             },
             pulizia: {
                 title: "🧹 Pulizia e Detergenti",
-                headerBg: "bg-purple-600 text-white",
-                cardBg: "bg-purple-50/70 border-purple-300 hover:border-purple-500",
+                headerBg: "bg-purple-700 text-white",
+                cardBg: "bg-purple-50/80 border-purple-300",
                 textCol: "text-purple-950",
                 items: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "MICROFIBRA"]
             }
@@ -327,7 +362,7 @@
         };
 
         function saveCatalogStorage() {
-            localStorage.setItem('galleon_supermarket_catalog_v2', JSON.stringify(catalog));
+            localStorage.setItem('galleon_supermarket_catalog_v3', JSON.stringify(catalog));
         }
 
         function toggleSidebar() {
@@ -389,7 +424,7 @@
             authors.forEach(name => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = "btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-2 rounded-2xl border border-slate-200 text-xs shadow-xs";
+                btn.className = "btn-pro bg-white hover:bg-slate-100 text-slate-800 font-extrabold py-2.5 px-2 rounded-xl border border-slate-200 text-xs shadow-xs";
                 btn.innerText = name;
                 btn.onclick = () => {
                     document.getElementById('inputAuthor').value = name;
@@ -409,11 +444,10 @@
                 const catDiv = document.createElement('div');
                 catDiv.className = "bg-white rounded-2xl border-2 border-slate-200 shadow-md overflow-hidden flex flex-col";
                 
-                // Testata Categoria Colorata e Marcata
                 catDiv.innerHTML = `
-                    <div class="${catData.headerBg} px-4 py-3 font-extrabold text-sm md:text-base tracking-wide flex items-center justify-between shadow-xs">
+                    <div class="${catData.headerBg} px-4 py-3 font-extrabold text-sm tracking-wide flex items-center justify-between shadow-xs">
                         <span>${catData.title}</span>
-                        <span class="bg-black/20 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
+                        <span class="bg-black/25 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
                     </div>
                     <div class="p-3 space-y-2.5 flex-grow bg-slate-50/50" id="cat-list-${catKey}"></div>
                 `;
@@ -432,13 +466,13 @@
                                 <span class="font-extrabold text-xs md:text-sm leading-snug break-words ${catData.textCol}" title="${item}">${item}</span>
                             </label>
                             <div class="flex items-center gap-1.5 shrink-0">
-                                <button type="button" onclick="adjustQty('${globalId}', -1)" class="btn-fluid bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">-</button>
+                                <button type="button" onclick="adjustQty('${globalId}', -1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">-</button>
                                 <input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="autoSaveDraft()" class="w-11 p-1 border border-slate-300 rounded-xl text-center font-extrabold text-xs bg-white shadow-inner">
-                                <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-fluid bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">+</button>
+                                <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">+</button>
                             </div>
                         </div>
                         <div>
-                            <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa, in sacco...)" oninput="autoSaveDraft()" class="w-full py-1.5 px-3 text-xs bg-white/95 border border-slate-300 rounded-xl focus:outline-none focus:border-slate-800 font-bold shadow-inner">
+                            <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa...)" oninput="autoSaveDraft()" class="w-full py-1.5 px-3 text-xs bg-white/95 border border-slate-300 rounded-xl focus:outline-none focus:border-slate-800 font-bold shadow-inner">
                         </div>
                     `;
                     listContainer.appendChild(row);
@@ -539,7 +573,7 @@
                 colDiv.innerHTML = `
                     <div class="${catData.headerBg} px-4 py-3 font-extrabold text-sm tracking-wide flex items-center justify-between">
                         <span>${catData.title}</span>
-                        <span class="bg-black/20 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
+                        <span class="bg-black/25 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
                     </div>
                     <div class="p-3 space-y-2 flex-grow bg-slate-50/50" id="manage-list-${catKey}"></div>
                 `;
@@ -551,7 +585,7 @@
                     row.className = "flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200 text-xs md:text-sm gap-2 shadow-xs";
                     row.innerHTML = `
                         <span class="font-extrabold text-slate-800 break-words flex-grow min-w-0">${item}</span>
-                        <button onclick="removeProductFromCatalog('${catKey}', ${itemIdx})" class="btn-fluid bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shrink-0 shadow-xs">🗑️ Elimina</button>
+                        <button onclick="removeProductFromCatalog('${catKey}', ${itemIdx})" class="btn-pro bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shrink-0 shadow-xs">🗑️ Elimina</button>
                     `;
                     listContainer.appendChild(row);
                 });
@@ -570,7 +604,7 @@
             const date = document.getElementById('inputDate').value;
             const authorInput = document.getElementById('inputAuthor').value.trim();
             if (!authorInput) {
-                alert("Seleziona o scrivi il nome di chi compila la spesa!");
+                alert("Seleziona o scrivi il nome dell'operatore!");
                 return;
             }
             currentSession.date = date;
@@ -647,7 +681,7 @@
                     </div>
                     <div class="flex items-center gap-2.5 shrink-0">
                         <span class="font-extrabold text-amber-900 bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 text-xs shadow-inner">${i.qty}</span>
-                        <button onclick="removeReviewItem(${idx})" class="btn-fluid bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shadow-xs">🗑️</button>
+                        <button onclick="removeReviewItem(${idx})" class="btn-pro bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shadow-xs">🗑️</button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -686,7 +720,7 @@
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <span class="font-extrabold text-teal-700">${i.qty}</span>
-                        <button onclick="removePostSaveItem(${idx})" class="btn-fluid bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs">🗑️</button>
+                        <button onclick="removePostSaveItem(${idx})" class="btn-pro bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs">🗑️</button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -780,41 +814,131 @@
             localStorage.setItem('galleon_history', JSON.stringify(history));
             localStorage.removeItem('galleon_current_active_list');
             localStorage.removeItem('galleon_draft_session');
-            alert("Spesa completata e salvata nello storico! 🎉");
+            alert("Spesa completata e registrata nello storico con successo! 🎉");
             goHome();
         }
 
         function showHistory() {
             hideAllSections();
+            renderStatsDashboard();
             const container = document.getElementById('historyContainer');
             container.innerHTML = '';
             let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            
             if (history.length === 0) {
-                container.innerHTML = '<p class="text-center text-slate-500 py-6 text-sm font-bold">Nessuno storico salvato.</p>';
+                container.innerHTML = '<p class="text-center text-slate-500 py-8 text-sm font-bold">Nessuno storico spesa disponibile.</p>';
             } else {
                 history.forEach((session, idx) => {
                     const card = document.createElement('div');
-                    card.className = "bg-indigo-50/50 border-2 border-indigo-200 rounded-2xl p-4.5 shadow-sm";
+                    card.className = "bg-white border-2 border-slate-200 rounded-2xl p-4.5 shadow-sm";
                     let itemsHtml = session.items.map(i => {
-                        let noteStr = i.note ? ` <span class="text-xs text-indigo-900 font-extrabold">(${i.note})</span>` : '';
+                        let noteStr = i.note ? ` <span class="text-xs text-indigo-700 font-extrabold">(${i.note})</span>` : '';
                         return `
-                            <li class="text-xs md:text-sm flex justify-between py-2 border-b border-indigo-100 last:border-0 items-center">
-                                <span class="${i.checked ? 'line-through text-emerald-900 font-extrabold' : 'text-slate-800 font-bold'} break-words pr-2">${i.name}${noteStr}</span>
-                                <span class="font-extrabold text-indigo-700 shrink-0 bg-white px-2.5 py-1 rounded-xl border border-indigo-200 shadow-inner">${i.qty}</span>
+                            <li class="text-xs md:text-sm flex justify-between py-2 border-b border-slate-100 last:border-0 items-center">
+                                <span class="${i.checked ? 'line-through text-emerald-800 font-extrabold' : 'text-slate-800 font-bold'} break-words pr-2">${i.name}${noteStr}</span>
+                                <span class="font-extrabold text-slate-700 shrink-0 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">${i.qty}</span>
                             </li>
                         `;
                     }).join('');
                     card.innerHTML = `
                         <div class="flex justify-between items-center mb-3 flex-wrap gap-1">
-                            <span class="font-extrabold text-indigo-950 text-sm md:text-base">📅 ${session.date} - <span class="text-red-600">${session.author}</span></span>
-                            <button onclick="deleteHistoryItem(${idx})" class="btn-fluid text-red-600 hover:text-red-800 text-xs font-extrabold bg-white px-3 py-1.5 rounded-xl shadow-xs border border-red-200">🗑️ Elimina</button>
+                            <span class="font-extrabold text-slate-900 text-sm md:text-base">📅 ${session.date} — Operatore: <span class="text-orange-600">${session.author}</span></span>
+                            <button onclick="deleteHistoryItem(${idx})" class="btn-pro text-rose-600 hover:text-rose-800 text-xs font-extrabold bg-rose-50 px-3 py-1 rounded-xl border border-rose-200">🗑️ Elimina</button>
                         </div>
-                        <ul class="bg-white rounded-2xl p-3.5 shadow-inner max-h-44 overflow-y-auto border border-indigo-200 space-y-1">${itemsHtml}</ul>
+                        <ul class="bg-slate-50 rounded-xl p-3 shadow-inner max-h-44 overflow-y-auto border border-slate-200 space-y-1">${itemsHtml}</ul>
                     `;
                     container.appendChild(card);
                 });
             }
             document.getElementById('historySection').classList.remove('hidden');
+        }
+
+        function renderStatsDashboard() {
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            let totalSessions = history.length;
+            let totalItemsAllTime = 0;
+            let operatorCounts = {};
+
+            history.forEach(s => {
+                totalItemsAllTime += s.items.length;
+                operatorCounts[s.author] = (operatorCounts[s.author] || 0) + 1;
+            });
+
+            let avgItems = totalSessions > 0 ? (totalItemsAllTime / totalSessions).toFixed(1) : 0;
+            let topOperator = Object.keys(operatorCounts).reduce((a, b) => operatorCounts[a] > operatorCounts[b] ? a : b, 'N/D');
+
+            const dash = document.getElementById('statsDashboard');
+            dash.innerHTML = `
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Ordini Totali</span>
+                    <div class="text-2xl font-extrabold text-orange-400 mt-1">${totalSessions}</div>
+                </div>
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Media Prodotti/Ordine</span>
+                    <div class="text-2xl font-extrabold text-emerald-400 mt-1">${avgItems}</div>
+                </div>
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Totale Articoli Gestiti</span>
+                    <div class="text-2xl font-extrabold text-blue-400 mt-1">${totalItemsAllTime}</div>
+                </div>
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Top Operatore</span>
+                    <div class="text-2xl font-extrabold text-amber-400 mt-1 truncate">${topOperator}</div>
+                </div>
+            `;
+        }
+
+        function exportHistoryExcel() {
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            if (history.length === 0) {
+                alert("Nessun dato nello storico da esportare!");
+                return;
+            }
+
+            // Creazione foglio Excel in formato HTML Tabellare compatibile (.xls)
+            let htmlTable = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+            <head><meta charset="UTF-8"></head><body>
+            <table border="1">
+                <tr>
+                    <th>Data Spesa</th>
+                    <th>Operatore</th>
+                    <th>Prodotto</th>
+                    <th>Quantità / Peso</th>
+                    <th>Nota</th>
+                    <th>Stato (Preso)</th>
+                </tr>`;
+
+            history.forEach(session => {
+                session.items.forEach(item => {
+                    htmlTable += `<tr>
+                        <td>${session.date}</td>
+                        <td>${session.author}</td>
+                        <td>${item.name}</td>
+                        <td>${item.qty}</td>
+                        <td>${item.note || ''}</td>
+                        <td>${item.checked ? 'Sì' : 'No'}</td>
+                    </tr>`;
+                });
+            });
+
+            htmlTable += `</table></body></html>`;
+
+            let blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `The_Galleon_Storico_Spesa_${new Date().toISOString().split('T')[0]}.xls`;
+            a.click();
+        }
+
+        function exportHistoryJSON() {
+            let history = localStorage.getItem('galleon_history') || '[]';
+            let blob = new Blob([history], { type: 'application/json' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `the_galleon_storico_spesa_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
         }
 
         function deleteHistoryItem(idx) {
