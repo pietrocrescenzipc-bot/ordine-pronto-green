@@ -6,20 +6,20 @@
     <title>Spesa Giornaliera The Galleon Pizzeria</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f1f5f9;
         }
-        .btn-modern {
+        .btn-fluid {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
         }
-        .btn-modern:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        .btn-fluid:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
         }
-        .btn-modern:active {
+        .btn-fluid:active {
             transform: translateY(1px);
         }
         #sideMenu {
@@ -29,140 +29,149 @@
 </head>
 <body class="bg-[#f8fafc] text-slate-900 min-h-screen flex flex-col">
 
-    <!-- Header con Menu Laterale -->
-    <header class="bg-gradient-to-r from-red-600 via-orange-600 to-amber-600 text-white shadow-md py-3.5 px-4 flex justify-between items-center rounded-b-3xl sticky top-0 z-40 backdrop-blur-md">
+    <!-- Header Moderno -->
+    <header class="bg-gradient-to-r from-slate-900 via-orange-900 to-red-900 text-white shadow-xl py-4 px-5 flex justify-between items-center rounded-b-3xl sticky top-0 z-40 backdrop-blur-md border-b border-white/10">
         <div class="flex items-center gap-3">
-            <button onclick="toggleSidebar()" class="bg-white/15 hover:bg-white/25 p-2 rounded-xl transition flex items-center justify-center text-white focus:outline-none">
+            <button onclick="toggleSidebar()" class="bg-white/10 hover:bg-white/20 p-2.5 rounded-2xl transition flex items-center justify-center text-white focus:outline-none shadow-sm">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
             </button>
-            <h1 class="text-base md:text-xl font-bold flex items-center gap-1.5 tracking-tight">
-                🍕 <span>The Galleon Spesa</span>
+            <h1 class="text-base md:text-xl font-extrabold flex items-center gap-2 tracking-tight">
+                🍕 <span class="bg-gradient-to-r from-orange-400 to-amber-200 bg-clip-text text-transparent">The Galleon Spesa</span>
             </h1>
         </div>
-        <div id="userInfoHeader" class="text-xs md:text-sm bg-black/20 px-3 py-1.5 rounded-xl font-semibold hidden flex items-center gap-2 backdrop-blur-sm border border-white/10">
-            <span id="displayDate"></span> | 👤 <span id="displayAuthor" class="text-amber-200"></span>
-            <button onclick="resetSession()" class="ml-1 bg-white text-red-600 px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-red-50 transition">Cambia</button>
+        <div id="userInfoHeader" class="text-xs md:text-sm bg-black/30 px-3.5 py-2 rounded-2xl font-bold hidden flex items-center gap-2.5 backdrop-blur-md border border-white/15 shadow-inner">
+            <span id="displayDate" class="text-slate-300"></span> | 👤 <span id="displayAuthor" class="text-amber-400"></span>
+            <button onclick="resetSession()" class="ml-1 bg-white text-red-600 px-3 py-1 rounded-xl text-xs font-extrabold hover:bg-red-50 transition shadow">Cambia</button>
         </div>
     </header>
 
     <!-- Overlay Sfondo Menu Laterale -->
-    <div id="menuOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-50 hidden backdrop-blur-xs transition-opacity"></div>
+    <div id="menuOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 z-50 hidden backdrop-blur-xs transition-opacity"></div>
 
-    <!-- Menù Laterale -->
-    <div id="sideMenu" class="fixed top-0 left-0 bottom-0 w-72 bg-white z-50 shadow-2xl transform -translate-x-full flex flex-col p-5 border-r border-slate-100">
-        <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-6">
-            <h2 class="font-extrabold text-lg text-orange-600 flex items-center gap-2">🧭 Menu Rapido</h2>
-            <button onclick="toggleSidebar()" class="bg-slate-100 hover:bg-slate-200 p-2 rounded-xl text-slate-600 font-bold">✕</button>
+    <!-- Menù Laterale (Drawer) -->
+    <div id="sideMenu" class="fixed top-0 left-0 bottom-0 w-80 bg-white z-50 shadow-2xl transform -translate-x-full flex flex-col p-6 border-r border-slate-100">
+        <div class="flex justify-between items-center pb-5 border-b border-slate-100 mb-6">
+            <h2 class="font-extrabold text-xl text-slate-900 flex items-center gap-2.5">🧭 Menu Navigazione</h2>
+            <button onclick="toggleSidebar()" class="bg-slate-100 hover:bg-slate-200 p-2.5 rounded-2xl text-slate-600 font-bold transition">✕</button>
         </div>
 
-        <nav class="space-y-2 flex-grow">
-            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3 rounded-2xl font-bold text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3">
-                🏠 Home
+        <nav class="space-y-2.5 flex-grow">
+            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3.5 shadow-xs">
+                🏠 Home principale
             </button>
-            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3 rounded-2xl font-bold text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3">
+            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3.5 shadow-xs">
                 ➕ Inserisci nuovo prodotto
             </button>
-            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3 rounded-2xl font-bold text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3">
-                🗑️ Togli prodotti dalla lista
+            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-700 hover:bg-rose-50 hover:text-rose-600 transition flex items-center gap-3.5 shadow-xs">
+                🗑️ Gestisci ed elimina prodotti
             </button>
-            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3 rounded-2xl font-bold text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-3">
-                📊 Storico Spese
+            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-3.5 shadow-xs">
+                📊 Storico delle spese
             </button>
         </nav>
 
-        <div class="pt-4 border-t border-slate-100 text-center text-xs text-slate-400 font-medium">
-            The Galleon Pizzeria v3.1
+        <div class="pt-4 border-t border-slate-100 text-center text-xs text-slate-400 font-semibold">
+            The Galleon Pizzeria • Professional Edition
         </div>
     </div>
 
     <main class="flex-grow container mx-auto p-4 md:p-6 max-w-7xl">
 
         <!-- SETUP INIZIALE -->
-        <section id="setupSection" class="bg-white rounded-3xl shadow-sm p-5 md:p-8 border border-slate-100 mt-2">
-            <h2 class="text-2xl md:text-3xl font-bold text-center text-orange-600 mb-6">Benvenuti! Chi compila la spesa oggi? ✨</h2>
+        <section id="setupSection" class="bg-white rounded-3xl shadow-xl p-6 md:p-10 border border-slate-100 mt-2">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <span class="text-5xl">⚓</span>
+                <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">Benvenuti in The Galleon</h2>
+                <p class="text-slate-500 text-sm md:text-base mt-1">Seleziona la data e il tuo nome per iniziare la gestione della spesa giornaliera.</p>
+            </div>
             
-            <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div class="grid md:grid-cols-2 gap-6 mb-8 max-w-3xl mx-auto">
                 <div>
-                    <label class="block text-slate-700 font-semibold mb-2 text-sm">📅 Data di oggi:</label>
-                    <input type="date" id="inputDate" class="w-full p-3.5 border border-slate-200 rounded-2xl text-base font-semibold bg-slate-50 focus:border-orange-500 focus:outline-none text-center shadow-inner">
+                    <label class="block text-slate-700 font-bold mb-2 text-sm">📅 Data di oggi:</label>
+                    <input type="date" id="inputDate" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-base font-bold bg-slate-50 focus:border-orange-500 focus:outline-none text-center shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-slate-700 font-semibold mb-2 text-sm">👦👧 Seleziona il tuo nome:</label>
-                    <div class="grid grid-cols-3 gap-2 mb-3" id="authorButtons"></div>
-                    <input type="text" id="inputAuthor" placeholder="O scrivi un altro nome..." class="w-full p-3.5 border border-slate-200 rounded-2xl text-sm focus:border-orange-500 focus:outline-none bg-slate-50 font-medium">
+                    <label class="block text-slate-700 font-bold mb-2 text-sm">👦👧 Seleziona il tuo nome:</label>
+                    <div class="grid grid-cols-3 gap-2.5 mb-3" id="authorButtons"></div>
+                    <input type="text" id="inputAuthor" placeholder="O scrivi un altro nome..." class="w-full p-3.5 border-2 border-slate-200 rounded-2xl text-sm focus:border-orange-500 focus:outline-none bg-slate-50 font-bold">
                 </div>
             </div>
 
-            <!-- Pulsanti Home -->
-            <div class="grid md:grid-cols-2 gap-4 mt-6">
-                <button onclick="startMode('create')" class="btn-modern bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold p-4 rounded-2xl text-lg flex items-center justify-center gap-2 shadow-sm">
+            <!-- Pulsanti Home Premium -->
+            <div class="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto mt-6">
+                <button onclick="startMode('create')" class="btn-fluid bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold p-5 rounded-2xl text-lg flex items-center justify-center gap-3 shadow-lg">
                     🛒 CREA LA SPESA
                 </button>
-                <button onclick="goToSupermarket()" class="btn-modern bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold p-4 rounded-2xl text-lg flex items-center justify-center gap-2 shadow-sm">
+                <button onclick="goToSupermarket()" class="btn-fluid bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold p-5 rounded-2xl text-lg flex items-center justify-center gap-3 shadow-lg">
                     🛍️ VAI AL SUPERMERCATO
                 </button>
             </div>
 
-            <div class="mt-6 text-center">
-                <button onclick="showHistory()" class="btn-modern bg-slate-100 hover:bg-slate-200 text-indigo-700 font-bold px-5 py-3 rounded-2xl border border-slate-200 inline-block text-sm">
+            <div class="mt-8 text-center">
+                <button onclick="showHistory()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-indigo-700 font-bold px-6 py-3.5 rounded-2xl border border-slate-200 inline-block text-sm shadow-xs">
                     📊 Visualizza Storico Spese
                 </button>
             </div>
         </section>
 
-        <!-- CREA LA SPESA (Divisa per Categorie Supermercato) -->
-        <section id="createSection" class="hidden bg-white rounded-3xl shadow-sm p-4 md:p-6 border border-emerald-100 mt-2">
-            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100 flex-wrap gap-2">
-                <h2 class="text-xl font-bold text-emerald-700">🛒 Seleziona i prodotti per reparto</h2>
-                <div class="flex gap-2">
-                    <button onclick="resetCatalogSelection()" class="btn-modern bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Azzera</button>
-                    <button onclick="goHome()" class="btn-modern bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-200">⬅️ Indietro</button>
+        <!-- CREA LA SPESA (Con Categorie Altamente Distinte e Marcatamente Colorate) -->
+        <section id="createSection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-8 border border-slate-100 mt-2">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100 flex-wrap gap-3">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">🛒 Seleziona i Prodotti</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Scegli quantità e inserisci eventuali note rapide.</p>
+                </div>
+                <div class="flex gap-2.5">
+                    <button onclick="resetCatalogSelection()" class="btn-fluid bg-rose-50 hover:bg-rose-100 text-rose-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-rose-200 shadow-xs">🗑️ Azzera</button>
+                    <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
                 </div>
             </div>
 
-            <!-- Aggiunta Fuori Lista rapida -->
-            <div class="bg-amber-50/70 p-3.5 rounded-2xl border border-amber-200 mb-4 flex flex-wrap lg:flex-nowrap gap-2.5 items-center">
-                <span class="font-bold text-amber-900 text-xs whitespace-nowrap">✨ Aggiungi al volo:</span>
-                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow p-2.5 border border-amber-200 rounded-xl text-sm bg-white focus:outline-none focus:border-amber-500">
-                <input type="text" id="customItemQty" placeholder="Qtà" class="w-20 p-2.5 border border-amber-200 rounded-xl text-sm bg-white text-center focus:outline-none focus:border-amber-500">
-                <input type="text" id="customItemNote" placeholder="Nota (es. cassa)" class="w-28 p-2.5 border border-amber-200 rounded-xl text-sm bg-white text-center focus:outline-none focus:border-amber-500">
-                <button onclick="addCustomItem()" class="btn-modern bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm whitespace-nowrap">➕ Aggiungi</button>
+            <!-- Aggiunta Fuori Lista Rapida -->
+            <div class="bg-amber-50/80 p-4 rounded-2xl border-2 border-amber-300 mb-6 flex flex-wrap lg:flex-nowrap gap-3 items-center shadow-sm">
+                <span class="font-extrabold text-amber-900 text-xs uppercase tracking-wide whitespace-nowrap">✨ Aggiunta rapida:</span>
+                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-amber-200 rounded-xl text-sm bg-white font-bold focus:outline-none focus:border-amber-500 shadow-inner">
+                <input type="text" id="customItemQty" placeholder="Qtà" class="w-24 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold focus:outline-none focus:border-amber-500 shadow-inner">
+                <input type="text" id="customItemNote" placeholder="Nota (es. cassa)" class="w-32 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold focus:outline-none focus:border-amber-500 shadow-inner">
+                <button onclick="addCustomItem()" class="btn-fluid bg-amber-500 hover:bg-amber-600 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
             </div>
 
-            <!-- Griglia Categorie Supermercato -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[60vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-50 rounded-2xl border border-slate-200" id="catalogCategoriesContainer"></div>
+            <!-- Griglia Categorie con Colori Fortemente Marcati -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[62vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-50/70 rounded-2xl border border-slate-200 shadow-inner" id="catalogCategoriesContainer"></div>
 
-            <button onclick="goToReviewScreen()" class="btn-modern w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold p-4 rounded-2xl text-base shadow-md flex items-center justify-center gap-2">
+            <button onclick="goToReviewScreen()" class="btn-fluid w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold p-4.5 rounded-2xl text-lg shadow-xl flex items-center justify-center gap-2.5">
                 🔍 Controlla se hai ordinato tutto 🚀
             </button>
         </section>
 
         <!-- GESTIONE / ELIMINA PRODOTTI DAL CATALOGO -->
-        <section id="manageProductsSection" class="hidden bg-white rounded-3xl shadow-sm p-5 md:p-6 border border-rose-100 mt-2">
-            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
-                <h2 class="text-xl font-bold text-rose-700">🗑️ Togli prodotti dalla lista (Elimina dal catalogo)</h2>
-                <button onclick="goHome()" class="btn-modern bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-200">⬅️ Indietro</button>
+        <section id="manageProductsSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-100 mt-2">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">🗑️ Gestione Catalogo</h2>
+                    <p class="text-slate-500 text-sm">Elimina definitivamente i prodotti non necessari.</p>
+                </div>
+                <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
             </div>
-            <p class="text-slate-600 text-sm mb-4">Qui puoi visualizzare tutti i prodotti suddivisi per categoria e rimuovere definitivamente quelli che non servono più.</p>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[60vh] overflow-y-auto pr-1 p-2 bg-slate-50 rounded-2xl border border-slate-200" id="manageCatalogContainer"></div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[62vh] overflow-y-auto pr-2 p-3 bg-slate-50/70 rounded-2xl border border-slate-200 shadow-inner" id="manageCatalogContainer"></div>
         </section>
 
         <!-- INSERISCI NUOVO PRODOTTO CON SCELTA CATEGORIA -->
-        <section id="addProductSection" class="hidden bg-white rounded-3xl shadow-sm p-6 md:p-8 border border-orange-100 mt-2 max-w-xl mx-auto">
-            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
-                <h2 class="text-xl font-bold text-orange-600">➕ Inserisci nuovo prodotto</h2>
-                <button onclick="goHome()" class="btn-modern bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-200">⬅️ Indietro</button>
+        <section id="addProductSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-100 mt-2 max-w-xl mx-auto">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                <h2 class="text-xl font-extrabold text-slate-900">➕ Inserisci Nuovo Prodotto</h2>
+                <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
             </div>
-            <div class="space-y-4">
+            <div class="space-y-5">
                 <div>
-                    <label class="block text-slate-700 font-semibold mb-2 text-sm">Nome del Prodotto:</label>
-                    <input type="text" id="newProdNameInput" placeholder="Es. MOZZARELLA DI BUFALA" class="w-full p-3.5 border border-slate-200 rounded-2xl text-sm bg-slate-50 focus:border-orange-500 focus:outline-none font-semibold uppercase">
+                    <label class="block text-slate-700 font-bold mb-2 text-sm">Nome del Prodotto:</label>
+                    <input type="text" id="newProdNameInput" placeholder="Es. MOZZARELLA DI BUFALA" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-slate-700 font-semibold mb-2 text-sm">Categoria Merceologica (Supermercato):</label>
-                    <select id="newProdCategorySelect" class="w-full p-3.5 border border-slate-200 rounded-2xl text-sm bg-slate-50 focus:border-orange-500 focus:outline-none font-semibold">
+                    <label class="block text-slate-700 font-bold mb-2 text-sm">Categoria Merceologica (Supermercato):</label>
+                    <select id="newProdCategorySelect" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 focus:border-orange-500 focus:outline-none font-bold shadow-inner">
                         <option value="ortofrutta">🍏 Ortofrutta e Freschi</option>
                         <option value="macelleria">🥩 Macelleria e Pescheria</option>
                         <option value="latticini">🧀 Latticini e Salumi</option>
@@ -171,126 +180,138 @@
                         <option value="pulizia">🧹 Pulizia e Detergenti</option>
                     </select>
                 </div>
-                <button onclick="saveNewCatalogProduct()" class="btn-modern w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold p-3.5 rounded-2xl text-base shadow-md">
-                    💾 Salva nel Catalogo
+                <button onclick="saveNewCatalogProduct()" class="btn-fluid w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg">
+                    💾 Salva Definitivamente
                 </button>
             </div>
         </section>
 
         <!-- SCHERMATA DI CONTROLLO -->
-        <section id="reviewSection" class="hidden bg-white rounded-3xl shadow-sm p-5 md:p-8 border border-amber-200 mt-2">
-            <div class="text-center mb-4">
-                <span class="text-4xl">📋</span>
-                <h2 class="text-2xl font-bold text-amber-800 mt-1">Controlla se hai ordinato tutto!</h2>
-                <p class="text-slate-600 text-sm mt-1">Verifica la lista. Puoi eliminare eventuali errori o confermare.</p>
+        <section id="reviewSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-100 mt-2">
+            <div class="text-center mb-6">
+                <span class="text-5xl">📋</span>
+                <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Controlla se hai ordinato tutto</h2>
+                <p class="text-slate-500 text-sm mt-1">Verifica la lista. Puoi eliminare eventuali errori prima di confermare.</p>
             </div>
 
-            <div class="mb-5">
-                <div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/50 p-3 rounded-2xl border border-amber-200 space-y-2"></div>
+            <div class="mb-6">
+                <div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/40 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner"></div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-3">
-                <button onclick="backToCreateFromReview()" class="btn-modern bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold p-3.5 rounded-2xl text-sm">
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="backToCreateFromReview()" class="btn-fluid bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-sm shadow">
                     ✏️ Torna alla spesa (Modifica)
                 </button>
-                <button onclick="confirmAndSaveShoppingList()" class="btn-modern bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold p-3.5 rounded-2xl text-base shadow-md">
+                <button onclick="confirmAndSaveShoppingList()" class="btn-fluid bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl">
                     ✅ Conferma e Salva Ordine
                 </button>
             </div>
         </section>
 
         <!-- SCHERMATA POST-SALVATAGGIO -->
-        <section id="postSaveSection" class="hidden bg-white rounded-3xl shadow-sm p-5 md:p-8 border border-teal-200 mt-2">
-            <div class="text-center mb-4">
-                <span class="text-4xl">🎉</span>
-                <h2 class="text-2xl font-bold text-teal-700 mt-1">Spesa Salvata con Successo!</h2>
-                <p class="text-slate-600 text-sm mt-1">Puoi aggiungere altri prodotti al volo o tornare alla home.</p>
+        <section id="postSaveSection" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-slate-100 mt-2">
+            <div class="text-center mb-6">
+                <span class="text-5xl">🎉</span>
+                <h2 class="text-2xl font-extrabold text-teal-800 mt-2">Spesa Salvata con Successo!</h2>
+                <p class="text-slate-500 text-sm mt-1">Puoi aggiungere altri prodotti al volo o tornare alla home.</p>
             </div>
 
-            <div class="bg-teal-50/60 p-3.5 rounded-2xl border border-teal-200 mb-4">
-                <h3 class="font-bold text-teal-900 mb-2 text-xs md:text-sm">➕ Aggiungi prodotto al volo:</h3>
-                <div class="flex flex-wrap lg:flex-nowrap gap-2.5 items-center">
-                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-2.5 border border-teal-200 rounded-xl text-sm bg-white focus:outline-none focus:border-teal-500">
-                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-20 p-2.5 border border-teal-200 rounded-xl text-sm bg-white text-center focus:outline-none focus:border-teal-500">
-                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-28 p-2.5 border border-teal-200 rounded-xl text-sm bg-white text-center focus:outline-none focus:border-teal-500">
-                    <button onclick="addExtraItemAfterSave()" class="btn-modern bg-teal-600 hover:bg-teal-700 text-white px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm whitespace-nowrap">➕ Aggiungi</button>
+            <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-sm">
+                <h3 class="font-extrabold text-teal-950 mb-3 text-xs md:text-sm uppercase tracking-wide">➕ Aggiungi prodotto al volo:</h3>
+                <div class="flex flex-wrap lg:flex-nowrap gap-3 items-center">
+                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm bg-white font-bold focus:outline-none focus:border-teal-500 shadow-inner">
+                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold focus:outline-none focus:border-teal-500 shadow-inner">
+                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-32 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold focus:outline-none focus:border-teal-500 shadow-inner">
+                    <button onclick="addExtraItemAfterSave()" class="btn-fluid bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
                 </div>
             </div>
 
-            <div class="mb-4">
-                <h4 class="font-bold text-slate-700 mb-2 text-sm">Prodotti in lista (puoi eliminarli):</h4>
-                <div id="savedItemsSummaryList" class="max-h-44 overflow-y-auto bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2"></div>
+            <div class="mb-6">
+                <h4 class="font-bold text-slate-700 mb-2.5 text-sm">Prodotti in lista (puoi eliminarli):</h4>
+                <div id="savedItemsSummaryList" class="max-h-48 overflow-y-auto bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner"></div>
             </div>
 
-            <button onclick="goHome()" class="btn-modern w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold p-3.5 rounded-2xl text-base shadow-md flex items-center justify-center gap-2">
-                🏠 Finito! Torna alla Home
+            <button onclick="goHome()" class="btn-fluid w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl flex items-center justify-center gap-2">
+                🏠 Finito! Torna alla Home principale
             </button>
         </section>
 
         <!-- VAI AL SUPERMERCATO -->
-        <section id="shopSection" class="hidden bg-white rounded-3xl shadow-sm p-4 md:p-6 border border-blue-200 mt-2">
-            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
-                <h2 class="text-xl font-bold text-blue-700">🛍️ Lista al Supermercato</h2>
-                <button onclick="goHome()" class="btn-modern bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-200">⬅️ Indietro</button>
+        <section id="shopSection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-8 border border-slate-100 mt-2">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                <h2 class="text-xl md:text-2xl font-extrabold text-blue-700">🛍️ Lista della Spesa al Supermercato</h2>
+                <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
             </div>
 
-            <div class="mb-4 bg-blue-50 p-3.5 rounded-2xl flex justify-between items-center border border-blue-200">
-                <span id="progressText" class="font-bold text-blue-900 text-sm md:text-base">Prodotti presi: 0 / 0</span>
-                <div class="w-1/2 bg-white rounded-full h-3 overflow-hidden border border-blue-200 shadow-inner">
+            <div class="mb-6 bg-blue-50 p-4 rounded-2xl flex justify-between items-center border-2 border-blue-200 shadow-sm">
+                <span id="progressText" class="font-extrabold text-blue-950 text-sm md:text-base">Prodotti presi: 0 / 0</span>
+                <div class="w-1/2 bg-white rounded-full h-3.5 overflow-hidden border-2 border-blue-200 shadow-inner">
                     <div id="progressBar" class="bg-blue-600 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
                 </div>
             </div>
 
-            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-2.5 max-h-[58vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-50 rounded-2xl border border-slate-200"></div>
+            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-50/70 rounded-2xl border border-slate-200 shadow-inner"></div>
 
-            <button onclick="completeShopping()" class="btn-modern w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold p-3.5 rounded-2xl text-base shadow-md">
+            <button onclick="completeShopping()" class="btn-fluid w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold p-4.5 rounded-2xl text-lg shadow-xl">
                 🎉 Termina e Salva nello Storico!
             </button>
         </section>
 
         <!-- STORICO -->
-        <section id="historySection" class="hidden bg-white rounded-3xl shadow-sm p-4 md:p-6 border border-indigo-200 mt-2">
-            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
-                <h2 class="text-xl font-bold text-indigo-700">📊 Storico delle Spese</h2>
-                <button onclick="goHome()" class="btn-modern bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-200">⬅️ Indietro</button>
+        <section id="historySection" class="hidden bg-white rounded-3xl shadow-xl p-4 md:p-8 border border-slate-100 mt-2">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                <h2 class="text-xl md:text-2xl font-extrabold text-indigo-700">📊 Storico delle Spese</h2>
+                <button onclick="goHome()" class="btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-2xl font-bold text-xs border border-slate-200 shadow-xs">⬅️ Indietro</button>
             </div>
 
-            <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1" id="historyContainer"></div>
+            <div class="space-y-4 max-h-[62vh] overflow-y-auto pr-2" id="historyContainer"></div>
         </section>
 
     </main>
 
     <script>
-        // Categorie merceologiche in stile supermercato con i prodotti originali suddivisi logicamente
-        let catalog = JSON.parse(localStorage.getItem('galleon_supermarket_catalog')) || {
+        // Categorie con colori fortissimamente distintivi, badge ed emoji dedicate
+        let catalog = JSON.parse(localStorage.getItem('galleon_supermarket_catalog_v2')) || {
             ortofrutta: {
                 title: "🍏 Ortofrutta e Freschi",
-                bg: "bg-emerald-50/60 border-emerald-200 text-emerald-950",
+                headerBg: "bg-emerald-600 text-white",
+                cardBg: "bg-emerald-50/70 border-emerald-300 hover:border-emerald-500",
+                textCol: "text-emerald-950",
                 items: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE"]
             },
             macelleria: {
                 title: "🥩 Macelleria e Pescheria",
-                bg: "bg-rose-50/60 border-rose-200 text-rose-950",
+                headerBg: "bg-rose-600 text-white",
+                cardBg: "bg-rose-50/70 border-rose-300 hover:border-rose-500",
+                textCol: "text-rose-950",
                 items: ["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"]
             },
             latticini: {
                 title: "🧀 Latticini, Salumi e Uova",
-                bg: "bg-sky-50/60 border-sky-200 text-sky-950",
+                headerBg: "bg-sky-600 text-white",
+                cardBg: "bg-sky-50/70 border-sky-300 hover:border-sky-500",
+                textCol: "text-sky-950",
                 items: ["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"]
             },
             dispensa: {
                 title: "🥫 Dispensa e Scatolame",
-                bg: "bg-amber-50/60 border-amber-200 text-amber-950",
+                headerBg: "bg-amber-600 text-white",
+                cardBg: "bg-amber-50/70 border-amber-300 hover:border-amber-500",
+                textCol: "text-amber-950",
                 items: ["SALE", "PEPE", "PISELLI", "NOCI", "LIMMY", "CONTEN.PANNA COTTA", "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "MARMELLATA", "FRUTTI BOSCO", "CAFFE'", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "TABASCO", "ROTOLONI", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SPUGNE VASSOI", "PELLICOLA", "ORDINARE DOLCE", "RITIRARE DOLCE"]
             },
             bevande: {
                 title: "🍷 Bevande e Alcolici",
-                bg: "bg-indigo-50/60 border-indigo-200 text-indigo-950",
+                headerBg: "bg-indigo-600 text-white",
+                cardBg: "bg-indigo-50/70 border-indigo-300 hover:border-indigo-500",
+                textCol: "text-indigo-950",
                 items: ["COCA COLA", "APEROL"]
             },
             pulizia: {
                 title: "🧹 Pulizia e Detergenti",
-                bg: "bg-purple-50/60 border-purple-200 text-purple-950",
+                headerBg: "bg-purple-600 text-white",
+                cardBg: "bg-purple-50/70 border-purple-300 hover:border-purple-500",
+                textCol: "text-purple-950",
                 items: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "MICROFIBRA"]
             }
         };
@@ -306,7 +327,7 @@
         };
 
         function saveCatalogStorage() {
-            localStorage.setItem('galleon_supermarket_catalog', JSON.stringify(catalog));
+            localStorage.setItem('galleon_supermarket_catalog_v2', JSON.stringify(catalog));
         }
 
         function toggleSidebar() {
@@ -368,7 +389,7 @@
             authors.forEach(name => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = "btn-modern bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-2 rounded-xl border border-slate-200 text-xs shadow-xs";
+                btn.className = "btn-fluid bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-2 rounded-2xl border border-slate-200 text-xs shadow-xs";
                 btn.innerText = name;
                 btn.onclick = () => {
                     document.getElementById('inputAuthor').value = name;
@@ -386,32 +407,42 @@
             Object.keys(catalog).forEach(catKey => {
                 const catData = catalog[catKey];
                 const catDiv = document.createElement('div');
-                catDiv.className = "space-y-2.5 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs";
-                catDiv.innerHTML = `<h3 class="font-bold text-center text-orange-600 pb-1.5 border-b border-slate-100 text-xs md:text-sm">${catData.title}</h3>`;
+                catDiv.className = "bg-white rounded-2xl border-2 border-slate-200 shadow-md overflow-hidden flex flex-col";
                 
+                // Testata Categoria Colorata e Marcata
+                catDiv.innerHTML = `
+                    <div class="${catData.headerBg} px-4 py-3 font-extrabold text-sm md:text-base tracking-wide flex items-center justify-between shadow-xs">
+                        <span>${catData.title}</span>
+                        <span class="bg-black/20 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
+                    </div>
+                    <div class="p-3 space-y-2.5 flex-grow bg-slate-50/50" id="cat-list-${catKey}"></div>
+                `;
+                
+                container.appendChild(catDiv);
+                const listContainer = catDiv.querySelector(`#cat-list-${catKey}`);
+
                 catData.items.forEach((item, itemIdx) => {
                     const globalId = `${catKey}-${itemIdx}`;
                     const row = document.createElement('div');
-                    row.className = `p-2.5 rounded-xl border ${catData.bg} transition shadow-xs flex flex-col gap-2`;
+                    row.className = `p-3 rounded-2xl border-2 ${catData.cardBg} transition shadow-xs flex flex-col gap-2`;
                     row.innerHTML = `
                         <div class="flex items-center justify-between gap-2">
-                            <label class="flex items-center gap-2 cursor-pointer flex-grow min-w-0">
-                                <input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="autoSaveDraft()" class="w-5 h-5 text-emerald-600 rounded cursor-pointer shrink-0 border border-slate-300">
-                                <span class="font-bold text-xs md:text-sm leading-tight break-words" title="${item}">${item}</span>
+                            <label class="flex items-center gap-2.5 cursor-pointer flex-grow min-w-0">
+                                <input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="autoSaveDraft()" class="w-5 h-5 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
+                                <span class="font-extrabold text-xs md:text-sm leading-snug break-words ${catData.textCol}" title="${item}">${item}</span>
                             </label>
-                            <div class="flex items-center gap-1 shrink-0">
-                                <button type="button" onclick="adjustQty('${globalId}', -1)" class="btn-modern bg-white hover:bg-slate-100 font-bold w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-xs">-</button>
-                                <input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="autoSaveDraft()" class="w-10 p-1 border border-slate-200 rounded-lg text-center font-bold text-xs bg-white">
-                                <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-modern bg-white hover:bg-slate-100 font-bold w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-xs">+</button>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button type="button" onclick="adjustQty('${globalId}', -1)" class="btn-fluid bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">-</button>
+                                <input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="autoSaveDraft()" class="w-11 p-1 border border-slate-300 rounded-xl text-center font-extrabold text-xs bg-white shadow-inner">
+                                <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-fluid bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">+</button>
                             </div>
                         </div>
                         <div>
-                            <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa)..." oninput="autoSaveDraft()" class="w-full py-1 px-2.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-orange-500 font-medium">
+                            <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa, in sacco...)" oninput="autoSaveDraft()" class="w-full py-1.5 px-3 text-xs bg-white/95 border border-slate-300 rounded-xl focus:outline-none focus:border-slate-800 font-bold shadow-inner">
                         </div>
                     `;
-                    catDiv.appendChild(row);
+                    listContainer.appendChild(row);
                 });
-                container.appendChild(catDiv);
             });
         }
 
@@ -436,7 +467,6 @@
                     if (note) note.value = "";
                 });
             });
-            document.querySelectorAll('.custom-row').forEach(r => r.remove());
             currentSession.items = [];
             localStorage.removeItem('galleon_draft_session');
             localStorage.removeItem('galleon_current_active_list');
@@ -505,19 +535,26 @@
             Object.keys(catalog).forEach(catKey => {
                 const catData = catalog[catKey];
                 const colDiv = document.createElement('div');
-                colDiv.className = "space-y-2 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs";
-                colDiv.innerHTML = `<h3 class="font-bold text-center text-rose-700 pb-1.5 border-b border-slate-100 text-xs md:text-sm">${catData.title}</h3>`;
+                colDiv.className = "bg-white rounded-2xl border-2 border-slate-200 shadow-md overflow-hidden flex flex-col";
+                colDiv.innerHTML = `
+                    <div class="${catData.headerBg} px-4 py-3 font-extrabold text-sm tracking-wide flex items-center justify-between">
+                        <span>${catData.title}</span>
+                        <span class="bg-black/20 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
+                    </div>
+                    <div class="p-3 space-y-2 flex-grow bg-slate-50/50" id="manage-list-${catKey}"></div>
+                `;
+                container.appendChild(colDiv);
+                const listContainer = colDiv.querySelector(`#manage-list-${catKey}`);
                 
                 catData.items.forEach((item, itemIdx) => {
                     const row = document.createElement('div');
-                    row.className = "flex items-center justify-between p-2 bg-slate-50 rounded-xl border border-slate-200 text-xs md:text-sm gap-2";
+                    row.className = "flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200 text-xs md:text-sm gap-2 shadow-xs";
                     row.innerHTML = `
-                        <span class="font-bold text-slate-800 break-words flex-grow min-w-0">${item}</span>
-                        <button onclick="removeProductFromCatalog('${catKey}', ${itemIdx})" class="btn-modern bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs shrink-0">🗑️ Elimina</button>
+                        <span class="font-extrabold text-slate-800 break-words flex-grow min-w-0">${item}</span>
+                        <button onclick="removeProductFromCatalog('${catKey}', ${itemIdx})" class="btn-fluid bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shrink-0 shadow-xs">🗑️ Elimina</button>
                     `;
-                    colDiv.appendChild(row);
+                    listContainer.appendChild(row);
                 });
-                container.appendChild(colDiv);
             });
         }
 
@@ -601,16 +638,16 @@
             container.innerHTML = '';
             currentSession.items.forEach((i, idx) => {
                 const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-white p-3 rounded-2xl border border-amber-200 text-sm shadow-xs";
-                let noteHtml = i.note ? `<div class="text-[11px] text-amber-800 font-medium mt-0.5">Nota: ${i.note}</div>` : '';
+                div.className = "flex justify-between items-center bg-white p-3.5 rounded-2xl border-2 border-amber-200 text-sm shadow-xs";
+                let noteHtml = i.note ? `<div class="text-xs text-amber-900 font-extrabold mt-0.5 bg-amber-100 px-2 py-0.5 rounded inline-block">Nota: ${i.note}</div>` : '';
                 div.innerHTML = `
                     <div class="overflow-hidden pr-2 flex-grow min-w-0">
-                        <span class="font-bold text-slate-800 break-words">${i.name}</span>
+                        <span class="font-extrabold text-slate-900 text-base break-words">${i.name}</span>
                         ${noteHtml}
                     </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                        <span class="font-extrabold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-200 text-xs">${i.qty}</span>
-                        <button onclick="removeReviewItem(${idx})" class="btn-modern bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-xl text-xs">🗑️</button>
+                    <div class="flex items-center gap-2.5 shrink-0">
+                        <span class="font-extrabold text-amber-900 bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 text-xs shadow-inner">${i.qty}</span>
+                        <button onclick="removeReviewItem(${idx})" class="btn-fluid bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shadow-xs">🗑️</button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -640,16 +677,16 @@
             container.innerHTML = '';
             currentSession.items.forEach((i, idx) => {
                 const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200 text-xs";
-                let noteHtml = i.note ? `<span class="text-teal-700 font-medium ml-1">(${i.note})</span>` : '';
+                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 text-xs shadow-xs";
+                let noteHtml = i.note ? `<span class="text-teal-800 font-extrabold ml-1 bg-teal-50 px-1.5 py-0.5 rounded">(${i.note})</span>` : '';
                 div.innerHTML = `
                     <div class="overflow-hidden pr-2 flex-grow min-w-0">
-                        <span class="font-semibold text-slate-800 break-words">${i.name}</span>
+                        <span class="font-extrabold text-slate-900 break-words">${i.name}</span>
                         ${noteHtml}
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <span class="font-bold text-teal-600">${i.qty}</span>
-                        <button onclick="removePostSaveItem(${idx})" class="btn-modern bg-rose-500 hover:bg-rose-600 text-white font-bold px-2 py-0.5 rounded-lg text-xs">🗑️</button>
+                        <span class="font-extrabold text-teal-700">${i.qty}</span>
+                        <button onclick="removePostSaveItem(${idx})" class="btn-fluid bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs">🗑️</button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -699,23 +736,23 @@
             const container = document.getElementById('activeShoppingList');
             container.innerHTML = '';
             if (currentSession.items.length === 0) {
-                container.innerHTML = '<p class="text-center text-slate-500 py-6 col-span-2 text-sm font-semibold">Nessun prodotto in lista.</p>';
+                container.innerHTML = '<p class="text-center text-slate-500 py-6 col-span-2 text-sm font-bold">Nessun prodotto in lista.</p>';
                 updateProgress();
                 return;
             }
             currentSession.items.forEach((item, index) => {
                 const div = document.createElement('div');
-                div.className = `flex items-center justify-between p-3 rounded-2xl border transition ${item.checked ? 'bg-emerald-50/70 border-emerald-200 opacity-75 line-through' : 'bg-white border-slate-200'}`;
-                let noteHtml = item.note ? `<div class="text-[11px] ${item.checked ? 'text-emerald-800' : 'text-blue-700'} font-medium mt-0.5">Nota: ${item.note}</div>` : '';
+                div.className = `flex items-center justify-between p-3.5 rounded-2xl border-2 transition shadow-sm ${item.checked ? 'bg-emerald-50/70 border-emerald-300 opacity-75 line-through' : 'bg-white border-slate-200'}`;
+                let noteHtml = item.note ? `<div class="text-xs ${item.checked ? 'text-emerald-900 font-extrabold' : 'text-blue-800 font-extrabold'} mt-0.5">Nota: ${item.note}</div>` : '';
                 div.innerHTML = `
-                    <label class="flex items-center gap-3 flex-grow cursor-pointer overflow-hidden pr-2 min-w-0">
-                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-5 h-5 text-blue-600 rounded-lg cursor-pointer shrink-0 border border-slate-300">
+                    <label class="flex items-center gap-3.5 flex-grow cursor-pointer overflow-hidden pr-2 min-w-0">
+                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-6 h-6 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
                         <div class="overflow-hidden min-w-0">
-                            <span class="font-bold text-sm md:text-base ${item.checked ? 'text-emerald-900' : 'text-slate-800'} break-words">${item.name}</span>
+                            <span class="font-extrabold text-sm md:text-base ${item.checked ? 'text-emerald-950' : 'text-slate-900'} break-words">${item.name}</span>
                             ${noteHtml}
                         </div>
                     </label>
-                    <span class="bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 font-extrabold text-blue-600 text-xs shrink-0">${item.qty}</span>
+                    <span class="bg-blue-50 px-3.5 py-1.5 rounded-xl border-2 border-blue-200 font-extrabold text-blue-700 text-xs shrink-0 shadow-inner">${item.qty}</span>
                 `;
                 container.appendChild(div);
             });
@@ -753,26 +790,26 @@
             container.innerHTML = '';
             let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
             if (history.length === 0) {
-                container.innerHTML = '<p class="text-center text-slate-500 py-6 text-sm font-semibold">Nessuno storico salvato.</p>';
+                container.innerHTML = '<p class="text-center text-slate-500 py-6 text-sm font-bold">Nessuno storico salvato.</p>';
             } else {
                 history.forEach((session, idx) => {
                     const card = document.createElement('div');
-                    card.className = "bg-indigo-50/40 border border-indigo-200 rounded-2xl p-4 shadow-xs";
+                    card.className = "bg-indigo-50/50 border-2 border-indigo-200 rounded-2xl p-4.5 shadow-sm";
                     let itemsHtml = session.items.map(i => {
-                        let noteStr = i.note ? ` <span class="text-xs text-indigo-700 font-medium">(${i.note})</span>` : '';
+                        let noteStr = i.note ? ` <span class="text-xs text-indigo-900 font-extrabold">(${i.note})</span>` : '';
                         return `
-                            <li class="text-xs md:text-sm flex justify-between py-1.5 border-b border-indigo-100 last:border-0 items-center">
-                                <span class="${i.checked ? 'line-through text-emerald-800 font-bold' : 'text-slate-700'} break-words pr-2">${i.name}${noteStr}</span>
-                                <span class="font-bold text-indigo-600 shrink-0 bg-white px-2 py-0.5 rounded-lg border border-indigo-100">${i.qty}</span>
+                            <li class="text-xs md:text-sm flex justify-between py-2 border-b border-indigo-100 last:border-0 items-center">
+                                <span class="${i.checked ? 'line-through text-emerald-900 font-extrabold' : 'text-slate-800 font-bold'} break-words pr-2">${i.name}${noteStr}</span>
+                                <span class="font-extrabold text-indigo-700 shrink-0 bg-white px-2.5 py-1 rounded-xl border border-indigo-200 shadow-inner">${i.qty}</span>
                             </li>
                         `;
                     }).join('');
                     card.innerHTML = `
-                        <div class="flex justify-between items-center mb-2 flex-wrap gap-1">
-                            <span class="font-bold text-indigo-950 text-sm">📅 ${session.date} - <span class="text-red-600">${session.author}</span></span>
-                            <button onclick="deleteHistoryItem(${idx})" class="btn-modern text-red-600 hover:text-red-800 text-xs font-bold bg-white px-2.5 py-1 rounded-xl shadow-xs border border-red-200">🗑️ Elimina</button>
+                        <div class="flex justify-between items-center mb-3 flex-wrap gap-1">
+                            <span class="font-extrabold text-indigo-950 text-sm md:text-base">📅 ${session.date} - <span class="text-red-600">${session.author}</span></span>
+                            <button onclick="deleteHistoryItem(${idx})" class="btn-fluid text-red-600 hover:text-red-800 text-xs font-extrabold bg-white px-3 py-1.5 rounded-xl shadow-xs border border-red-200">🗑️ Elimina</button>
                         </div>
-                        <ul class="bg-white rounded-xl p-3 shadow-inner max-h-40 overflow-y-auto border border-indigo-100 space-y-1">${itemsHtml}</ul>
+                        <ul class="bg-white rounded-2xl p-3.5 shadow-inner max-h-44 overflow-y-auto border border-indigo-200 space-y-1">${itemsHtml}</ul>
                     `;
                     container.appendChild(card);
                 });
