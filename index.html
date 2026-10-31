@@ -12,17 +12,16 @@
             background-color: #f8fafc;
         }
         .btn-modern {
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
         .btn-modern:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         .btn-modern:active {
             transform: translateY(1px);
         }
-        /* Transizione menu laterale */
         #sideMenu {
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -30,10 +29,9 @@
 </head>
 <body class="bg-[#f8fafc] text-slate-900 min-h-screen flex flex-col">
 
-    <!-- Header con Hamburger Menu -->
-    <header class="bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-md py-3.5 px-4 flex justify-between items-center rounded-b-3xl sticky top-0 z-40 backdrop-blur-md">
+    <!-- Header con Menu Laterale -->
+    <header class="bg-gradient-to-r from-red-600 via-orange-600 to-amber-600 text-white shadow-md py-3.5 px-4 flex justify-between items-center rounded-b-3xl sticky top-0 z-40 backdrop-blur-md">
         <div class="flex items-center gap-3">
-            <!-- Pulsante Menu a 3 linee -->
             <button onclick="toggleSidebar()" class="bg-white/15 hover:bg-white/25 p-2 rounded-xl transition flex items-center justify-center text-white focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -52,7 +50,7 @@
     <!-- Overlay Sfondo Menu Laterale -->
     <div id="menuOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-50 hidden backdrop-blur-xs transition-opacity"></div>
 
-    <!-- Menù Laterale (Drawer) -->
+    <!-- Menù Laterale -->
     <div id="sideMenu" class="fixed top-0 left-0 bottom-0 w-72 bg-white z-50 shadow-2xl transform -translate-x-full flex flex-col p-5 border-r border-slate-100">
         <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-6">
             <h2 class="font-extrabold text-lg text-orange-600 flex items-center gap-2">🧭 Menu Rapido</h2>
@@ -75,7 +73,7 @@
         </nav>
 
         <div class="pt-4 border-t border-slate-100 text-center text-xs text-slate-400 font-medium">
-            The Galleon Pizzeria v3.0
+            The Galleon Pizzeria v3.1
         </div>
     </div>
 
@@ -114,10 +112,10 @@
             </div>
         </section>
 
-        <!-- CREA LA SPESA -->
+        <!-- CREA LA SPESA (Divisa per Categorie Supermercato) -->
         <section id="createSection" class="hidden bg-white rounded-3xl shadow-sm p-4 md:p-6 border border-emerald-100 mt-2">
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100 flex-wrap gap-2">
-                <h2 class="text-xl font-bold text-emerald-700">🛒 Seleziona i prodotti</h2>
+                <h2 class="text-xl font-bold text-emerald-700">🛒 Seleziona i prodotti per reparto</h2>
                 <div class="flex gap-2">
                     <button onclick="resetCatalogSelection()" class="btn-modern bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Azzera</button>
                     <button onclick="goHome()" class="btn-modern bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-200">⬅️ Indietro</button>
@@ -133,28 +131,28 @@
                 <button onclick="addCustomItem()" class="btn-modern bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm whitespace-nowrap">➕ Aggiungi</button>
             </div>
 
-            <!-- Griglia Prodotti (Testi lunghi protetti e visibili per intero) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-h-[58vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-50 rounded-2xl border border-slate-200" id="catalogColumnsContainer"></div>
+            <!-- Griglia Categorie Supermercato -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[60vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-50 rounded-2xl border border-slate-200" id="catalogCategoriesContainer"></div>
 
             <button onclick="goToReviewScreen()" class="btn-modern w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold p-4 rounded-2xl text-base shadow-md flex items-center justify-center gap-2">
                 🔍 Controlla se hai ordinato tutto 🚀
             </button>
         </section>
 
-        <!-- GESTIONE / ELIMINA PRODOTTI DAL CATALOGO ("Togli prodotti dalla lista") -->
+        <!-- GESTIONE / ELIMINA PRODOTTI DAL CATALOGO -->
         <section id="manageProductsSection" class="hidden bg-white rounded-3xl shadow-sm p-5 md:p-6 border border-rose-100 mt-2">
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
                 <h2 class="text-xl font-bold text-rose-700">🗑️ Togli prodotti dalla lista (Elimina dal catalogo)</h2>
                 <button onclick="goHome()" class="btn-modern bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-200">⬅️ Indietro</button>
             </div>
-            <p class="text-slate-600 text-sm mb-4">Qui puoi visualizzare tutti i prodotti presenti nei reparti e rimuovere definitivamente quelli che non servono più.</p>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto pr-1 p-2 bg-slate-50 rounded-2xl border border-slate-200" id="manageCatalogContainer"></div>
+            <p class="text-slate-600 text-sm mb-4">Qui puoi visualizzare tutti i prodotti suddivisi per categoria e rimuovere definitivamente quelli che non servono più.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[60vh] overflow-y-auto pr-1 p-2 bg-slate-50 rounded-2xl border border-slate-200" id="manageCatalogContainer"></div>
         </section>
 
-        <!-- INSERISCI NUOVO PRODOTTO (Modale o Sezione dedicata) -->
+        <!-- INSERISCI NUOVO PRODOTTO CON SCELTA CATEGORIA -->
         <section id="addProductSection" class="hidden bg-white rounded-3xl shadow-sm p-6 md:p-8 border border-orange-100 mt-2 max-w-xl mx-auto">
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
-                <h2 class="text-xl font-bold text-orange-600">➕ Inserisci nuovo prodotto in catalogo</h2>
+                <h2 class="text-xl font-bold text-orange-600">➕ Inserisci nuovo prodotto</h2>
                 <button onclick="goHome()" class="btn-modern bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-200">⬅️ Indietro</button>
             </div>
             <div class="space-y-4">
@@ -163,12 +161,14 @@
                     <input type="text" id="newProdNameInput" placeholder="Es. MOZZARELLA DI BUFALA" class="w-full p-3.5 border border-slate-200 rounded-2xl text-sm bg-slate-50 focus:border-orange-500 focus:outline-none font-semibold uppercase">
                 </div>
                 <div>
-                    <label class="block text-slate-700 font-semibold mb-2 text-sm">Seleziona Reparto (Colonna):</label>
-                    <select id="newProdColSelect" class="w-full p-3.5 border border-slate-200 rounded-2xl text-sm bg-slate-50 focus:border-orange-500 focus:outline-none font-semibold">
-                        <option value="0">Reparto 1 (Ortofrutta / Freschi base)</option>
-                        <option value="1">Reparto 2 (Latticini / Carni)</option>
-                        <option value="2">Reparto 3 (Dispensa / Scatolame)</option>
-                        <option value="3">Reparto 4 (Bevande / Detergenti / Varie)</option>
+                    <label class="block text-slate-700 font-semibold mb-2 text-sm">Categoria Merceologica (Supermercato):</label>
+                    <select id="newProdCategorySelect" class="w-full p-3.5 border border-slate-200 rounded-2xl text-sm bg-slate-50 focus:border-orange-500 focus:outline-none font-semibold">
+                        <option value="ortofrutta">🍏 Ortofrutta e Freschi</option>
+                        <option value="macelleria">🥩 Macelleria e Pescheria</option>
+                        <option value="latticini">🧀 Latticini e Salumi</option>
+                        <option value="dispensa">🥫 Dispensa e Scatolame</option>
+                        <option value="bevande">🍷 Bevande e Alcolici</option>
+                        <option value="pulizia">🧹 Pulizia e Detergenti</option>
                     </select>
                 </div>
                 <button onclick="saveNewCatalogProduct()" class="btn-modern w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold p-3.5 rounded-2xl text-base shadow-md">
@@ -261,12 +261,38 @@
     </main>
 
     <script>
-        // Gestione cataloghi salvati in localStorage per renderli persistenti se l'utente aggiunge o rimuove prodotti
-        let catalog = JSON.parse(localStorage.getItem('galleon_catalog_data')) || {
-            col1: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE", "CAFFE'", "SPIEDINI", "POMODORI SECCHI"],
-            col2: ["SALE", "PEPE", "PISELLI", "C.HAMBURGER", "CHIANINA", "NOCI", "LIMMY", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "EMMENTHAL", "STRACCHINO", "MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "PANNA SPRAY", "PANNA FRESCA", "CONTEN.PANNA COTTA"],
-            col3: ["PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "TONNO", "SALMONE", "ZUCCHERO", "ZUCCHERO A VELO", "UOVA", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "LATTE", "ROTOLONI"],
-            col4: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SAPONE MANI", "SPUGNE VASSOI", "MICROFIBRA", "ORDINARE DOLCE", "RITIRARE DOLCE", "MARMELLATA", "FRUTTI BOSCO", "COCA COLA", "TABASCO", "TRANCI SALMONE", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "PELLICOLA", "APEROL"]
+        // Categorie merceologiche in stile supermercato con i prodotti originali suddivisi logicamente
+        let catalog = JSON.parse(localStorage.getItem('galleon_supermarket_catalog')) || {
+            ortofrutta: {
+                title: "🍏 Ortofrutta e Freschi",
+                bg: "bg-emerald-50/60 border-emerald-200 text-emerald-950",
+                items: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE"]
+            },
+            macelleria: {
+                title: "🥩 Macelleria e Pescheria",
+                bg: "bg-rose-50/60 border-rose-200 text-rose-950",
+                items: ["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"]
+            },
+            latticini: {
+                title: "🧀 Latticini, Salumi e Uova",
+                bg: "bg-sky-50/60 border-sky-200 text-sky-950",
+                items: ["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"]
+            },
+            dispensa: {
+                title: "🥫 Dispensa e Scatolame",
+                bg: "bg-amber-50/60 border-amber-200 text-amber-950",
+                items: ["SALE", "PEPE", "PISELLI", "NOCI", "LIMMY", "CONTEN.PANNA COTTA", "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "MARMELLATA", "FRUTTI BOSCO", "CAFFE'", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "TABASCO", "ROTOLONI", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SPUGNE VASSOI", "PELLICOLA", "ORDINARE DOLCE", "RITIRARE DOLCE"]
+            },
+            bevande: {
+                title: "🍷 Bevande e Alcolici",
+                bg: "bg-indigo-50/60 border-indigo-200 text-indigo-950",
+                items: ["COCA COLA", "APEROL"]
+            },
+            pulizia: {
+                title: "🧹 Pulizia e Detergenti",
+                bg: "bg-purple-50/60 border-purple-200 text-purple-950",
+                items: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "MICROFIBRA"]
+            }
         };
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
@@ -275,12 +301,12 @@
         window.onload = function() {
             document.getElementById('inputDate').value = currentSession.date;
             renderAuthorButtons();
-            initCatalogColumns();
+            initCatalogCategories();
             loadAutoSave();
         };
 
         function saveCatalogStorage() {
-            localStorage.setItem('galleon_catalog_data', JSON.stringify(catalog));
+            localStorage.setItem('galleon_supermarket_catalog', JSON.stringify(catalog));
         }
 
         function toggleSidebar() {
@@ -293,26 +319,6 @@
                 menu.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
             }
-        }
-
-        function getProductTheme(name) {
-            name = name.toUpperCase();
-            if (["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI"].includes(name)) {
-                return { bg: "bg-emerald-50/60 border-emerald-200 text-emerald-950" };
-            }
-            if (["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"].includes(name)) {
-                return { bg: "bg-rose-50/60 border-rose-200 text-rose-950" };
-            }
-            if (["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"].includes(name)) {
-                return { bg: "bg-sky-50/60 border-sky-200 text-sky-950" };
-            }
-            if (["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "SPUGNE VASSOI", "MICROFIBRA", "ROTOLONI", "PELLICOLA"].includes(name)) {
-                return { bg: "bg-purple-50/60 border-purple-200 text-purple-950" };
-            }
-            if (["COCA COLA", "APEROL", "CAFFE'", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "MARMELLATA", "FRUTTI BOSCO", "ORDINARE DOLCE", "RITIRARE DOLCE"].includes(name)) {
-                return { bg: "bg-amber-50/60 border-amber-200 text-amber-950" };
-            }
-            return { bg: "bg-white border-slate-200 text-slate-900" };
         }
 
         function autoSaveDraft() {
@@ -334,11 +340,10 @@
                         
                         if (parsed.items) {
                             parsed.items.forEach(i => {
-                                const columnsData = [catalog.col1, catalog.col2, catalog.col3, catalog.col4];
-                                columnsData.forEach((colArray, colIdx) => {
-                                    colArray.forEach((item, itemIdx) => {
+                                Object.keys(catalog).forEach(catKey => {
+                                    catalog[catKey].items.forEach((item, itemIdx) => {
                                         if (item === i.name) {
-                                            const globalId = `${colIdx}-${itemIdx}`;
+                                            const globalId = `${catKey}-${itemIdx}`;
                                             const chk = document.getElementById(`cat-check-${globalId}`);
                                             const qty = document.getElementById(`cat-qty-${globalId}`);
                                             const note = document.getElementById(`cat-note-${globalId}`);
@@ -374,21 +379,20 @@
             });
         }
 
-        function initCatalogColumns() {
-            const container = document.getElementById('catalogColumnsContainer');
+        function initCatalogCategories() {
+            const container = document.getElementById('catalogCategoriesContainer');
             container.innerHTML = '';
-            const columnsData = [catalog.col1, catalog.col2, catalog.col3, catalog.col4];
 
-            columnsData.forEach((colArray, colIdx) => {
-                const colDiv = document.createElement('div');
-                colDiv.className = "space-y-2.5 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs";
-                colDiv.innerHTML = `<h3 class="font-bold text-center text-orange-600 pb-1.5 border-b border-slate-100 text-xs md:text-sm">Reparto ${colIdx + 1}</h3>`;
+            Object.keys(catalog).forEach(catKey => {
+                const catData = catalog[catKey];
+                const catDiv = document.createElement('div');
+                catDiv.className = "space-y-2.5 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs";
+                catDiv.innerHTML = `<h3 class="font-bold text-center text-orange-600 pb-1.5 border-b border-slate-100 text-xs md:text-sm">${catData.title}</h3>`;
                 
-                colArray.forEach((item, itemIdx) => {
-                    const globalId = `${colIdx}-${itemIdx}`;
-                    const theme = getProductTheme(item);
+                catData.items.forEach((item, itemIdx) => {
+                    const globalId = `${catKey}-${itemIdx}`;
                     const row = document.createElement('div');
-                    row.className = `p-2.5 rounded-xl border ${theme.bg} transition shadow-xs flex flex-col gap-2`;
+                    row.className = `p-2.5 rounded-xl border ${catData.bg} transition shadow-xs flex flex-col gap-2`;
                     row.innerHTML = `
                         <div class="flex items-center justify-between gap-2">
                             <label class="flex items-center gap-2 cursor-pointer flex-grow min-w-0">
@@ -405,9 +409,9 @@
                             <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa)..." oninput="autoSaveDraft()" class="w-full py-1 px-2.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-orange-500 font-medium">
                         </div>
                     `;
-                    colDiv.appendChild(row);
+                    catDiv.appendChild(row);
                 });
-                container.appendChild(colDiv);
+                container.appendChild(catDiv);
             });
         }
 
@@ -421,10 +425,9 @@
 
         function resetCatalogSelection() {
             if (!confirm("Vuoi davvero azzerare tutti i prodotti selezionati e le quantità?")) return;
-            const columnsData = [catalog.col1, catalog.col2, catalog.col3, catalog.col4];
-            columnsData.forEach((colArray, colIdx) => {
-                colArray.forEach((item, itemIdx) => {
-                    const globalId = `${colIdx}-${itemIdx}`;
+            Object.keys(catalog).forEach(catKey => {
+                catalog[catKey].items.forEach((item, itemIdx) => {
+                    const globalId = `${catKey}-${itemIdx}`;
                     const chk = document.getElementById(`cat-check-${globalId}`);
                     const qty = document.getElementById(`cat-qty-${globalId}`);
                     const note = document.getElementById(`cat-note-${globalId}`);
@@ -449,16 +452,16 @@
             const note = noteInput.value.trim();
             if (!name) return;
 
-            if (!catalog.col1.includes(name)) {
-                catalog.col1.push(name);
+            if (!catalog.ortofrutta.items.includes(name)) {
+                catalog.ortofrutta.items.push(name);
                 saveCatalogStorage();
-                initCatalogColumns();
+                initCatalogCategories();
             }
 
             nameInput.value = '';
             qtyInput.value = '';
             noteInput.value = '';
-            alert(`Prodotto "${name}" aggiunto con successo al Reparto 1!`);
+            alert(`Prodotto "${name}" aggiunto con successo a Ortofrutta e Freschi!`);
         }
 
         function openAddProductModal() {
@@ -468,21 +471,20 @@
 
         function saveNewCatalogProduct() {
             const nameInput = document.getElementById('newProdNameInput');
-            const colSelect = document.getElementById('newProdColSelect');
+            const catSelect = document.getElementById('newProdCategorySelect');
             const name = nameInput.value.trim().toUpperCase();
-            const colIdx = parseInt(colSelect.value);
+            const catKey = catSelect.value;
 
             if (!name) {
                 alert("Inserisci il nome del prodotto!");
                 return;
             }
 
-            let targetCol = [catalog.col1, catalog.col2, catalog.col3, catalog.col4][colIdx];
-            if (!targetCol.includes(name)) {
-                targetCol.push(name);
+            if (!catalog[catKey].items.includes(name)) {
+                catalog[catKey].items.push(name);
                 saveCatalogStorage();
-                initCatalogColumns();
-                alert(`Prodotto "${name}" inserito correttamente nel Reparto ${colIdx + 1}!`);
+                initCatalogCategories();
+                alert(`Prodotto "${name}" inserito correttamente nella categoria!`);
                 nameInput.value = '';
                 goHome();
             } else {
@@ -499,24 +501,19 @@
         function renderManageCatalog() {
             const container = document.getElementById('manageCatalogContainer');
             container.innerHTML = '';
-            const columnsData = [
-                { title: "Reparto 1", items: catalog.col1, key: 'col1' },
-                { title: "Reparto 2", items: catalog.col2, key: 'col2' },
-                { title: "Reparto 3", items: catalog.col3, key: 'col3' },
-                { title: "Reparto 4", items: catalog.col4, key: 'col4' }
-            ];
 
-            columnsData.forEach(col => {
+            Object.keys(catalog).forEach(catKey => {
+                const catData = catalog[catKey];
                 const colDiv = document.createElement('div');
-                colDiv.className = "space-y-2 bg-white p-3 rounded-2xl border border-slate-200 shadow-xs";
-                colDiv.innerHTML = `<h3 class="font-bold text-center text-rose-700 pb-1.5 border-b border-slate-100 text-xs md:text-sm">${col.title}</h3>`;
+                colDiv.className = "space-y-2 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs";
+                colDiv.innerHTML = `<h3 class="font-bold text-center text-rose-700 pb-1.5 border-b border-slate-100 text-xs md:text-sm">${catData.title}</h3>`;
                 
-                col.items.forEach((item, itemIdx) => {
+                catData.items.forEach((item, itemIdx) => {
                     const row = document.createElement('div');
                     row.className = "flex items-center justify-between p-2 bg-slate-50 rounded-xl border border-slate-200 text-xs md:text-sm gap-2";
                     row.innerHTML = `
                         <span class="font-bold text-slate-800 break-words flex-grow min-w-0">${item}</span>
-                        <button onclick="removeProductFromCatalog('${col.key}', ${itemIdx})" class="btn-modern bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs shrink-0">🗑️ Elimina</button>
+                        <button onclick="removeProductFromCatalog('${catKey}', ${itemIdx})" class="btn-modern bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs shrink-0">🗑️ Elimina</button>
                     `;
                     colDiv.appendChild(row);
                 });
@@ -524,11 +521,11 @@
             });
         }
 
-        function removeProductFromCatalog(colKey, idx) {
+        function removeProductFromCatalog(catKey, idx) {
             if (!confirm("Vuoi davvero rimuovere questo prodotto dal catalogo generale?")) return;
-            catalog[colKey].splice(idx, 1);
+            catalog[catKey].items.splice(idx, 1);
             saveCatalogStorage();
-            initCatalogColumns();
+            initCatalogCategories();
             renderManageCatalog();
         }
 
@@ -572,10 +569,9 @@
 
         function goToReviewScreen() {
             currentSession.items = [];
-            const columnsData = [catalog.col1, catalog.col2, catalog.col3, catalog.col4];
-            columnsData.forEach((colArray, colIdx) => {
-                colArray.forEach((item, itemIdx) => {
-                    const globalId = `${colIdx}-${itemIdx}`;
+            Object.keys(catalog).forEach(catKey => {
+                catalog[catKey].items.forEach((item, itemIdx) => {
+                    const globalId = `${catKey}-${itemIdx}`;
                     const chk = document.getElementById(`cat-check-${globalId}`);
                     const qtyField = document.getElementById(`cat-qty-${globalId}`);
                     const noteField = document.getElementById(`cat-note-${globalId}`);
