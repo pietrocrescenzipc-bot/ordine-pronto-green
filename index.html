@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spesa Giornaliera | The Galleon Pizzeria Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDK per Sincronizzazione in Tempo Reale -->
+    <!-- Firebase SDK (Compatibile con la configurazione della Tombola) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
@@ -58,9 +58,9 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <!-- Indicatore Stato Sincronizzazione Live -->
-            <div id="syncStatusBadge" class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-xl font-extrabold flex items-center gap-1.5 shadow-xs">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> LIVE
+            <!-- Badge Live Sincronizzato -->
+            <div class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-xl font-extrabold flex items-center gap-1.5 shadow-xs">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SYNC LIVE
             </div>
 
             <div id="userInfoHeader" class="text-xs md:text-sm bg-slate-800/90 border border-slate-700/80 px-3 py-2 rounded-2xl font-bold hidden items-center gap-2 shadow-inner shrink-0">
@@ -348,7 +348,7 @@
     </main>
 
     <script>
-        // Configurazione Firebase (sostituisci con il tuo progetto o usa il database di test condiviso)
+        // === CONFIGURAZIONE FIREBASE (Struttura Tombola) ===
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForGalleonApp2026",
             authDomain: "galleon-spesa-live.firebaseapp.com",
@@ -360,7 +360,7 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
-        const dbRef = db.ref('galleon_spesa_live_v3');
+        const dbRef = db.ref('galleon_spesa_live_v4');
 
         let catalog = {
             ortofrutta: {
@@ -409,41 +409,41 @@
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
         let currentSession = { date: new Date().toISOString().split('T')[0], author: "", items: [] };
-        let isCloudUpdating = false;
+        let isRemoteUpdating = false;
 
         window.onload = function() {
             document.getElementById('inputDate').value = currentSession.date;
             renderAuthorButtons();
             initCatalogCategories();
 
-            // ASCOLTATORE FIREBASE IN TEMPO REALE (Sincronizzazione Immediata Multi-Dispositivo)
+            // === ASCOLTATORE FIREBASE (Stile Tombola) ===
             dbRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
-                    isCloudUpdating = true;
+                    isRemoteUpdating = true;
                     if (data.catalog) {
                         catalog = data.catalog;
                         initCatalogCategories();
                     }
                     if (data.session) {
                         currentSession = data.session;
-                        updateUIFromSession();
+                        applySessionToDOM();
                     }
-                    isCloudUpdating = false;
+                    isRemoteUpdating = false;
                 }
             });
         };
 
-        function syncToCloud() {
-            if (isCloudUpdating) return;
+        function syncStateToCloud() {
+            if (isRemoteUpdating) return;
             dbRef.set({
                 session: currentSession,
                 catalog: catalog,
-                lastUpdated: Date.now()
+                timestamp: Date.now()
             });
         }
 
-        function updateUIFromSession() {
+        function applySessionToDOM() {
             if (currentSession.date) document.getElementById('inputDate').value = currentSession.date;
             if (currentSession.author) {
                 document.getElementById('inputAuthor').value = currentSession.author;
@@ -453,7 +453,6 @@
                 document.getElementById('userInfoHeader').classList.add('flex');
             }
 
-            // Aggiorna checkbox del catalogo in base alla sessione cloud
             if (currentSession.items) {
                 currentSession.items.forEach(i => {
                     Object.keys(catalog).forEach(catKey => {
@@ -474,7 +473,7 @@
                 });
             }
 
-            // Se siamo nella schermata supermercato, aggiorna la lista attiva in tempo reale
+            // Aggiorna in tempo reale la schermata supermercato se aperta
             if (!document.getElementById('shopSection').classList.contains('hidden')) {
                 renderActiveShoppingList();
             }
@@ -503,7 +502,7 @@
                 btn.onclick = () => {
                     document.getElementById('inputAuthor').value = name;
                     currentSession.author = name;
-                    syncToCloud();
+                    syncStateToCloud();
                 };
                 container.appendChild(btn);
             });
@@ -511,6 +510,7 @@
 
         function initCatalogCategories() {
             const container = document.getElementById('catalogCategoriesContainer');
+            if (!container) return;
             container.innerHTML = '';
 
             Object.keys(catalog).forEach(catKey => {
@@ -536,22 +536,23 @@
                     row.innerHTML = `
                         <div class="flex items-center justify-between gap-2 w-full">
                             <label class="flex items-center gap-2.5 cursor-pointer flex-grow min-w-0">
-                                <input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="collectSelectedItems(); syncToCloud();" class="w-6 h-6 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
+                                <input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="collectSelectedItems(); syncStateToCloud();" class="w-6 h-6 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
                                 <span class="font-extrabold text-xs md:text-sm leading-snug break-words ${catData.textCol}" title="${item}">${item}</span>
                             </label>
                             <div class="flex items-center gap-1.5 shrink-0">
                                 <button type="button" onclick="adjustQty('${globalId}', -1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-8 h-8 rounded-xl border border-slate-300 flex items-center justify-center text-sm shadow-xs">-</button>
-                                <input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="collectSelectedItems(); syncToCloud();" class="w-12 p-1.5 border border-slate-300 rounded-xl text-center font-extrabold text-xs bg-white shadow-inner">
+                                <input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="collectSelectedItems(); syncStateToCloud();" class="w-12 p-1.5 border border-slate-300 rounded-xl text-center font-extrabold text-xs bg-white shadow-inner">
                                 <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-8 h-8 rounded-xl border border-slate-300 flex items-center justify-center text-sm shadow-xs">+</button>
                             </div>
                         </div>
                         <div class="w-full pt-1 border-t border-slate-200/60">
-                            <input type="text" id="cat-note-${globalId}" placeholder="Note (es. cassa, bancale...)" oninput="collectSelectedItems(); syncToCloud();" class="w-full p-2 px-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-white text-slate-900 shadow-inner focus:outline-none focus:border-amber-500">
+                            <input type="text" id="cat-note-${globalId}" placeholder="Note (es. cassa, bancale...)" oninput="collectSelectedItems(); syncStateToCloud();" class="w-full p-2 px-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-white text-slate-900 shadow-inner focus:outline-none focus:border-amber-500">
                         </div>
                     `;
                     listContainer.appendChild(row);
                 });
             });
+            applySessionToDOM();
         }
 
         function adjustQty(globalId, delta) {
@@ -565,7 +566,7 @@
                 chk.checked = true;
             }
             collectSelectedItems();
-            syncToCloud();
+            syncStateToCloud();
         }
 
         function startMode(mode) {
@@ -579,7 +580,7 @@
 
             currentSession.date = dateVal;
             currentSession.author = authorVal;
-            syncToCloud();
+            syncStateToCloud();
 
             document.getElementById('displayDate').innerText = dateVal;
             document.getElementById('displayAuthor').innerText = authorVal;
@@ -605,6 +606,7 @@
             currentSession.author = authorVal;
 
             collectSelectedItems();
+            syncStateToCloud();
 
             document.getElementById('setupSection').classList.add('hidden');
             document.getElementById('shopSection').classList.remove('hidden');
@@ -620,7 +622,6 @@
                     const qty = document.getElementById(`cat-qty-${globalId}`);
                     const note = document.getElementById(`cat-note-${globalId}`);
                     if (chk && chk.checked) {
-                        // Mantiene lo stato checked precedente se già esistente
                         let existing = currentSession.items ? currentSession.items.find(i => i.name === item) : null;
                         collected.push({
                             name: item,
@@ -637,7 +638,7 @@
 
         function goToReviewScreen() {
             collectSelectedItems();
-            syncToCloud();
+            syncStateToCloud();
             if (currentSession.items.length === 0) {
                 alert("Seleziona almeno un prodotto prima di procedere.");
                 return;
@@ -693,7 +694,7 @@
             if (!name) return;
 
             currentSession.items.push({ name, qty, note, checked: false });
-            syncToCloud();
+            syncStateToCloud();
             renderPostSaveSummary();
 
             document.getElementById('extraPostName').value = '';
@@ -712,7 +713,7 @@
             container.innerHTML = '';
 
             if (!currentSession.items || currentSession.items.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center text-slate-500 font-bold py-8">Nessun prodotto in lista.</p>`;
+                container.innerHTML = `<p class="col-span-full text-center text-slate-500 font-bold py-8">Nessun prodotto in lista sul Cloud.</p>`;
                 updateProgress();
                 return;
             }
@@ -740,14 +741,14 @@
 
         function toggleItemCheck(index) {
             currentSession.items[index].checked = !currentSession.items[index].checked;
-            syncToCloud();
+            syncStateToCloud();
             renderActiveShoppingList();
         }
 
         function deleteCheckedItem(index) {
             if (currentSession.items[index].checked) {
                 currentSession.items.splice(index, 1);
-                syncToCloud();
+                syncStateToCloud();
                 renderActiveShoppingList();
             } else {
                 alert("Spunta prima il prodotto come fatto per poterlo rimuovere.");
@@ -765,7 +766,7 @@
                     saveHistoryRecordCustom(takenItems);
                 }
                 resetCatalogSelection();
-                syncToCloud();
+                syncStateToCloud();
                 goHome();
             }
         }
@@ -830,7 +831,7 @@
             }
 
             currentSession.items = currentSession.items.filter(i => !i.checked);
-            syncToCloud();
+            syncStateToCloud();
 
             document.getElementById('summaryModalSection').classList.add('hidden');
             alert("Spesa completata! I prodotti presi sono nello storico, quelli non trovati sono rimasti in memoria.");
@@ -855,7 +856,7 @@
                     saveHistoryRecordCustom(takenItems);
                 }
                 currentSession.items = currentSession.items.filter(i => !i.checked);
-                syncToCloud();
+                syncStateToCloud();
             }
             goHome();
         }
@@ -873,7 +874,7 @@
                 });
             });
             currentSession.items = [];
-            syncToCloud();
+            syncStateToCloud();
         }
 
         function goHome() {
@@ -887,7 +888,7 @@
             document.getElementById('userInfoHeader').classList.remove('flex');
             document.getElementById('inputAuthor').value = "";
             resetCatalogSelection();
-            syncToCloud();
+            syncStateToCloud();
             goHome();
         }
 
@@ -907,7 +908,7 @@
 
             if (!catalog[category].items.includes(name)) {
                 catalog[category].items.push(name);
-                syncToCloud();
+                syncStateToCloud();
                 initCatalogCategories();
                 alert(`Prodotto "${name}" aggiunto con successo al reparto!`);
                 goHome();
@@ -945,7 +946,7 @@
         function deleteCatalogItem(catKey, index) {
             if (confirm("Vuoi davvero rimuovere questo prodotto dal catalogo?")) {
                 catalog[catKey].items.splice(index, 1);
-                syncToCloud();
+                syncStateToCloud();
                 openManageProductsScreen();
                 initCatalogCategories();
             }
