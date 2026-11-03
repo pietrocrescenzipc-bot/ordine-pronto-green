@@ -354,7 +354,7 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
-        const dbRef = db.ref('galleon_spesa_live_v6');
+        const dbRef = db.ref('galleon_spesa_live_v7');
 
         let catalog = {
             ortofrutta: {
@@ -403,14 +403,13 @@
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
         
-        let currentSession = JSON.parse(localStorage.getItem('galleon_session_v6')) || { 
+        let currentSession = JSON.parse(localStorage.getItem('galleon_session_v7')) || { 
             date: new Date().toISOString().split('T')[0], 
             author: "Orsola", 
             items: [] 
         };
         
         let isApplyingRemoteData = false;
-        let lastServerTimestamp = 0;
 
         window.onload = function() {
             document.getElementById('inputDate').value = currentSession.date;
@@ -423,43 +422,35 @@
             renderAuthorButtons();
             initCatalogCategories();
 
+            // Sincronizzazione in tempo reale forzata tramite Firebase
             dbRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data && data.session) {
-                    if (data.timestamp && data.timestamp >= lastServerTimestamp) {
-                        if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
-                            return; 
-                        }
-
-                        isApplyingRemoteData = true;
-                        currentSession = data.session;
-                        if (data.catalog) {
-                            catalog = data.catalog;
-                        }
-                        lastServerTimestamp = data.timestamp;
-                        
-                        localStorage.setItem('galleon_session_v6', JSON.stringify(currentSession));
-                        applySessionToDOM();
-                        isApplyingRemoteData = false;
+                    if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+                        return; 
                     }
+
+                    isApplyingRemoteData = true;
+                    currentSession = data.session;
+                    if (data.catalog) catalog = data.catalog;
+                    
+                    localStorage.setItem('galleon_session_v7', JSON.stringify(currentSession));
+                    applySessionToDOM();
+                    isApplyingRemoteData = false;
                 }
-            }, (error) => {
-                console.warn("Modalità offline attiva o restrizioni Cloud rilevate:", error);
             });
         };
 
         function syncStateToCloud() {
             if (isApplyingRemoteData) return;
-            localStorage.setItem('galleon_session_v6', JSON.stringify(currentSession));
-            const newTimestamp = Date.now();
-            lastServerTimestamp = newTimestamp;
+            localStorage.setItem('galleon_session_v7', JSON.stringify(currentSession));
 
             dbRef.set({
                 session: currentSession,
                 catalog: catalog,
-                timestamp: newTimestamp
+                timestamp: Date.now()
             }).catch((e) => {
-                console.error("Errore sync cloud:", e);
+                console.error("Sync cloud fallback:", e);
             });
         }
 
@@ -646,7 +637,6 @@
         }
 
         function goToReviewScreen() {
-            // Sola lettura diretta dal DOM: scansiona tutte le categorie e raccoglie le spunte
             currentSession.items = [];
             Object.keys(catalog).forEach(catKey => {
                 catalog[catKey].items.forEach((item, itemIdx) => {
@@ -818,21 +808,28 @@
         }
 
         function confirmAndFinalizeShopping() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
-            history.unshift({
-                date: currentSession.date,
-                author: currentSession.author,
-                items: [...currentSession.items],
-                timestamp: Date.now()
-            });
-            localStorage.setItem('galleon_history_v6', JSON.stringify(history));
+            let history = JSON.parse(localStorage.getItem('galleon_history_v7')) || [];
+            
+            // CORREZIONE RITENUTA: Vengono archiviati SOLO i prodotti presi (taken === true)
+            const onlyTakenItems = currentSession.items.filter(i => i.taken);
 
+            if (onlyTakenItems.length > 0) {
+                history.unshift({
+                    date: currentSession.date,
+                    author: currentSession.author,
+                    items: onlyTakenItems,
+                    timestamp: Date.now()
+                });
+                localStorage.setItem('galleon_history_v7', JSON.stringify(history));
+            }
+
+            // I prodotti NON presi rimangono in memoria per la prossima volta
             currentSession.items = currentSession.items.filter(i => !i.taken);
             syncStateToCloud();
 
             document.getElementById('summaryModalSection').classList.add('hidden');
             goHome();
-            alert("Spesa archiviata con successo nello Storico!");
+            alert("Spesa completata! I soli prodotti presi sono stati salvati nello Storico.");
         }
 
         function clearEntireShopping() {
@@ -918,10 +915,10 @@
             container.innerHTML = '';
             statsDashboard.innerHTML = '';
 
-            let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v7')) || [];
 
             let totalOrders = history.length;
-            let totalItemsBought = history.reduce((acc, h) => acc + h.items.filter(i => i.taken).length, 0);
+            let totalItemsBought = history.reduce((acc, h) => acc + h.items.length, 0);
 
             statsDashboard.innerHTML = `
                 <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 shadow-sm">
@@ -943,7 +940,7 @@
                 let div = document.createElement('div');
                 div.className = "bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-slate-900";
                 
-                let itemsHtml = h.items.map(i => `<li class="text-xs font-bold ${i.taken ? 'text-emerald-700' : 'text-slate-400'}">${i.name} (Qtà: ${i.qty}) ${i.note ? '- ' + i.note : ''}</li>`).join('');
+                let itemsHtml = h.items.map(i => `<li class="text-xs font-bold text-emerald-700">${i.name} (Qtà: ${i.qty}) ${i.note ? '- ' + i.note : ''}</li>`).join('');
 
                 div.innerHTML = `
                     <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
@@ -958,23 +955,23 @@
 
         function deleteHistoryItem(idx) {
             if (confirm("Vuoi eliminare questo storico?")) {
-                let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
+                let history = JSON.parse(localStorage.getItem('galleon_history_v7')) || [];
                 history.splice(idx, 1);
-                localStorage.setItem('galleon_history_v6', JSON.stringify(history));
+                localStorage.setItem('galleon_history_v7', JSON.stringify(history));
                 showHistory();
             }
         }
 
         function exportHistoryExcel() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v7')) || [];
             if (history.length === 0) {
                 alert("Nessun dato nello storico da esportare!");
                 return;
             }
-            let csvContent = "data:text/csv;charset=utf-8,Data,Autore,Prodotto,Quantita,Nota,Preso\n";
+            let csvContent = "data:text/csv;charset=utf-8,Data,Autore,Prodotto,Quantita,Nota\n";
             history.forEach(h => {
                 h.items.forEach(i => {
-                    csvContent += `${h.date},${h.author},"${i.name}",${i.qty},"${i.note || ''}",${i.taken ? 'SI' : 'NO'}\n`;
+                    csvContent += `${h.date},${h.author},"${i.name}",${i.qty},"${i.note || ''}"\n`;
                 });
             });
             const encodedUri = encodeURI(csvContent);
@@ -987,7 +984,7 @@
         }
 
         function exportHistoryJSON() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v7')) || [];
             if (history.length === 0) {
                 alert("Nessun dato nello storico da esportare!");
                 return;
