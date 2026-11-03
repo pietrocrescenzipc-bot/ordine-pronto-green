@@ -260,9 +260,12 @@
 
         <!-- VAI AL SUPERMERCATO -->
         <section id="shopSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
                 <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
-                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+                <div class="flex gap-2">
+                    <button onclick="clearEntireShopping()" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-300 flex items-center gap-1">🗑️ Svuota Tutta la Spesa</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+                </div>
             </div>
 
             <div class="mb-6 bg-blue-50 p-4 rounded-2xl flex justify-between items-center border-2 border-blue-200 shadow-xs">
@@ -647,6 +650,7 @@
         }
 
         function saveHistoryRecord() {
+            if (!currentSession.items || currentSession.items.length === 0) return;
             let history = JSON.parse(localStorage.getItem('galleon_history_v3')) || [];
             history.unshift({
                 id: Date.now(),
@@ -734,6 +738,20 @@
             }
         }
 
+        // Funzione modificata: salva nello storico prima di svuotare l'intera spesa
+        function clearEntireShopping() {
+            if (!currentSession.items || currentSession.items.length === 0) {
+                alert("La spesa è già vuota.");
+                return;
+            }
+            if (confirm("Vuoi svuotare l'intera lista della spesa? I prodotti attuali verranno comunque registrati e salvati nello storico.")) {
+                saveHistoryRecord();
+                currentSession.items = [];
+                autoSaveDraft();
+                renderActiveShoppingList();
+            }
+        }
+
         function updateProgress() {
             const total = currentSession.items.length;
             const checkedCount = currentSession.items.filter(i => i.checked).length;
@@ -744,7 +762,8 @@
         }
 
         function completeShopping() {
-            alert("Spesa completata e sincronizzata con successo!");
+            saveHistoryRecord();
+            alert("Spesa completata, salvata nello storico e sincronizzata con successo!");
             goHome();
         }
 
