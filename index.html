@@ -1,634 +1,974 @@
-<script>
-    // === CONFIGURAZIONE FIREBASE ===
-    const firebaseConfig = {
-        apiKey: "AIzaSyDummyKeyForGalleonApp2026",
-        authDomain: "galleon-spesa-live.firebaseapp.com",
-        databaseURL: "https://galleon-spesa-live-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "galleon-spesa-live"
-    };
-
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.database();
-    const dbRef = db.ref('galleon_spesa_live_v6');
-
-    let catalog = {
-        ortofrutta: {
-            title: "🍏 Ortofrutta e Freschi",
-            headerBg: "bg-emerald-700 text-white",
-            cardBg: "bg-emerald-50/80 border-emerald-300",
-            textCol: "text-emerald-950",
-            items: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE"]
-        },
-        macelleria: {
-            title: "🥩 Macelleria e Pescheria",
-            headerBg: "bg-rose-700 text-white",
-            cardBg: "bg-rose-50/80 border-rose-300",
-            textCol: "text-rose-950",
-            items: ["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"]
-        },
-        latticini: {
-            title: "🧀 Latticini, Salumi e Uova",
-            headerBg: "bg-sky-700 text-white",
-            cardBg: "bg-sky-50/80 border-sky-300",
-            textCol: "text-sky-950",
-            items: ["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"]
-        },
-        dispensa: {
-            title: "🥫 Dispensa e Scatolame",
-            headerBg: "bg-amber-700 text-white",
-            cardBg: "bg-amber-50/80 border-amber-300",
-            textCol: "text-amber-950",
-            items: ["SALE", "PEPE", "PISELLI", "NOCI", "LIMMY", "CONTEN.PANNA COTTA", "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "MARMELLATA", "FRUTTI BOSCO", "CAFFE'", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "TABASCO", "ROTOLONI", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SPUGNE VASSOI", "PELLICOLA", "ORDINARE DOLCE", "RITIRARE DOLCE"]
-        },
-        bevande: {
-            title: "🍷 Bevande e Alcolici",
-            headerBg: "bg-indigo-700 text-white",
-            cardBg: "bg-indigo-50/80 border-indigo-300",
-            textCol: "text-indigo-950",
-            items: ["COCA COLA", "APEROL"]
-        },
-        pulizia: {
-            title: "🧹 Pulizia e Detergenti",
-            headerBg: "bg-purple-700 text-white",
-            cardBg: "bg-purple-50/80 border-purple-300",
-            textCol: "text-purple-950",
-            items: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "MICROFIBRA"]
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spesa Giornaliera | The Galleon Pizzeria Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
         }
-    };
-
-    const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
-    
-    let currentSession = JSON.parse(localStorage.getItem('galleon_session_v6')) || { 
-        date: new Date().toISOString().split('T')[0], 
-        author: "Orsola", 
-        items: [] 
-    };
-    
-    let isApplyingRemoteData = false;
-    let lastServerTimestamp = 0;
-
-    // === INIZIALIZZAZIONE ALL'AVVIO ===
-    window.onload = function() {
-        document.getElementById('inputDate').value = currentSession.date;
-        if (currentSession.author) {
-            document.getElementById('inputAuthor').value = currentSession.author;
-            document.getElementById('displayAuthor').innerText = currentSession.author;
+        .pro-card {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
-        document.getElementById('displayDate').innerText = currentSession.date;
-        
-        renderAuthorButtons();
-        initCatalogCategories();
+        .btn-pro {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-pro:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+        .btn-pro:active {
+            transform: translateY(1px);
+        }
+        #sideMenu {
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-orange-500 selection:text-white w-full max-w-[100vw]">
 
-        // Ascoltatore in tempo reale da Firebase
-        dbRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data && data.session) {
-                if (data.timestamp && data.timestamp >= lastServerTimestamp) {
-                    // Evita di sovrascrivere se l'utente sta digitando in un input
-                    if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
-                        return; 
-                    }
+    <!-- Header Professionale -->
+    <header class="bg-slate-900/80 border-b border-slate-800 backdrop-blur-xl sticky top-0 z-40 px-4 md:px-8 py-4 flex justify-between items-center shadow-lg w-full">
+        <div class="flex items-center gap-3.5 min-w-0">
+            <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-2xl transition text-slate-200 border border-slate-700/60 shadow-xs flex items-center justify-center focus:outline-none shrink-0" title="Menu principale">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center shadow-md text-lg shrink-0">
+                    🍕
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-sm md:text-base font-extrabold tracking-tight text-white leading-none truncate">The Galleon</h1>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-400 truncate block">Gestione Spesa Semplice</span>
+                </div>
+            </div>
+        </div>
 
-                    isApplyingRemoteData = true;
-                    currentSession = data.session;
-                    if (data.catalog) {
-                        catalog = data.catalog;
-                    }
-                    lastServerTimestamp = data.timestamp;
-                    
-                    localStorage.setItem('galleon_session_v6', JSON.stringify(currentSession));
-                    applySessionToDOM();
-                    isApplyingRemoteData = false;
-                }
+        <div class="flex items-center gap-2">
+            <div class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-xl font-extrabold flex items-center gap-1.5 shadow-xs">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ONLINE
+            </div>
+
+            <div id="userInfoHeader" class="text-xs md:text-sm bg-slate-800/90 border border-slate-700/80 px-3 py-2 rounded-2xl font-bold flex items-center gap-2 shadow-inner shrink-0">
+                <span id="displayDate" class="text-slate-300 hidden sm:inline"></span> 
+                <span class="text-slate-600 hidden sm:inline">•</span> 
+                <span class="text-amber-400 flex items-center gap-1">👤 <span id="displayAuthor">Orsola</span></span>
+                <button onclick="resetSession()" class="ml-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded-xl text-[11px] font-extrabold transition">Cambia</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay Sfondo Menu -->
+    <div id="menuOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/70 z-50 hidden backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Menù Laterale Pro (Drawer) -->
+    <div id="sideMenu" class="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-slate-900 border-r border-slate-800 z-50 shadow-2xl transform -translate-x-full flex flex-col p-6 text-slate-200">
+        <div class="flex justify-between items-center pb-5 border-b border-slate-800 mb-6">
+            <div class="flex items-center gap-2.5">
+                <span class="text-xl">🧭</span>
+                <span class="font-extrabold text-lg text-white">Menu Rapido</span>
+            </div>
+            <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-slate-400 hover:text-white transition">✕</button>
+        </div>
+
+        <nav class="space-y-2.5 flex-grow">
+            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+                🏠 Home Principale
+            </button>
+            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+                ➕ Aggiungi Nuovo Prodotto
+            </button>
+            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+                🗑️ Gestisci Catalogo Prodotti
+            </button>
+            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+                📊 Storico Spese Passate
+            </button>
+        </nav>
+
+        <div class="pt-4 border-t border-slate-800 text-center text-xs text-slate-500 font-medium">
+            The Galleon • Gestione Sicura
+        </div>
+    </div>
+
+    <main class="flex-grow container mx-auto p-3 md:p-8 max-w-6xl w-full box-border">
+
+        <!-- SETUP INIZIALE -->
+        <section id="setupSection" class="pro-card rounded-3xl p-6 md:p-10 mt-4 border border-slate-100 w-full">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <div class="inline-flex p-4 rounded-2xl bg-orange-50 text-orange-600 text-4xl shadow-inner mb-3">
+                    🛒
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Cosa vuoi fare oggi?</h2>
+                <p class="text-slate-500 text-sm mt-1.5">Seleziona il tuo nome e scegli un'operazione.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto bg-slate-50 p-5 md:p-6 rounded-3xl border border-slate-200/80 shadow-inner">
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">📅 Data di oggi</label>
+                    <input type="date" id="inputDate" class="w-full p-3.5 border-2 border-slate-200 rounded-2xl text-base font-bold bg-white text-slate-900 focus:border-orange-500 focus:outline-none text-center shadow-xs">
+                </div>
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Chi sei? (Tocca il nome)</label>
+                    <div class="grid grid-cols-3 gap-2 mb-2.5" id="authorButtons"></div>
+                    <input type="text" id="inputAuthor" placeholder="O scrivi il nome..." class="w-full p-3 border-2 border-slate-200 rounded-2xl text-sm bg-white text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-6">
+                <button onclick="startMode('create')" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
+                    📝 COMPILA LA SPESA
+                </button>
+                <button onclick="goToSupermarketDirect()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
+                    🛍️ VAI AL SUPERMERCATO
+                </button>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button onclick="showHistory()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl border border-slate-300 inline-block text-xs uppercase tracking-wider shadow-xs">
+                    📊 Visualizza Storico Spese Passate
+                </button>
+            </div>
+        </section>
+
+        <!-- CREA LA SPESA -->
+        <section id="createSection" class="hidden pro-card rounded-3xl p-4 md:p-8 mt-4 w-full relative">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200 flex-wrap gap-3">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Spesa</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Spunta i prodotti e scrivi quantità o note (es. cassa, bancale).</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Pulisci Tutto</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[62vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
+
+            <div class="sticky bottom-2 z-20 pt-2 bg-white/80 backdrop-blur-md rounded-2xl pb-1">
+                <button onclick="goToReviewScreen()" class="btn-pro w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 md:p-5 rounded-2xl text-base md:text-lg shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
+                    🔍 AVANTI: CONTROLLA RIEPILOGO 🚀
+                </button>
+            </div>
+        </section>
+
+        <!-- GESTIONE CATALOGO -->
+        <section id="manageProductsSection" class="hidden pro-card rounded-3xl p-4 md:p-8 mt-4 w-full">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
+                    <p class="text-slate-500 text-sm">Elimina prodotti non necessari o visualizza i reparti.</p>
+                </div>
+                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[60vh] overflow-y-auto pr-2 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="manageCatalogContainer"></div>
+        </section>
+
+        <!-- AGGIUNGI PRODOTTO -->
+        <section id="addProductSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 max-w-xl mx-auto w-full">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">➕ Nuovo Prodotto in Catalogo</h2>
+                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+            </div>
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Nome Prodotto</label>
+                    <input type="text" id="newProdNameInput" placeholder="Es. RUCOLA FRESCA" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
+                </div>
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Reparto / Categoria</label>
+                    <select id="newProdCategorySelect" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
+                        <option value="ortofrutta">🍏 Ortofrutta e Freschi</option>
+                        <option value="macelleria">🥩 Macelleria e Pescheria</option>
+                        <option value="latticini">🧀 Latticini, Salumi e Uova</option>
+                        <option value="dispensa">🥫 Dispensa e Scatolame</option>
+                        <option value="bevande">🍷 Bevande e Alcolici</option>
+                        <option value="pulizia">🧹 Pulizia e Detergenti</option>
+                    </select>
+                </div>
+                <button onclick="saveNewCatalogProduct()" class="btn-pro w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-orange-500/20">
+                    💾 Salva nel Catalogo
+                </button>
+            </div>
+        </section>
+
+        <!-- SCHERMATA DI CONTROLLO -->
+        <section id="reviewSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
+            <div class="text-center mb-6">
+                <div class="inline-flex p-3 rounded-2xl bg-amber-100 text-amber-800 text-3xl mb-2">📋</div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
+                <p class="text-slate-500 text-sm mt-1">Verifica la lista prima di confermare e registrarla.</p>
+            </div>
+
+            <div class="mb-6">
+                <div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner w-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="backToCreateFromReview()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-sm shadow-xs">
+                    ✏️ Torna a Modificare
+                </button>
+                <button onclick="confirmAndSaveShoppingList()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
+                    ✅ CONFERMA E REGISTRA ORDINE
+                </button>
+            </div>
+        </section>
+
+        <!-- SCHERMATA POST-SALVATAGGIO -->
+        <section id="postSaveSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
+            <div class="text-center mb-6">
+                <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
+                <p class="text-slate-500 text-sm mt-1">L'ordine è pronto. Vuoi andare subito al supermercato a spuntarlo?</p>
+            </div>
+
+            <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs w-full">
+                <h3 class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiungi un prodotto al volo:</h3>
+                <div class="flex flex-wrap lg:flex-nowrap gap-3 items-center">
+                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm bg-white font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-32 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <button onclick="addExtraItemAfterSave()" class="btn-pro bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo prodotti in lista:</h4>
+                <div id="savedItemsSummaryList" class="max-h-48 overflow-y-auto bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner w-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="goToSupermarketFromPostSave()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base md:text-lg shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2">
+                    🛍️ VAI AL SUPERMERCATO 🛒
+                </button>
+                <button onclick="completeShoppingCycle()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                    🏠 Termina e Torna alla Home
+                </button>
+            </div>
+        </section>
+
+        <!-- VAI AL SUPERMERCATO -->
+        <section id="shopSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
+                <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
+                <div class="flex gap-2">
+                    <button onclick="clearEntireShopping()" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-300 flex items-center gap-1">🗑️ Svuota Tutta la Spesa</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+                </div>
+            </div>
+
+            <div class="mb-6 bg-blue-50 p-4 rounded-2xl flex justify-between items-center border-2 border-blue-200 shadow-xs">
+                <span id="progressText" class="font-extrabold text-blue-950 text-sm md:text-base">Prodotti presi: 0 / 0</span>
+                <div class="w-1/2 bg-white rounded-full h-3.5 overflow-hidden border-2 border-blue-200 shadow-inner">
+                    <div id="progressBar" class="bg-blue-600 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full"></div>
+
+            <button onclick="promptCompleteShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-lg shadow-xl shadow-blue-600/20">
+                🎉 TERMINA SPESA E ARCHIVIA!
+            </button>
+        </section>
+
+        <!-- SCHERMATA RIEPILOGO FINALE SUPERMERCATO -->
+        <section id="summaryModalSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
+            <div class="text-center mb-6">
+                <div class="inline-flex p-3 rounded-2xl bg-indigo-100 text-indigo-800 text-3xl mb-2">📊</div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Riepilogo Spesa Effettuata</h2>
+                <p class="text-slate-500 text-sm mt-1">Ecco cosa è stato preso e cosa è rimasto in sospeso.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-emerald-50 border-2 border-emerald-200 p-4 rounded-2xl shadow-inner">
+                    <h3 class="font-extrabold text-emerald-950 text-sm mb-3 uppercase tracking-wider">✅ Prodotti Presi (Vanno nello Storico)</h3>
+                    <div id="summaryTakenList" class="max-h-48 overflow-y-auto space-y-2 pr-1"></div>
+                </div>
+                <div class="bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl shadow-inner">
+                    <h3 class="font-extrabold text-amber-950 text-sm mb-3 uppercase tracking-wider">❌ Prodotti Non Trovati (Rimasti in Memoria)</h3>
+                    <div id="summaryMissingList" class="max-h-48 overflow-y-auto space-y-2 pr-1"></div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="backToShopFromSummary()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs">
+                    ⬅️ Torna al Supermercato
+                </button>
+                <button onclick="confirmAndFinalizeShopping()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
+                    ✔️ Conferma Archiviazione
+                </button>
+            </div>
+        </section>
+
+        <!-- STORICO & STATISTICHE AVANZATE -->
+        <section id="historySection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico Spese</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Riepilogo ordini effettuati in passato.</p>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="exportHistoryExcel()" class="btn-pro bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
+                        📊 Esporta Excel
+                    </button>
+                    <button onclick="exportHistoryJSON()" class="btn-pro bg-slate-800 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
+                        📥 Esporta JSON
+                    </button>
+                    <button onclick="window.print()" class="btn-pro bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
+                        🖨️ Stampa Report
+                    </button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-200 text-slate-700 px-4 py-2.5 rounded-bold text-xs shadow-xs">⬅️ Home</button>
+                </div>
+            </div>
+
+            <div id="statsDashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
+
+            <div class="space-y-4 max-h-[50vh] overflow-y-auto pr-2 w-full" id="historyContainer"></div>
+        </section>
+
+    </main>
+
+    <!-- LOGICA E SINCRONIZZAZIONE FIREBASE -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForGalleonApp2026",
+            authDomain: "galleon-spesa-live.firebaseapp.com",
+            databaseURL: "https://galleon-spesa-live-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "galleon-spesa-live"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+        const dbRef = db.ref('galleon_spesa_live_v6');
+
+        let catalog = {
+            ortofrutta: {
+                title: "🍏 Ortofrutta e Freschi",
+                headerBg: "bg-emerald-700 text-white",
+                cardBg: "bg-emerald-50/80 border-emerald-300",
+                textCol: "text-emerald-950",
+                items: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE"]
+            },
+            macelleria: {
+                title: "🥩 Macelleria e Pescheria",
+                headerBg: "bg-rose-700 text-white",
+                cardBg: "bg-rose-50/80 border-rose-300",
+                textCol: "text-rose-950",
+                items: ["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"]
+            },
+            latticini: {
+                title: "🧀 Latticini, Salumi e Uova",
+                headerBg: "bg-sky-700 text-white",
+                cardBg: "bg-sky-50/80 border-sky-300",
+                textCol: "text-sky-950",
+                items: ["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"]
+            },
+            dispensa: {
+                title: "🥫 Dispensa e Scatolame",
+                headerBg: "bg-amber-700 text-white",
+                cardBg: "bg-amber-50/80 border-amber-300",
+                textCol: "text-amber-950",
+                items: ["SALE", "PEPE", "PISELLI", "NOCI", "LIMMY", "CONTEN.PANNA COTTA", "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "MARMELLATA", "FRUTTI BOSCO", "CAFFE'", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "TABASCO", "ROTOLONI", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SPUGNE VASSOI", "PELLICOLA", "ORDINARE DOLCE", "RITIRARE DOLCE"]
+            },
+            bevande: {
+                title: "🍷 Bevande e Alcolici",
+                headerBg: "bg-indigo-700 text-white",
+                cardBg: "bg-indigo-50/80 border-indigo-300",
+                textCol: "text-indigo-950",
+                items: ["COCA COLA", "APEROL"]
+            },
+            pulizia: {
+                title: "🧹 Pulizia e Detergenti",
+                headerBg: "bg-purple-700 text-white",
+                cardBg: "bg-purple-50/80 border-purple-300",
+                textCol: "text-purple-950",
+                items: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "MICROFIBRA"]
             }
-        }, (error) => {
-            console.warn("Modalità offline attiva o restrizioni Cloud rilevate:", error);
-        });
-    };
+        };
 
-    function syncStateToCloud() {
-        if (isApplyingRemoteData) return;
+        const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
         
-        localStorage.setItem('galleon_session_v6', JSON.stringify(currentSession));
+        let currentSession = JSON.parse(localStorage.getItem('galleon_session_v6')) || { 
+            date: new Date().toISOString().split('T')[0], 
+            author: "Orsola", 
+            items: [] 
+        };
         
-        const newTimestamp = Date.now();
-        lastServerTimestamp = newTimestamp;
+        let isApplyingRemoteData = false;
+        let lastServerTimestamp = 0;
 
-        dbRef.set({
-            session: currentSession,
-            catalog: catalog,
-            timestamp: newTimestamp
-        }).catch((e) => {
-            console.error("Errore sync cloud:", e);
-        });
-    }
-
-    function applySessionToDOM() {
-        if (currentSession.date) document.getElementById('inputDate').value = currentSession.date;
-        if (currentSession.author) {
-            document.getElementById('inputAuthor').value = currentSession.author;
+        window.onload = function() {
+            document.getElementById('inputDate').value = currentSession.date;
+            if (currentSession.author) {
+                document.getElementById('inputAuthor').value = currentSession.author;
+                document.getElementById('displayAuthor').innerText = currentSession.author;
+            }
             document.getElementById('displayDate').innerText = currentSession.date;
-            document.getElementById('displayAuthor').innerText = currentSession.author;
+            
+            renderAuthorButtons();
+            initCatalogCategories();
+
+            dbRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.session) {
+                    if (data.timestamp && data.timestamp >= lastServerTimestamp) {
+                        if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+                            return; 
+                        }
+
+                        isApplyingRemoteData = true;
+                        currentSession = data.session;
+                        if (data.catalog) {
+                            catalog = data.catalog;
+                        }
+                        lastServerTimestamp = data.timestamp;
+                        
+                        localStorage.setItem('galleon_session_v6', JSON.stringify(currentSession));
+                        applySessionToDOM();
+                        isApplyingRemoteData = false;
+                    }
+                }
+            }, (error) => {
+                console.warn("Modalità offline attiva o restrizioni Cloud rilevate:", error);
+            });
+        };
+
+        function syncStateToCloud() {
+            if (isApplyingRemoteData) return;
+            localStorage.setItem('galleon_session_v6', JSON.stringify(currentSession));
+            const newTimestamp = Date.now();
+            lastServerTimestamp = newTimestamp;
+
+            dbRef.set({
+                session: currentSession,
+                catalog: catalog,
+                timestamp: newTimestamp
+            }).catch((e) => {
+                console.error("Errore sync cloud:", e);
+            });
         }
 
-        document.querySelectorAll('input[type="checkbox"]').forEach(chk => chk.checked = false);
-        document.querySelectorAll('input[type="text"]').forEach(txt => {
-            if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate')) txt.value = '';
-        });
+        function applySessionToDOM() {
+            if (currentSession.date) document.getElementById('inputDate').value = currentSession.date;
+            if (currentSession.author) {
+                document.getElementById('inputAuthor').value = currentSession.author;
+                document.getElementById('displayDate').innerText = currentSession.date;
+                document.getElementById('displayAuthor').innerText = currentSession.author;
+            }
 
-        if (currentSession.items) {
-            currentSession.items.forEach(i => {
-                Object.keys(catalog).forEach(catKey => {
-                    catalog[catKey].items.forEach((item, itemIdx) => {
-                        if (item === i.name) {
-                            const globalId = `${catKey}-${itemIdx}`;
-                            const chk = document.getElementById(`cat-check-${globalId}`);
-                            const qty = document.getElementById(`cat-qty-${globalId}`);
-                            const note = document.getElementById(`cat-note-${globalId}`);
-                            if (chk && qty) {
-                                chk.checked = true;
-                                qty.value = i.qty || '';
-                                if (note) note.value = i.note || "";
+            document.querySelectorAll('input[type="checkbox"]').forEach(chk => chk.checked = false);
+            document.querySelectorAll('input[type="text"]').forEach(txt => {
+                if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate')) txt.value = '';
+            });
+
+            if (currentSession.items) {
+                currentSession.items.forEach(i => {
+                    Object.keys(catalog).forEach(catKey => {
+                        catalog[catKey].items.forEach((item, itemIdx) => {
+                            if (item === i.name) {
+                                const globalId = `${catKey}-${itemIdx}`;
+                                const chk = document.getElementById(`cat-check-${globalId}`);
+                                const qty = document.getElementById(`cat-qty-${globalId}`);
+                                const note = document.getElementById(`cat-note-${globalId}`);
+                                if (chk && qty) {
+                                    chk.checked = true;
+                                    qty.value = i.qty || '';
+                                    if (note) note.value = i.note || "";
+                                }
                             }
-                        }
+                        });
                     });
                 });
+            }
+
+            if (!document.getElementById('shopSection').classList.contains('hidden')) {
+                renderActiveShoppingList();
+            }
+        }
+
+        function toggleSidebar() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('menuOverlay');
+            if (menu.classList.contains('-translate-x-full')) {
+                menu.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                menu.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function renderAuthorButtons() {
+            const container = document.getElementById('authorButtons');
+            if (!container) return;
+            container.innerHTML = '';
+            authors.forEach(auth => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = "p-2.5 rounded-xl text-xs font-extrabold border-2 border-slate-200 bg-white hover:border-orange-500 hover:text-orange-600 transition text-slate-700 shadow-xs";
+                btn.innerText = auth;
+                btn.onclick = () => {
+                    document.getElementById('inputAuthor').value = auth;
+                    currentSession.author = auth;
+                    document.getElementById('displayAuthor').innerText = auth;
+                    syncStateToCloud();
+                };
+                container.appendChild(btn);
             });
         }
 
-        if (!document.getElementById('shopSection').classList.contains('hidden')) {
-            renderActiveShoppingList();
-        }
-    }
+        function initCatalogCategories() {
+            const container = document.getElementById('catalogCategoriesContainer');
+            if (!container) return;
+            container.innerHTML = '';
 
-    function toggleSidebar() {
-        const menu = document.getElementById('sideMenu');
-        const overlay = document.getElementById('menuOverlay');
-        if (menu.classList.contains('-translate-x-full')) {
-            menu.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-        } else {
-            menu.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        }
-    }
+            Object.keys(catalog).forEach(catKey => {
+                const cat = catalog[catKey];
+                let cardDiv = document.createElement('div');
+                cardDiv.className = `rounded-2xl border-2 ${cat.cardBg} p-4 shadow-sm flex flex-col`;
+                
+                let htmlHeader = `
+                    <div class="px-3 py-2 rounded-xl ${cat.headerBg} font-extrabold text-xs uppercase tracking-wider mb-3 shadow-xs flex justify-between items-center">
+                        <span>${cat.title}</span>
+                        <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-md">${cat.items.length} prodotti</span>
+                    </div>
+                    <div class="space-y-2.5 flex-grow overflow-y-auto max-h-72 pr-1">
+                `;
 
-    function renderAuthorButtons() {
-        const container = document.getElementById('authorButtons');
-        if (!container) return;
-        container.innerHTML = '';
-        authors.forEach(auth => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = "p-2.5 rounded-xl text-xs font-extrabold border-2 border-slate-200 bg-white hover:border-orange-500 hover:text-orange-600 transition text-slate-700 shadow-xs";
-            btn.innerText = auth;
-            btn.onclick = () => {
-                document.getElementById('inputAuthor').value = auth;
-                currentSession.author = auth;
-                document.getElementById('displayAuthor').innerText = auth;
-                syncStateToCloud();
-            };
-            container.appendChild(btn);
-        });
-    }
-
-    function initCatalogCategories() {
-        const container = document.getElementById('catalogCategoriesContainer');
-        if (!container) return;
-        container.innerHTML = '';
-
-        Object.keys(catalog).forEach(catKey => {
-            const cat = catalog[catKey];
-            let cardDiv = document.createElement('div');
-            cardDiv.className = `rounded-2xl border-2 ${cat.cardBg} p-4 shadow-sm flex flex-col`;
-            
-            let htmlHeader = `
-                <div class="px-3 py-2 rounded-xl ${cat.headerBg} font-extrabold text-xs uppercase tracking-wider mb-3 shadow-xs flex justify-between items-center">
-                    <span>${cat.title}</span>
-                    <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-md">${cat.items.length} prodotti</span>
-                </div>
-                <div class="space-y-2.5 flex-grow overflow-y-auto max-h-72 pr-1">
-            `;
-
-            let itemsHtml = '';
-            cat.items.forEach((item, itemIdx) => {
-                const globalId = `${catKey}-${itemIdx}`;
-                itemsHtml += `
-                    <div class="bg-white/90 p-2.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col gap-2">
-                        <div class="flex items-center justify-between gap-2">
-                            <label class="flex items-center gap-2 cursor-pointer flex-grow min-w-0">
-                                <input type="checkbox" id="cat-check-${globalId}" onchange="updateItemSelection('${catKey}', ${itemIdx})" class="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 shrink-0">
-                                <span class="text-xs font-extrabold text-slate-800 uppercase tracking-tight truncate">${item}</span>
-                            </label>
-                            <input type="text" id="cat-qty-${globalId}" placeholder="Qtà" oninput="updateItemSelection('${catKey}', ${itemIdx})" class="w-14 p-1.5 border border-slate-200 rounded-lg text-xs text-center font-bold text-slate-900 bg-slate-50 focus:outline-none focus:border-orange-500 shrink-0">
+                let itemsHtml = '';
+                cat.items.forEach((item, itemIdx) => {
+                    const globalId = `${catKey}-${itemIdx}`;
+                    itemsHtml += `
+                        <div class="bg-white/90 p-2.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col gap-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <label class="flex items-center gap-2 cursor-pointer flex-grow min-w-0">
+                                    <input type="checkbox" id="cat-check-${globalId}" onchange="updateItemSelection('${catKey}', ${itemIdx})" class="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 shrink-0">
+                                    <span class="text-xs font-extrabold text-slate-800 uppercase tracking-tight truncate">${item}</span>
+                                </label>
+                                <input type="text" id="cat-qty-${globalId}" placeholder="Qtà" oninput="updateItemSelection('${catKey}', ${itemIdx})" class="w-14 p-1.5 border border-slate-200 rounded-lg text-xs text-center font-bold text-slate-900 bg-slate-50 focus:outline-none focus:border-orange-500 shrink-0">
+                            </div>
+                            <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa, bancale...)" oninput="updateItemSelection('${catKey}', ${itemIdx})" class="w-full p-1.5 border border-slate-200 rounded-lg text-[11px] font-semibold text-slate-800 bg-slate-50 focus:outline-none focus:border-orange-500">
                         </div>
-                        <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa, bancale...)" oninput="updateItemSelection('${catKey}', ${itemIdx})" class="w-full p-1.5 border border-slate-200 rounded-lg text-[11px] font-semibold text-slate-800 bg-slate-50 focus:outline-none focus:border-orange-500">
-                    </div>
-                `;
+                    `;
+                });
+
+                cardDiv.innerHTML = htmlHeader + itemsHtml + `</div>`;
+                container.appendChild(cardDiv);
             });
+        }
 
-            cardDiv.innerHTML = htmlHeader + itemsHtml + `</div>`;
-            container.appendChild(cardDiv);
-        });
-    }
+        function updateItemSelection(catKey, itemIdx) {
+            const globalId = `${catKey}-${itemIdx}`;
+            const chk = document.getElementById(`cat-check-${globalId}`);
+            const qty = document.getElementById(`cat-qty-${globalId}`);
+            const note = document.getElementById(`cat-note-${globalId}`);
+            const itemName = catalog[catKey].items[itemIdx];
 
-    function updateItemSelection(catKey, itemIdx) {
-        const globalId = `${catKey}-${itemIdx}`;
-        const chk = document.getElementById(`cat-check-${globalId}`);
-        const qty = document.getElementById(`cat-qty-${globalId}`);
-        const note = document.getElementById(`cat-note-${globalId}`);
-        const itemName = catalog[catKey].items[itemIdx];
+            let existingIndex = currentSession.items.findIndex(i => i.name === itemName);
 
-        let existingIndex = currentSession.items.findIndex(i => i.name === itemName);
-
-        if (chk.checked) {
-            const itemObj = {
-                name: itemName,
-                qty: qty.value.trim() || "1",
-                note: note ? note.value.trim() : "",
-                taken: existingIndex >= 0 ? currentSession.items[existingIndex].taken : false
-            };
-            if (existingIndex >= 0) {
-                currentSession.items[existingIndex] = itemObj;
+            if (chk.checked) {
+                const itemObj = {
+                    name: itemName,
+                    qty: qty.value.trim() || "1",
+                    note: note ? note.value.trim() : "",
+                    taken: existingIndex >= 0 ? currentSession.items[existingIndex].taken : false
+                };
+                if (existingIndex >= 0) {
+                    currentSession.items[existingIndex] = itemObj;
+                } else {
+                    currentSession.items.push(itemObj);
+                }
             } else {
-                currentSession.items.push(itemObj);
+                if (existingIndex >= 0) {
+                    currentSession.items.splice(existingIndex, 1);
+                }
             }
-        } else {
-            if (existingIndex >= 0) {
-                currentSession.items.splice(existingIndex, 1);
+            syncStateToCloud();
+        }
+
+        function startMode(mode) {
+            const dateVal = document.getElementById('inputDate').value;
+            const authorVal = document.getElementById('inputAuthor').value.trim() || "Orsola";
+            
+            currentSession.date = dateVal;
+            currentSession.author = authorVal;
+            document.getElementById('displayDate').innerText = dateVal;
+            document.getElementById('displayAuthor').innerText = authorVal;
+
+            syncStateToCloud();
+            
+            document.getElementById('setupSection').classList.add('hidden');
+            document.getElementById('createSection').classList.remove('hidden');
+            applySessionToDOM();
+        }
+
+        function goToSupermarketDirect() {
+            startMode('shop');
+            document.getElementById('createSection').classList.add('hidden');
+            document.getElementById('shopSection').classList.remove('hidden');
+            renderActiveShoppingList();
+        }
+
+        function goHome() {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('setupSection').classList.remove('hidden');
+        }
+
+        function resetSession() {
+            if (confirm("Vuoi cambiare utente o data della sessione?")) {
+                goHome();
             }
         }
-        syncStateToCloud();
-    }
 
-    function startMode(mode) {
-        const dateVal = document.getElementById('inputDate').value;
-        const authorVal = document.getElementById('inputAuthor').value.trim() || "Orsola";
-        
-        currentSession.date = dateVal;
-        currentSession.author = authorVal;
-        document.getElementById('displayDate').innerText = dateVal;
-        document.getElementById('displayAuthor').innerText = authorVal;
+        function goToReviewScreen() {
+            if (currentSession.items.length === 0) {
+                alert("Seleziona almeno un prodotto prima di procedere!");
+                return;
+            }
+            document.getElementById('createSection').classList.add('hidden');
+            document.getElementById('reviewSection').classList.remove('hidden');
+            
+            const listContainer = document.getElementById('reviewItemsList');
+            listContainer.innerHTML = '';
+            currentSession.items.forEach(i => {
+                let div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-amber-200 shadow-xs text-xs font-bold text-slate-800";
+                div.innerHTML = `<span>🛒 ${i.name} <span class="text-orange-600 font-extrabold">(Qtà: ${i.qty})</span> ${i.note ? '• <span class="text-slate-500">' + i.note + '</span>' : ''}</span>`;
+                listContainer.appendChild(div);
+            });
+        }
 
-        syncStateToCloud();
-        
-        document.getElementById('setupSection').classList.add('hidden');
-        document.getElementById('createSection').classList.remove('hidden');
-        applySessionToDOM();
-    }
+        function backToCreateFromReview() {
+            document.getElementById('reviewSection').classList.add('hidden');
+            document.getElementById('createSection').classList.remove('hidden');
+        }
 
-    function goToSupermarketDirect() {
-        startMode('shop');
-        document.getElementById('createSection').classList.add('hidden');
-        document.getElementById('shopSection').classList.remove('hidden');
-        renderActiveShoppingList();
-    }
+        function confirmAndSaveShoppingList() {
+            syncStateToCloud();
+            document.getElementById('reviewSection').classList.add('hidden');
+            document.getElementById('postSaveSection').classList.remove('hidden');
+            
+            const summaryList = document.getElementById('savedItemsSummaryList');
+            summaryList.innerHTML = '';
+            currentSession.items.forEach(i => {
+                let div = document.createElement('div');
+                div.className = "bg-white p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 flex justify-between";
+                div.innerHTML = `<span>${i.name} (Qtà: ${i.qty})</span> <span class="text-slate-500">${i.note || ''}</span>`;
+                summaryList.appendChild(div);
+            });
+        }
 
-    function goHome() {
-        document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-        document.getElementById('setupSection').classList.remove('hidden');
-    }
+        function addExtraItemAfterSave() {
+            const name = document.getElementById('extraPostName').value.trim().toUpperCase();
+            const qty = document.getElementById('extraPostQty').value.trim() || "1";
+            const note = document.getElementById('extraPostNote').value.trim();
 
-    function resetSession() {
-        if (confirm("Vuoi cambiare utente o data della sessione?")) {
+            if (!name) {
+                alert("Inserisci il nome del prodotto!");
+                return;
+            }
+
+            currentSession.items.push({ name, qty, note, taken: false });
+            syncStateToCloud();
+
+            document.getElementById('extraPostName').value = '';
+            document.getElementById('extraPostQty').value = '';
+            document.getElementById('extraPostNote').value = '';
+
+            confirmAndSaveShoppingList();
+        }
+
+        function goToSupermarketFromPostSave() {
+            document.getElementById('postSaveSection').classList.add('hidden');
+            document.getElementById('shopSection').classList.remove('hidden');
+            renderActiveShoppingList();
+        }
+
+        function completeShoppingCycle() {
             goHome();
         }
-    }
 
-    function goToReviewScreen() {
-        if (currentSession.items.length === 0) {
-            alert("Seleziona almeno un prodotto prima di procedere!");
-            return;
-        }
-        document.getElementById('createSection').classList.add('hidden');
-        document.getElementById('reviewSection').classList.remove('hidden');
-        
-        const listContainer = document.getElementById('reviewItemsList');
-        listContainer.innerHTML = '';
-        currentSession.items.forEach(i => {
-            let div = document.createElement('div');
-            div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-amber-200 shadow-xs text-xs font-bold text-slate-800";
-            div.innerHTML = `<span>🛒 ${i.name} <span class="text-orange-600 font-extrabold">(Qtà: ${i.qty})</span> ${i.note ? '• <span class="text-slate-500">' + i.note + '</span>' : ''}</span>`;
-            listContainer.appendChild(div);
-        });
-    }
+        function renderActiveShoppingList() {
+            const container = document.getElementById('activeShoppingList');
+            if (!container) return;
+            container.innerHTML = '';
 
-    function backToCreateFromReview() {
-        document.getElementById('reviewSection').classList.add('hidden');
-        document.getElementById('createSection').classList.remove('hidden');
-    }
-
-    function confirmAndSaveShoppingList() {
-        syncStateToCloud();
-        document.getElementById('reviewSection').classList.add('hidden');
-        document.getElementById('postSaveSection').classList.remove('hidden');
-        
-        const summaryList = document.getElementById('savedItemsSummaryList');
-        summaryList.innerHTML = '';
-        currentSession.items.forEach(i => {
-            let div = document.createElement('div');
-            div.className = "bg-white p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 flex justify-between";
-            div.innerHTML = `<span>${i.name} (Qtà: ${i.qty})</span> <span class="text-slate-500">${i.note || ''}</span>`;
-            summaryList.appendChild(div);
-        });
-    }
-
-    function addExtraItemAfterSave() {
-        const name = document.getElementById('extraPostName').value.trim().toUpperCase();
-        const qty = document.getElementById('extraPostQty').value.trim() || "1";
-        const note = document.getElementById('extraPostNote').value.trim();
-
-        if (!name) {
-            alert("Inserisci il nome del prodotto!");
-            return;
-        }
-
-        currentSession.items.push({ name, qty, note, taken: false });
-        syncStateToCloud();
-
-        document.getElementById('extraPostName').value = '';
-        document.getElementById('extraPostQty').value = '';
-        document.getElementById('extraPostNote').value = '';
-
-        confirmAndSaveShoppingList();
-    }
-
-    function goToSupermarketFromPostSave() {
-        document.getElementById('postSaveSection').classList.add('hidden');
-        document.getElementById('shopSection').classList.remove('hidden');
-        renderActiveShoppingList();
-    }
-
-    function completeShoppingCycle() {
-        goHome();
-    }
-
-    function renderActiveShoppingList() {
-        const container = document.getElementById('activeShoppingList');
-        if (!container) return;
-        container.innerHTML = '';
-
-        if (currentSession.items.length === 0) {
-            container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 font-bold text-sm">Nessun prodotto in lista. Torna a compilare la spesa!</div>`;
-            updateProgress(0, 0);
-            return;
-        }
-
-        let takenCount = 0;
-        currentSession.items.forEach((item, idx) => {
-            if (item.taken) takenCount++;
-
-            let div = document.createElement('div');
-            div.className = `p-3.5 rounded-2xl border-2 flex items-center justify-between transition shadow-xs ${item.taken ? 'bg-emerald-50/90 border-emerald-300 text-emerald-950 opacity-75 line-through' : 'bg-white border-slate-200 text-slate-900'}`;
-            
-            div.innerHTML = `
-                <label class="flex items-center gap-3 cursor-pointer flex-grow min-w-0">
-                    <input type="checkbox" ${item.taken ? 'checked' : ''} onchange="toggleItemTaken(${idx})" class="w-5 h-5 rounded text-blue-600 focus:ring-blue-500 shrink-0">
-                    <div class="min-w-0">
-                        <span class="text-sm font-extrabold uppercase tracking-tight block truncate">${item.name}</span>
-                        <span class="text-xs font-bold text-orange-600 block">Qtà: ${item.qty} ${item.note ? '• ' + item.note : ''}</span>
-                    </div>
-                </label>
-            `;
-            container.appendChild(div);
-        });
-
-        updateProgress(takenCount, currentSession.items.length);
-    }
-
-    function toggleItemTaken(idx) {
-        currentSession.items[idx].taken = !currentSession.items[idx].taken;
-        syncStateToCloud();
-        renderActiveShoppingList();
-    }
-
-    function updateProgress(taken, total) {
-        const text = document.getElementById('progressText');
-        const bar = document.getElementById('progressBar');
-        if (text) text.innerText = `Prodotti presi: ${taken} / ${total}`;
-        const percent = total > 0 ? (taken / total) * 100 : 0;
-        if (bar) bar.style.width = `${percent}%`;
-    }
-
-    function promptCompleteShopping() {
-        document.getElementById('shopSection').classList.add('hidden');
-        document.getElementById('summaryModalSection').classList.remove('hidden');
-
-        const takenContainer = document.getElementById('summaryTakenList');
-        const missingContainer = document.getElementById('summaryMissingList');
-        takenContainer.innerHTML = '';
-        missingContainer.innerHTML = '';
-
-        let hasTaken = false;
-        let hasMissing = false;
-
-        currentSession.items.forEach(i => {
-            let div = document.createElement('div');
-            div.className = "bg-white p-2.5 rounded-xl border text-xs font-bold text-slate-800 shadow-xs flex justify-between";
-            div.innerHTML = `<span>${i.name} (Qtà: ${i.qty})</span> <span class="text-slate-500">${i.note || ''}</span>`;
-            
-            if (i.taken) {
-                hasTaken = true;
-                takenContainer.appendChild(div);
-            } else {
-                hasMissing = true;
-                missingContainer.appendChild(div);
+            if (currentSession.items.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 font-bold text-sm">Nessun prodotto in lista. Torna a compilare la spesa!</div>`;
+                updateProgress(0, 0);
+                return;
             }
-        });
 
-        if (!hasTaken) takenContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Nessun prodotto preso.</span>`;
-        if (!hasMissing) missingContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Nessun prodotto mancante.</span>`;
-    }
+            let takenCount = 0;
+            currentSession.items.forEach((item, idx) => {
+                if (item.taken) takenCount++;
 
-    function backToShopFromSummary() {
-        document.getElementById('summaryModalSection').classList.add('hidden');
-        document.getElementById('shopSection').classList.remove('hidden');
-        renderActiveShoppingList();
-    }
+                let div = document.createElement('div');
+                div.className = `p-3.5 rounded-2xl border-2 flex items-center justify-between transition shadow-xs ${item.taken ? 'bg-emerald-50/90 border-emerald-300 text-emerald-950 opacity-75 line-through' : 'bg-white border-slate-200 text-slate-900'}`;
+                
+                div.innerHTML = `
+                    <label class="flex items-center gap-3 cursor-pointer flex-grow min-w-0">
+                        <input type="checkbox" ${item.taken ? 'checked' : ''} onchange="toggleItemTaken(${idx})" class="w-5 h-5 rounded text-blue-600 focus:ring-blue-500 shrink-0">
+                        <div class="min-w-0">
+                            <span class="text-sm font-extrabold uppercase tracking-tight block truncate">${item.name}</span>
+                            <span class="text-xs font-bold text-orange-600 block">Qtà: ${item.qty} ${item.note ? '• ' + item.note : ''}</span>
+                        </div>
+                    </label>
+                `;
+                container.appendChild(div);
+            });
 
-    function confirmAndFinalizeShopping() {
-        let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
-        history.unshift({
-            date: currentSession.date,
-            author: currentSession.author,
-            items: [...currentSession.items],
-            timestamp: Date.now()
-        });
-        localStorage.setItem('galleon_history_v6', JSON.stringify(history));
+            updateProgress(takenCount, currentSession.items.length);
+        }
 
-        currentSession.items = currentSession.items.filter(i => !i.taken);
-        syncStateToCloud();
-
-        document.getElementById('summaryModalSection').classList.add('hidden');
-        goHome();
-        alert("Spesa archiviata con successo nello Storico!");
-    }
-
-    function clearEntireShopping() {
-        if (confirm("Vuoi svuotare interamente la spesa corrente?")) {
-            currentSession.items = [];
+        function toggleItemTaken(idx) {
+            currentSession.items[idx].taken = !currentSession.items[idx].taken;
             syncStateToCloud();
             renderActiveShoppingList();
         }
-    }
 
-    function openAddProductModal() {
-        document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-        document.getElementById('addProductSection').classList.remove('hidden');
-    }
-
-    function saveNewCatalogProduct() {
-        const name = document.getElementById('newProdNameInput').value.trim().toUpperCase();
-        const category = document.getElementById('newProdCategorySelect').value;
-
-        if (!name) {
-            alert("Inserisci il nome del prodotto!");
-            return;
+        function updateProgress(taken, total) {
+            const text = document.getElementById('progressText');
+            const bar = document.getElementById('progressBar');
+            if (text) text.innerText = `Prodotti presi: ${taken} / ${total}`;
+            const percent = total > 0 ? (taken / total) * 100 : 0;
+            if (bar) bar.style.width = `${percent}%`;
         }
 
-        if (!catalog[category].items.includes(name)) {
-            catalog[category].items.push(name);
-            syncStateToCloud();
-            alert(`Prodotto "${name}" aggiunto con successo al reparto ${catalog[category].title}!`);
-            document.getElementById('newProdNameInput').value = '';
-            goHome();
-        } else {
-            alert("Il prodotto è già presente in questo reparto!");
-        }
-    }
+        function promptCompleteShopping() {
+            document.getElementById('shopSection').classList.add('hidden');
+            document.getElementById('summaryModalSection').classList.remove('hidden');
 
-    function openManageProductsScreen() {
-        document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-        document.getElementById('manageProductsSection').classList.remove('hidden');
-        
-        const container = document.getElementById('manageCatalogContainer');
-        container.innerHTML = '';
+            const takenContainer = document.getElementById('summaryTakenList');
+            const missingContainer = document.getElementById('summaryMissingList');
+            takenContainer.innerHTML = '';
+            missingContainer.innerHTML = '';
 
-        Object.keys(catalog).forEach(catKey => {
-            const cat = catalog[catKey];
-            let div = document.createElement('div');
-            div.className = `rounded-2xl border-2 ${cat.cardBg} p-4 shadow-sm flex flex-col`;
-            
-            let html = `
-                <div class="px-3 py-2 rounded-xl ${cat.headerBg} font-extrabold text-xs uppercase tracking-wider mb-3 shadow-xs">
-                    ${cat.title}
-                </div>
-                <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
-            `;
+            let hasTaken = false;
+            let hasMissing = false;
 
-            cat.items.forEach((item, idx) => {
-                html += `
-                    <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-xs flex justify-between items-center text-xs font-bold text-slate-800">
-                        <span class="truncate uppercase">${item}</span>
-                        <button onclick="deleteCatalogItem('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-extrabold px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 transition shrink-0">🗑️</button>
-                    </div>
-                `;
+            currentSession.items.forEach(i => {
+                let div = document.createElement('div');
+                div.className = "bg-white p-2.5 rounded-xl border text-xs font-bold text-slate-800 shadow-xs flex justify-between";
+                div.innerHTML = `<span>${i.name} (Qtà: ${i.qty})</span> <span class="text-slate-500">${i.note || ''}</span>`;
+                
+                if (i.taken) {
+                    hasTaken = true;
+                    takenContainer.appendChild(div);
+                } else {
+                    hasMissing = true;
+                    missingContainer.appendChild(div);
+                }
             });
 
-            div.innerHTML = html + `</div>`;
-            container.appendChild(div);
-        });
-    }
-
-    function deleteCatalogItem(catKey, idx) {
-        if (confirm("Vuoi rimuovere questo prodotto dal catalogo?")) {
-            catalog[catKey].items.splice(idx, 1);
-            syncStateToCloud();
-            openManageProductsScreen();
-        }
-    }
-
-    function showHistory() {
-        document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-        document.getElementById('historySection').classList.remove('hidden');
-
-        const container = document.getElementById('historyContainer');
-        const statsDashboard = document.getElementById('statsDashboard');
-        container.innerHTML = '';
-        statsDashboard.innerHTML = '';
-
-        let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
-
-        let totalOrders = history.length;
-        let totalItemsBought = history.reduce((acc, h) => acc + h.items.filter(i => i.taken).length, 0);
-
-        statsDashboard.innerHTML = `
-            <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 shadow-sm">
-                <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Ordini Totali</span>
-                <span class="text-2xl font-extrabold text-orange-400">${totalOrders}</span>
-            </div>
-            <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 shadow-sm">
-                <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Prodotti Acquistati</span>
-                <span class="text-2xl font-extrabold text-emerald-400">${totalItemsBought}</span>
-            </div>
-        `;
-
-        if (history.length === 0) {
-            container.innerHTML = `<div class="text-center py-8 text-slate-400 font-bold text-sm">Nessun ordine nello storico.</div>`;
-            return;
+            if (!hasTaken) takenContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Nessun prodotto preso.</span>`;
+            if (!hasMissing) missingContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Nessun prodotto mancante.</span>`;
         }
 
-        history.forEach((h, hIdx) => {
-            let div = document.createElement('div');
-            div.className = "bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-slate-900";
-            
-            let itemsHtml = h.items.map(i => `<li class="text-xs font-bold ${i.taken ? 'text-emerald-700' : 'text-slate-400'}">${i.name} (Qtà: ${i.qty}) ${i.note ? '- ' + i.note : ''}</li>`).join('');
+        function backToShopFromSummary() {
+            document.getElementById('summaryModalSection').classList.add('hidden');
+            document.getElementById('shopSection').classList.remove('hidden');
+            renderActiveShoppingList();
+        }
 
-            div.innerHTML = `
-                <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
-                    <span class="font-extrabold text-sm">📅 ${h.date} • <span class="text-amber-600">👤 ${h.author}</span></span>
-                    <button onclick="deleteHistoryItem(${hIdx})" class="text-rose-500 hover:text-rose-700 text-xs font-bold bg-rose-50 px-2.5 py-1 rounded-xl">Elimina Storico</button>
-                </div>
-                <ul class="list-disc pl-5 space-y-1">${itemsHtml}</ul>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    function deleteHistoryItem(idx) {
-        if (confirm("Vuoi eliminare questo storico?")) {
+        function confirmAndFinalizeShopping() {
             let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
-            history.splice(idx, 1);
-            localStorage.setItem('galleon_history_v6', JSON.stringify(history));
-            showHistory();
-        }
-    }
-
-    function exportHistoryExcel() {
-        let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
-        if (history.length === 0) {
-            alert("Nessun dato nello storico da esportare!");
-            return;
-        }
-        let csvContent = "data:text/csv;charset=utf-8,Data,Autore,Prodotto,Quantita,Nota,Preso\n";
-        history.forEach(h => {
-            h.items.forEach(i => {
-                csvContent += `${h.date},${h.author},"${i.name}",${i.qty},"${i.note || ''}",${i.taken ? 'SI' : 'NO'}\n`;
+            history.unshift({
+                date: currentSession.date,
+                author: currentSession.author,
+                items: [...currentSession.items],
+                timestamp: Date.now()
             });
-        });
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "storico_spesa_galleon.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+            localStorage.setItem('galleon_history_v6', JSON.stringify(history));
 
-    function exportHistoryJSON() {
-        let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
-        if (history.length === 0) {
-            alert("Nessun dato nello storico da esportare!");
-            return;
+            currentSession.items = currentSession.items.filter(i => !i.taken);
+            syncStateToCloud();
+
+            document.getElementById('summaryModalSection').classList.add('hidden');
+            goHome();
+            alert("Spesa archiviata con successo nello Storico!");
         }
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
-        const dlAnchorElem = document.createElement('a');
-        dlAnchorElem.setAttribute("href", dataStr);
-        dlAnchorElem.setAttribute("download", "storico_spesa_galleon.json");
-        document.body.appendChild(dlAnchorElem);
-        dlAnchorElem.click();
-        dlAnchorElem.remove();
-    }
-</script>
+
+        function clearEntireShopping() {
+            if (confirm("Vuoi svuotare interamente la spesa corrente?")) {
+                currentSession.items = [];
+                syncStateToCloud();
+                renderActiveShoppingList();
+            }
+        }
+
+        function openAddProductModal() {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('addProductSection').classList.remove('hidden');
+        }
+
+        function saveNewCatalogProduct() {
+            const name = document.getElementById('newProdNameInput').value.trim().toUpperCase();
+            const category = document.getElementById('newProdCategorySelect').value;
+
+            if (!name) {
+                alert("Inserisci il nome del prodotto!");
+                return;
+            }
+
+            if (!catalog[category].items.includes(name)) {
+                catalog[category].items.push(name);
+                syncStateToCloud();
+                alert(`Prodotto "${name}" aggiunto con successo al reparto ${catalog[category].title}!`);
+                document.getElementById('newProdNameInput').value = '';
+                goHome();
+            } else {
+                alert("Il prodotto è già presente in questo reparto!");
+            }
+        }
+
+        function openManageProductsScreen() {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('manageProductsSection').classList.remove('hidden');
+            
+            const container = document.getElementById('manageCatalogContainer');
+            container.innerHTML = '';
+
+            Object.keys(catalog).forEach(catKey => {
+                const cat = catalog[catKey];
+                let div = document.createElement('div');
+                div.className = `rounded-2xl border-2 ${cat.cardBg} p-4 shadow-sm flex flex-col`;
+                
+                let html = `
+                    <div class="px-3 py-2 rounded-xl ${cat.headerBg} font-extrabold text-xs uppercase tracking-wider mb-3 shadow-xs">
+                        ${cat.title}
+                    </div>
+                    <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                `;
+
+                cat.items.forEach((item, idx) => {
+                    html += `
+                        <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-xs flex justify-between items-center text-xs font-bold text-slate-800">
+                            <span class="truncate uppercase">${item}</span>
+                            <button onclick="deleteCatalogItem('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-extrabold px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 transition shrink-0">🗑️</button>
+                        </div>
+                    `;
+                });
+
+                div.innerHTML = html + `</div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteCatalogItem(catKey, idx) {
+            if (confirm("Vuoi rimuovere questo prodotto dal catalogo?")) {
+                catalog[catKey].items.splice(idx, 1);
+                syncStateToCloud();
+                openManageProductsScreen();
+            }
+        }
+
+        function showHistory() {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('historySection').classList.remove('hidden');
+
+            const container = document.getElementById('historyContainer');
+            const statsDashboard = document.getElementById('statsDashboard');
+            container.innerHTML = '';
+            statsDashboard.innerHTML = '';
+
+            let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
+
+            let totalOrders = history.length;
+            let totalItemsBought = history.reduce((acc, h) => acc + h.items.filter(i => i.taken).length, 0);
+
+            statsDashboard.innerHTML = `
+                <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 shadow-sm">
+                    <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Ordini Totali</span>
+                    <span class="text-2xl font-extrabold text-orange-400">${totalOrders}</span>
+                </div>
+                <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 shadow-sm">
+                    <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Prodotti Acquistati</span>
+                    <span class="text-2xl font-extrabold text-emerald-400">${totalItemsBought}</span>
+                </div>
+            `;
+
+            if (history.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-400 font-bold text-sm">Nessun ordine nello storico.</div>`;
+                return;
+            }
+
+            history.forEach((h, hIdx) => {
+                let div = document.createElement('div');
+                div.className = "bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-slate-900";
+                
+                let itemsHtml = h.items.map(i => `<li class="text-xs font-bold ${i.taken ? 'text-emerald-700' : 'text-slate-400'}">${i.name} (Qtà: ${i.qty}) ${i.note ? '- ' + i.note : ''}</li>`).join('');
+
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
+                        <span class="font-extrabold text-sm">📅 ${h.date} • <span class="text-amber-600">👤 ${h.author}</span></span>
+                        <button onclick="deleteHistoryItem(${hIdx})" class="text-rose-500 hover:text-rose-700 text-xs font-bold bg-rose-50 px-2.5 py-1 rounded-xl">Elimina Storico</button>
+                    </div>
+                    <ul class="list-disc pl-5 space-y-1">${itemsHtml}</ul>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteHistoryItem(idx) {
+            if (confirm("Vuoi eliminare questo storico?")) {
+                let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
+                history.splice(idx, 1);
+                localStorage.setItem('galleon_history_v6', JSON.stringify(history));
+                showHistory();
+            }
+        }
+
+        function exportHistoryExcel() {
+            let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
+            if (history.length === 0) {
+                alert("Nessun dato nello storico da esportare!");
+                return;
+            }
+            let csvContent = "data:text/csv;charset=utf-8,Data,Autore,Prodotto,Quantita,Nota,Preso\n";
+            history.forEach(h => {
+                h.items.forEach(i => {
+                    csvContent += `${h.date},${h.author},"${i.name}",${i.qty},"${i.note || ''}",${i.taken ? 'SI' : 'NO'}\n`;
+                });
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "storico_spesa_galleon.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportHistoryJSON() {
+            let history = JSON.parse(localStorage.getItem('galleon_history_v6')) || [];
+            if (history.length === 0) {
+                alert("Nessun dato nello storico da esportare!");
+                return;
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "storico_spesa_galleon.json");
+            document.body.appendChild(dlAnchorElem);
+            dlAnchorElem.click();
+            dlAnchorElem.remove();
+        }
+    </script>
+</body>
+</html>
