@@ -570,6 +570,9 @@
                 cardDiv.innerHTML = htmlHeader + itemsHtml + `</div>`;
                 container.appendChild(cardDiv);
             });
+            
+            // Allinea le checkbox e i dati salvati subito dopo aver creato il DOM
+            applySessionToDOM();
         }
 
         function updateItemSelection(catKey, itemIdx) {
@@ -581,10 +584,10 @@
 
             let existingIndex = currentSession.items.findIndex(i => i.name === itemName);
 
-            if (chk.checked) {
+            if (chk && chk.checked) {
                 const itemObj = {
                     name: itemName,
-                    qty: qty.value.trim() || "1",
+                    qty: qty && qty.value.trim() ? qty.value.trim() : "1",
                     note: note ? note.value.trim() : "",
                     taken: existingIndex >= 0 ? currentSession.items[existingIndex].taken : false
                 };
@@ -599,6 +602,14 @@
                 }
             }
             syncStateToCloud();
+        }
+
+        function resetCatalogSelection() {
+            if (confirm("Vuoi deselezionare tutti i prodotti della spesa corrente?")) {
+                currentSession.items = [];
+                syncStateToCloud();
+                applySessionToDOM();
+            }
         }
 
         function startMode(mode) {
