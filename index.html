@@ -43,7 +43,7 @@
             padding-bottom: 8px;
         }
 
-        /* Sezione Dati Compilatore */
+        /* Sezione Dati Compilatore Compatta */
         .meta-section {
             display: flex;
             flex-wrap: wrap;
@@ -230,8 +230,7 @@
             text-transform: uppercase;
         }
 
-        /* Tasti Modifica ed Elimina (visibili solo in modalità gestione) */
-        .btn-edit-product, .btn-delete-product {
+        .btn-edit, .btn-delete {
             background: none;
             border: none;
             font-weight: bold;
@@ -240,18 +239,18 @@
             display: none;
         }
 
-        .btn-edit-product {
+        .btn-edit {
             color: var(--edit-color);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
-        .btn-delete-product {
+        .btn-delete {
             color: var(--danger-color);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
-        .safe-mode-active .btn-edit-product,
-        .safe-mode-active .btn-delete-product {
+        .safe-mode-active .btn-edit,
+        .safe-mode-active .btn-delete {
             display: inline-block;
         }
 
@@ -494,22 +493,20 @@
                 qtyInput.oninput = (e) => updateQty(colIndex, item.name, e.target.value);
                 li.appendChild(qtyInput);
 
-                // Pulsante Modifica Dicitura
+                // Tasto Modifica Dicitura
                 const btnEdit = document.createElement('button');
-                btnEdit.className = 'btn-edit-product';
+                btnEdit.className = 'btn-edit';
                 btnEdit.innerText = '✏️';
-                btnEdit.title = 'Modifica dicitura';
+                btnEdit.title = 'Modifica Dicitura';
                 btnEdit.onclick = (e) => {
                     e.stopPropagation();
                     editProduct(colIndex, itemIndex);
                 };
                 li.appendChild(btnEdit);
 
-                // Pulsante Elimina Prodotto
                 const btnDel = document.createElement('button');
-                btnDel.className = 'btn-delete-product';
+                btnDel.className = 'btn-delete';
                 btnDel.innerText = '✕';
-                btnDel.title = 'Elimina prodotto';
                 btnDel.onclick = (e) => {
                     e.stopPropagation();
                     deleteProduct(colIndex, itemIndex);
@@ -644,21 +641,21 @@
         renderApp();
     }
 
-    // NUOVA FUNZIONE: Modifica dicitura prodotto
+    // Funzione Modifica Dicitura Prodotto
     function editProduct(colIndex, itemIndex) {
         const oldName = shoppingData[colIndex][itemIndex].name;
-        const newName = prompt(`Modifica la dicitura del prodotto:`, oldName);
+        const newName = prompt("Modifica la dicitura del prodotto:", oldName);
 
         if (newName !== null) {
-            const formattedName = newName.trim().toUpperCase();
-            if (!formattedName) {
-                alert("Il nome del prodotto non può essere vuoto.");
+            const formatted = newName.trim().toUpperCase();
+            if (!formatted) {
+                alert("Il nome non può essere vuoto!");
                 return;
             }
 
-            // Aggiorna lo stato dell'ordine se il vecchio nome era selezionato
             const oldKey = `${colIndex}-${oldName}`;
-            const newKey = `${colIndex}-${formattedName}`;
+            const newKey = `${colIndex}-${formatted}`;
+
             if (orderState[oldKey]) {
                 orderState[newKey] = orderState[oldKey];
                 delete orderState[oldKey];
@@ -668,7 +665,7 @@
                 delete shopCheckedState[oldKey];
             }
 
-            shoppingData[colIndex][itemIndex].name = formattedName;
+            shoppingData[colIndex][itemIndex].name = formatted;
             saveData();
             renderApp();
         }
