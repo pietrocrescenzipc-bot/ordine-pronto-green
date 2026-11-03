@@ -10,7 +10,6 @@
             --accent-color: #27ae60;
             --whatsapp-color: #25d366;
             --danger-color: #e74c3c;
-            --edit-color: #2980b9;
             --bg-color: #f8f9fa;
             --card-bg: #ffffff;
             --border-color: #bdc3c7;
@@ -36,21 +35,21 @@
         h1 {
             text-align: center;
             color: var(--primary-color);
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             margin-bottom: 15px;
             text-transform: uppercase;
             border-bottom: 2px solid var(--primary-color);
             padding-bottom: 8px;
         }
 
-        /* Dati Compilatore */
+        /* Sezione Dati Compilatore Compatta */
         .meta-section {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             background: #eef2f3;
-            padding: 12px;
+            padding: 8px 10px;
             border-radius: 6px;
             align-items: center;
             justify-content: space-between;
@@ -60,51 +59,51 @@
             display: flex;
             flex-direction: column;
             flex: 1;
-            min-width: 140px;
+            min-width: 130px;
         }
 
         .meta-field label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             color: var(--primary-color);
         }
 
         .meta-field input {
-            padding: 8px;
+            padding: 5px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
 
-        /* Aggiunta Prodotti */
+        /* Sezione Aggiunta Prodotti */
         .add-section {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             background: #fff;
-            padding: 12px;
+            padding: 8px 10px;
             border: 1px solid #ddd;
             border-radius: 6px;
         }
 
         .add-section input, .add-section select {
-            padding: 8px;
+            padding: 5px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             flex: 1;
-            min-width: 130px;
+            min-width: 120px;
         }
 
         button {
             cursor: pointer;
-            padding: 10px 16px;
+            padding: 6px 10px;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             font-weight: bold;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             transition: opacity 0.2s;
         }
 
@@ -120,27 +119,25 @@
         .btn-safe-mode {
             background-color: #f39c12;
             color: white;
-            font-size: 0.85rem;
-            padding: 8px 12px;
+            font-size: 0.75rem;
+            padding: 6px 10px;
         }
 
         .btn-mode {
             background-color: #2980b9;
             color: white;
-            font-size: 0.85rem;
-            padding: 8px 12px;
         }
 
         .btn-mode.active {
             background-color: #c0392b;
         }
 
-        /* Griglia 4 Colonne Stile Cartaceo */
+        /* Griglia a 4 colonne stile foglio cartaceo originale */
         .columns-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 15px;
         }
 
         @media (max-width: 768px) {
@@ -157,7 +154,7 @@
 
         .column-box {
             border: 1px solid var(--primary-color);
-            border-radius: 6px;
+            border-radius: 4px;
             background: #fff;
             overflow: hidden;
             display: flex;
@@ -169,8 +166,8 @@
             color: white;
             text-align: center;
             font-weight: bold;
-            padding: 8px;
-            font-size: 0.9rem;
+            padding: 6px;
+            font-size: 0.85rem;
             text-transform: uppercase;
         }
 
@@ -185,15 +182,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 9px 10px;
+            padding: 5px 8px;
             border-bottom: 1px solid #eee;
-            font-size: 0.9rem;
-            cursor: pointer;
+            font-size: 0.85rem;
             transition: background 0.2s;
-        }
-
-        .item-row:hover {
-            background-color: #f1f4f6;
         }
 
         .item-row:last-child {
@@ -209,6 +201,7 @@
             display: flex;
             align-items: center;
             flex-grow: 1;
+            cursor: pointer;
         }
 
         .item-name {
@@ -216,37 +209,37 @@
             word-break: break-word;
         }
 
+        .item-qty {
+            width: 36px;
+            padding: 2px;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            text-align: center;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
         .temp-badge {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             background: #e67e22;
             color: white;
-            padding: 2px 4px;
+            padding: 1px 3px;
             border-radius: 3px;
-            margin-left: 6px;
+            margin-left: 4px;
             text-transform: uppercase;
         }
 
-        /* Pulsanti Modifica ed Elimina (Nascosti di default, visibili in Mod. Gestione) */
-        .btn-edit, .btn-delete {
+        .btn-delete {
             background: none;
             border: none;
+            color: var(--danger-color);
             font-weight: bold;
+            font-size: 0.9rem;
             cursor: pointer;
             padding: 0 4px;
             display: none;
         }
 
-        .btn-edit {
-            color: var(--edit-color);
-            font-size: 0.9rem;
-        }
-
-        .btn-delete {
-            color: var(--danger-color);
-            font-size: 1.1rem;
-        }
-
-        .safe-mode-active .btn-edit,
         .safe-mode-active .btn-delete {
             display: inline-block;
         }
@@ -257,33 +250,33 @@
             background: #eafaf1;
             border: 2px solid var(--accent-color);
             border-radius: 6px;
-            padding: 12px;
+            padding: 10px;
             margin-bottom: 15px;
         }
 
         .shopping-mode-container h3 {
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             color: #1e8449;
-            font-size: 1rem;
+            font-size: 0.95rem;
             text-align: center;
         }
 
         .shopping-list-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 6px;
         }
 
         .shopping-item-card {
             background: white;
             border: 1px solid #a9dfbf;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 6px 10px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
         }
 
@@ -297,45 +290,32 @@
         .actions-footer {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 8px;
             justify-content: center;
             border-top: 1px solid #ddd;
-            padding-top: 15px;
+            padding-top: 12px;
         }
 
         .btn-whatsapp {
             background-color: var(--whatsapp-color);
             color: white;
-            font-size: 1.05rem;
-            padding: 12px 24px;
+            font-size: 0.95rem;
+            padding: 8px 16px;
         }
 
         .btn-history {
             background-color: #7f8c8d;
             color: white;
-            padding: 12px 20px;
+            font-size: 0.85rem;
+            padding: 8px 12px;
         }
 
         .history-section {
-            margin-top: 20px;
+            margin-top: 15px;
             border-top: 2px dashed #ccc;
-            padding-top: 15px;
+            padding-top: 10px;
             display: none;
-        }
-
-        .history-section h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-            font-size: 1.1rem;
-        }
-
-        .history-item {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 10px 14px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -354,7 +334,7 @@
             <label for="buyerDate">Data:</label>
             <input type="date" id="buyerDate">
         </div>
-        <div style="display: flex; align-items: flex-end; gap: 6px;">
+        <div style="display: flex; align-items: flex-end; gap: 5px;">
             <button type="button" class="btn-mode" id="btnModeToggle" onclick="toggleShoppingMode()">🛒 Spesa</button>
             <button type="button" class="btn-safe-mode" id="btnToggleSafe" onclick="toggleSafeMode()">🔒 Gestione</button>
         </div>
@@ -370,8 +350,8 @@
             <option value="3">Colonna 4</option>
         </select>
         <select id="newProductType">
-            <option value="fixed">Fisso (Rimane sempre)</option>
-            <option value="temp">Solo per oggi (Temporaneo)</option>
+            <option value="fixed">Fisso</option>
+            <option value="temp">Solo Oggi</option>
         </select>
         <button type="button" class="btn-add" onclick="addNewProduct()">+ Aggiungi</button>
     </div>
@@ -382,20 +362,18 @@
         <div class="shopping-list-grid" id="shoppingListGrid"></div>
     </div>
 
-    <!-- Griglia a 4 Colonne -->
-    <div class="columns-grid" id="columnsGrid">
-        <!-- Generato via JavaScript -->
-    </div>
+    <!-- GRIGLIA PRINCIPALE A 4 COLONNE -->
+    <div class="columns-grid" id="columnsGrid"></div>
 
     <!-- Azioni Finali -->
     <div class="actions-footer">
         <button type="button" class="btn-whatsapp" onclick="sendWhatsApp()">📱 Invia Ordine a Pietro (WhatsApp)</button>
-        <button type="button" class="btn-history" onclick="toggleHistory()">📜 Visualizza Storico</button>
+        <button type="button" class="btn-history" onclick="toggleHistory()">📜 Storico</button>
     </div>
 
     <!-- Sezione Storico -->
     <div class="history-section" id="historySection">
-        <h3>Storico Spese Passate</h3>
+        <h3 style="margin-top:0; font-size:0.95rem; color:var(--primary-color);">Storico Spese</h3>
         <div id="historyList"></div>
     </div>
 </div>
@@ -443,7 +421,7 @@
     ];
 
     let shoppingData = JSON.parse(localStorage.getItem('shopping_columns_data')) || defaultColumns;
-    let orderState = JSON.parse(localStorage.getItem('shopping_order_state')) || {}; // { key: {selected, qty} }
+    let orderState = JSON.parse(localStorage.getItem('shopping_order_state')) || {};
     let shopCheckedState = JSON.parse(localStorage.getItem('shopping_shop_checked')) || {};
     let historyData = JSON.parse(localStorage.getItem('shopping_history')) || [];
     let safeMode = false;
@@ -486,10 +464,10 @@
                 const itemState = orderState[key] || { selected: false, qty: '' };
 
                 li.className = `item-row ${itemState.selected ? 'selected' : ''}`;
-                li.onclick = () => toggleSelectItem(colIndex, item.name);
 
                 const infoDiv = document.createElement('div');
                 infoDiv.className = 'item-info';
+                infoDiv.onclick = () => toggleSelectItem(colIndex, item.name);
 
                 const spanName = document.createElement('span');
                 spanName.className = 'item-name';
@@ -497,22 +475,17 @@
                 infoDiv.appendChild(spanName);
                 li.appendChild(infoDiv);
 
-                // Tasto Modifica Dicitura (visibile solo in modalità gestione)
-                const btnEdit = document.createElement('button');
-                btnEdit.className = 'btn-edit';
-                btnEdit.innerText = '✏️';
-                btnEdit.title = 'Modifica Dicitura';
-                btnEdit.onclick = (e) => {
-                    e.stopPropagation();
-                    editProduct(colIndex, itemIndex);
-                };
-                li.appendChild(btnEdit);
+                const qtyInput = document.createElement('input');
+                qtyInput.type = 'text';
+                qtyInput.className = 'item-qty';
+                qtyInput.value = itemState.qty;
+                qtyInput.placeholder = 'Q';
+                qtyInput.oninput = (e) => updateQty(colIndex, item.name, e.target.value);
+                li.appendChild(qtyInput);
 
-                // Tasto Elimina (visibile solo in modalità gestione)
                 const btnDel = document.createElement('button');
                 btnDel.className = 'btn-delete';
                 btnDel.innerText = '✕';
-                btnDel.title = 'Elimina Prodotto';
                 btnDel.onclick = (e) => {
                     e.stopPropagation();
                     deleteProduct(colIndex, itemIndex);
@@ -530,18 +503,25 @@
     function toggleSelectItem(colIndex, name) {
         const key = `${colIndex}-${name}`;
         if (!orderState[key]) {
-            // Chiedi opzionalmente la quantità o assegna di default selezionato
-            let qty = prompt(`Inserisci quantità per "${name}" (lascia vuoto se 1):`, "1");
-            if (qty === null) return; // Annullato
-            orderState[key] = { selected: true, qty: qty.trim() === "1" ? "" : qty.trim() };
+            orderState[key] = { selected: true, qty: '1' };
         } else {
             orderState[key].selected = !orderState[key].selected;
-            if (!orderState[key].selected) {
-                orderState[key].qty = '';
-            }
         }
         saveData();
         renderColumns();
+    }
+
+    function updateQty(colIndex, name, qty) {
+        const key = `${colIndex}-${name}`;
+        if (!orderState[key]) {
+            orderState[key] = { selected: true, qty: qty };
+        } else {
+            orderState[key].qty = qty;
+            if (qty.trim() !== '') {
+                orderState[key].selected = true;
+            }
+        }
+        saveData();
     }
 
     function toggleShoppingMode() {
@@ -554,7 +534,7 @@
             container.style.display = 'block';
             grid.style.display = 'none';
             btn.classList.add('active');
-            btn.innerText = '📝 Modifica Ordine';
+            btn.innerText = '📝 Modifica';
             renderShoppingList();
         } else {
             container.style.display = 'none';
@@ -580,8 +560,8 @@
                     const isDone = shopCheckedState[key] || false;
                     card.className = `shopping-item-card ${isDone ? 'done' : ''}`;
                     
-                    const qtyText = state.qty ? ` (Q.tà: ${state.qty})` : '';
-                    card.innerHTML = `<span>${item.name}${qtyText}</span> <span>${isDone ? '✓ FATTO' : '☐'}</span>`;
+                    const qtyText = state.qty ? ` (${state.qty})` : '';
+                    card.innerHTML = `<span>${item.name}${qtyText}</span> <span>${isDone ? '✓' : '☐'}</span>`;
                     
                     card.onclick = () => {
                         shopCheckedState[key] = !shopCheckedState[key];
@@ -595,7 +575,7 @@
         });
 
         if (count === 0) {
-            listGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666; margin: 5px;">Nessun prodotto selezionato. Torna a "Modifica Ordine" e seleziona i prodotti cliccandoci sopra.</p>';
+            listGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666; margin: 5px;">Nessun prodotto selezionato. Torna a "Modifica" e seleziona i prodotti.</p>';
         }
     }
 
@@ -640,36 +620,6 @@
         renderApp();
     }
 
-    // Modifica Dicitura Prodotto
-    function editProduct(colIndex, itemIndex) {
-        const oldName = shoppingData[colIndex][itemIndex].name;
-        const newName = prompt("Modifica la dicitura del prodotto:", oldName);
-
-        if (newName !== null) {
-            const formatted = newName.trim().toUpperCase();
-            if (!formatted) {
-                alert("Il nome non può essere vuoto!");
-                return;
-            }
-
-            const oldKey = `${colIndex}-${oldName}`;
-            const newKey = `${colIndex}-${formatted}`;
-
-            if (orderState[oldKey]) {
-                orderState[newKey] = orderState[oldKey];
-                delete orderState[oldKey];
-            }
-            if (shopCheckedState[oldKey] !== undefined) {
-                shopCheckedState[newKey] = shopCheckedState[oldKey];
-                delete shopCheckedState[oldKey];
-            }
-
-            shoppingData[colIndex][itemIndex].name = formatted;
-            saveData();
-            renderApp();
-        }
-    }
-
     function deleteProduct(colIndex, itemIndex) {
         const itemName = shoppingData[colIndex][itemIndex].name;
         if (confirm(`Eliminare definitivamente "${itemName}"?`)) {
@@ -695,7 +645,7 @@
                 const state = orderState[key];
                 if (state && state.selected) {
                     let line = `- ${item.name}`;
-                    if (state.qty) line += ` (Q.tà: ${state.qty})`;
+                    if (state.qty) line += ` [Q.tà: ${state.qty}]`;
                     colItems.push(line);
                 }
             });
@@ -714,7 +664,6 @@
         historyData.unshift(historyEntry);
         if (historyData.length > 15) historyData.pop();
         localStorage.setItem('shopping_history', JSON.stringify(historyData));
-        renderHistory();
 
         const phone = "3391318613";
         const whatsappUrl = `https://wa.me/${phone}?text=${text}`;
@@ -724,25 +673,16 @@
     function toggleHistory() {
         const sec = document.getElementById('historySection');
         sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
-        renderHistory();
-    }
-
-    function renderHistory() {
+        
         const listEl = document.getElementById('historyList');
         if (historyData.length === 0) {
-            listEl.innerHTML = '<p>Nessuna spesa salvata nello storico.</p>';
+            listEl.innerHTML = 'Nessuna spesa salvata.';
             return;
         }
-        listEl.innerHTML = historyData.map(h => `
-            <div class="history-item">
-                <strong>Spesa di:</strong> ${h.buyer} | <strong>Data:</strong> ${h.date} <br>
-                <small style="color: #666;">Inviata il: ${h.timestamp}</small>
-            </div>
-        `).join('');
+        listEl.innerHTML = historyData.map(h => `• <strong>${h.buyer}</strong> (${h.date}) - Inviata: ${h.timestamp}<br>`).join('');
     }
 
     renderApp();
-    renderHistory();
 </script>
 
 </body>
