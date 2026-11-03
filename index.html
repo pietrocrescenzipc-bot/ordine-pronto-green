@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spesa Giornaliera | The Galleon Pizzeria Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDK (Compatibile con la configurazione della Tombola) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
@@ -58,7 +58,6 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <!-- Badge Live Sincronizzato -->
             <div class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-xl font-extrabold flex items-center gap-1.5 shadow-xs">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SYNC LIVE
             </div>
@@ -348,7 +347,7 @@
     </main>
 
     <script>
-        // === CONFIGURAZIONE FIREBASE (Struttura Tombola) ===
+        // === CONFIGURAZIONE FIREBASE ===
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForGalleonApp2026",
             authDomain: "galleon-spesa-live.firebaseapp.com",
@@ -360,7 +359,7 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
-        const dbRef = db.ref('galleon_spesa_live_v4');
+        const dbRef = db.ref('galleon_spesa_live_v5');
 
         let catalog = {
             ortofrutta: {
@@ -408,34 +407,43 @@
         };
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
-        let currentSession = { date: new Date().toISOString().split('T')[0], author: "", items: [] };
-        let isRemoteUpdating = false;
+        let currentSession = JSON.parse(localStorage.getItem('galleon_local_session')) || { date: new Date().toISOString().split('T')[0], author: "Orsola", items: [] };
+        let isSyncing = false;
 
         window.onload = function() {
             document.getElementById('inputDate').value = currentSession.date;
+            if (currentSession.author) {
+                document.getElementById('inputAuthor').value = currentSession.author;
+                document.getElementById('displayDate').innerText = currentSession.date;
+                document.getElementById('displayAuthor').innerText = currentSession.author;
+                document.getElementById('userInfoHeader').classList.remove('hidden');
+                document.getElementById('userInfoHeader').classList.add('flex');
+            }
             renderAuthorButtons();
             initCatalogCategories();
 
-            // === ASCOLTATORE FIREBASE (Stile Tombola) ===
+            // Sincronizzazione in tempo reale blindata (stile Tombola)
             dbRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
-                    isRemoteUpdating = true;
+                    isSyncing = true;
                     if (data.catalog) {
                         catalog = data.catalog;
                         initCatalogCategories();
                     }
-                    if (data.session) {
+                    if (data.session && data.session.items && data.session.items.length > 0) {
                         currentSession = data.session;
+                        localStorage.setItem('galleon_local_session', JSON.stringify(currentSession));
                         applySessionToDOM();
                     }
-                    isRemoteUpdating = false;
+                    isSyncing = false;
                 }
             });
         };
 
         function syncStateToCloud() {
-            if (isRemoteUpdating) return;
+            if (isSyncing) return;
+            localStorage.setItem('galleon_local_session', JSON.stringify(currentSession));
             dbRef.set({
                 session: currentSession,
                 catalog: catalog,
@@ -473,7 +481,6 @@
                 });
             }
 
-            // Aggiorna in tempo reale la schermata supermercato se aperta
             if (!document.getElementById('shopSection').classList.contains('hidden')) {
                 renderActiveShoppingList();
             }
@@ -493,6 +500,7 @@
 
         function renderAuthorButtons() {
             const container = document.getElementById('authorButtons');
+            if (!container) return;
             container.innerHTML = '';
             authors.forEach(name => {
                 const btn = document.createElement('button');
@@ -571,12 +579,7 @@
 
         function startMode(mode) {
             const dateVal = document.getElementById('inputDate').value;
-            const authorVal = document.getElementById('inputAuthor').value.trim();
-
-            if (!dateVal || !authorVal) {
-                alert("Inserisci la data e il nome dell'operatore per procedere.");
-                return;
-            }
+            const authorVal = document.getElementById('inputAuthor').value.trim() || "Orsola";
 
             currentSession.date = dateVal;
             currentSession.author = authorVal;
@@ -593,14 +596,10 @@
             }
         }
 
+        // ACCESSO IMMEDIATO AL SUPERMERCATO (Legge subito la lista dal Cloud/Memoria)
         function goToSupermarketDirect() {
             const dateVal = document.getElementById('inputDate').value;
-            const authorVal = document.getElementById('inputAuthor').value.trim();
-
-            if (!dateVal || !authorVal) {
-                alert("Inserisci data e operatore prima di procedere.");
-                return;
-            }
+            const authorVal = document.getElementById('inputAuthor').value.trim() || currentSession.author || "Orsola";
 
             currentSession.date = dateVal;
             currentSession.author = authorVal;
@@ -632,6 +631,11 @@
                     }
                 });
             });
+
+            // Se l'utente non ha spuntato nulla al momento ma c'erano già prodotti salvati in precedenza, li mantiene intatti
+            if (collected.length === 0 && currentSession.items && currentSession.items.length > 0) {
+                return;
+            }
 
             currentSession.items = collected;
         }
@@ -713,7 +717,7 @@
             container.innerHTML = '';
 
             if (!currentSession.items || currentSession.items.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center text-slate-500 font-bold py-8">Nessun prodotto in lista sul Cloud.</p>`;
+                container.innerHTML = `<p class="col-span-full text-center text-slate-500 font-bold py-8">Nessun prodotto in lista.</p>`;
                 updateProgress();
                 return;
             }
@@ -883,7 +887,8 @@
         }
 
         function resetSession() {
-            currentSession = { date: new Date().toISOString().split('T')[0], author: "", items: [] };
+            localStorage.removeItem('galleon_local_session');
+            currentSession = { date: new Date().toISOString().split('T')[0], author: "Orsola", items: [] };
             document.getElementById('userInfoHeader').classList.add('hidden');
             document.getElementById('userInfoHeader').classList.remove('flex');
             document.getElementById('inputAuthor').value = "";
