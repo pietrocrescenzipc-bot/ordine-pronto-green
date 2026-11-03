@@ -273,9 +273,38 @@
 
             <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full"></div>
 
-            <button onclick="completeShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-lg shadow-xl shadow-blue-600/20">
+            <button onclick="promptCompleteShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-lg shadow-xl shadow-blue-600/20">
                 🎉 TERMINA SPESA E ARCHIVIA!
             </button>
+        </section>
+
+        <!-- SCHERMATA RIEPILOGO FINALE SUPERMERCATO -->
+        <section id="summaryModalSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
+            <div class="text-center mb-6">
+                <div class="inline-flex p-3 rounded-2xl bg-indigo-100 text-indigo-800 text-3xl mb-2">📊</div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Riepilogo Spesa Effettuata</h2>
+                <p class="text-slate-500 text-sm mt-1">Ecco cosa è stato preso e cosa è rimasto in sospeso.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-emerald-50 border-2 border-emerald-200 p-4 rounded-2xl shadow-inner">
+                    <h3 class="font-extrabold text-emerald-950 text-sm mb-3 uppercase tracking-wider">✅ Prodotti Presi (Vanno nello Storico)</h3>
+                    <div id="summaryTakenList" class="max-h-48 overflow-y-auto space-y-2 pr-1"></div>
+                </div>
+                <div class="bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl shadow-inner">
+                    <h3 class="font-extrabold text-amber-950 text-sm mb-3 uppercase tracking-wider">❌ Prodotti Non Trovati (Rimasti in Memoria)</h3>
+                    <div id="summaryMissingList" class="max-h-48 overflow-y-auto space-y-2 pr-1"></div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="backToShopFromSummary()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs">
+                    ⬅️ Torna al Supermercato
+                </button>
+                <button onclick="confirmAndFinalizeShopping()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
+                    ✔️ Conferma Archiviazione
+                </button>
+            </div>
         </section>
 
         <!-- STORICO & STATISTICHE AVANZATE -->
@@ -619,22 +648,9 @@
         }
 
         function confirmAndSaveShoppingList() {
-            saveHistoryRecord();
             document.getElementById('reviewSection').classList.add('hidden');
             document.getElementById('postSaveSection').classList.remove('hidden');
             renderPostSaveSummary();
-        }
-
-        function saveHistoryRecord() {
-            if (!currentSession.items || currentSession.items.length === 0) return;
-            let history = JSON.parse(localStorage.getItem('galleon_history_v3')) || [];
-            history.unshift({
-                id: Date.now(),
-                date: currentSession.date,
-                author: currentSession.author,
-                items: JSON.parse(JSON.stringify(currentSession.items))
-            });
-            localStorage.setItem('galleon_history_v3', JSON.stringify(history));
         }
 
         function renderPostSaveSummary() {
@@ -725,8 +741,11 @@
                 alert("La spesa è già vuota.");
                 return;
             }
-            if (confirm("Vuoi svuotare l'intera lista della spesa? I prodotti verranno comunque salvati nello storico.")) {
-                saveHistoryRecord();
+            if (confirm("Vuoi svuotare l'intera lista della spesa? I prodotti spuntati verranno salvati nello storico.")) {
+                let takenItems = currentSession.items.filter(i => i.checked);
+                if (takenItems.length > 0) {
+                    saveHistoryRecordCustom(takenItems);
+                }
                 resetCatalogSelection();
                 goHome();
             }
@@ -741,25 +760,77 @@
             document.getElementById('progressBar').style.width = `${percent}%`;
         }
 
-        // Funzione aggiornata: salva l'ordine intero nello storico, archivia,
-        // ma rimuove solo i prodotti spuntati. Quelli NON spuntati rimangono in memoria!
-        function completeShopping() {
-            saveHistoryRecord(); // Registra tutto l'ordine nello storico
-            
-            // Filtriamo la lista: teniamo solo i prodotti che NON sono stati spuntati (es. non trovati)
-            if (currentSession.items && currentSession.items.length > 0) {
-                currentSession.items = currentSession.items.filter(item => !item.checked);
+        // Funzione attivata al click di Termina Spesa
+        function promptCompleteShopping() {
+            const checkedCount = currentSession.items.filter(i => i.checked).length;
+            if (checkedCount === 0) {
+                alert("Attenzione: non hai spuntato nessun prodotto! Spunta almeno un prodotto preso prima di terminare.");
+                return;
             }
 
-            autoSaveDraft();
-            
-            if (currentSession.items.length > 0) {
-                alert("Spesa completata e archiviata! I prodotti non trovati (non spuntati) sono rimasti in memoria per il prossimo giro.");
-            } else {
-                alert("Spesa completata, salvata nello storico e schermata ripulita con successo!");
+            if (!confirm("Sei sicuro di aver preso tutto? Clicca OK per vedere il riepilogo.")) {
+                return;
             }
-            
+
+            // Mostriamo il riepilogo visivo prima di archiviare definitivamente
+            document.getElementById('shopSection').classList.add('hidden');
+            document.getElementById('summaryModalSection').classList.remove('hidden');
+
+            const takenContainer = document.getElementById('summaryTakenList');
+            const missingContainer = document.getElementById('summaryMissingList');
+            takenContainer.innerHTML = '';
+            missingContainer.innerHTML = '';
+
+            const taken = currentSession.items.filter(i => i.checked);
+            const missing = currentSession.items.filter(i => !i.checked);
+
+            if (taken.length === 0) {
+                takenContainer.innerHTML = `<p class="text-xs text-slate-500 font-bold">Nessun prodotto preso.</p>`;
+            } else {
+                taken.forEach(i => {
+                    takenContainer.innerHTML += `<div class="bg-white p-2 rounded-xl border border-emerald-200 text-xs font-bold text-slate-900 flex justify-between"><span>✅ ${i.name}</span><span>Qtà: ${i.qty}</span></div>`;
+                });
+            }
+
+            if (missing.length === 0) {
+                missingContainer.innerHTML = `<p class="text-xs text-slate-500 font-bold">Nessun prodotto mancante (preso tutto!).</p>`;
+            } else {
+                missing.forEach(i => {
+                    missingContainer.innerHTML += `<div class="bg-white p-2 rounded-xl border border-amber-200 text-xs font-bold text-slate-900 flex justify-between"><span>❌ ${i.name}</span><span>Qtà: ${i.qty}</span></div>`;
+                });
+            }
+        }
+
+        function backToShopFromSummary() {
+            document.getElementById('summaryModalSection').classList.add('hidden');
+            document.getElementById('shopSection').classList.remove('hidden');
+        }
+
+        function confirmAndFinalizeShopping() {
+            // Salviamo nello storico SOLO i prodotti spuntati (presi)
+            let takenItems = currentSession.items.filter(i => i.checked);
+            if (takenItems.length > 0) {
+                saveHistoryRecordCustom(takenItems);
+            }
+
+            // Manteniamo in memoria solo i prodotti NON spuntati (mancanti)
+            currentSession.items = currentSession.items.filter(i => !i.checked);
+            autoSaveDraft();
+
+            document.getElementById('summaryModalSection').classList.add('hidden');
+            alert("Spesa completata! I prodotti presi sono nello storico, quelli non trovati sono rimasti in memoria.");
             goHome();
+        }
+
+        function saveHistoryRecordCustom(itemsToSave) {
+            let history = JSON.parse(localStorage.getItem('galleon_history_v3')) || [];
+            history.unshift({
+                id: Date.now(),
+                date: currentSession.date,
+                author: currentSession.author,
+                items: JSON.parse(JSON.stringify(itemsToSave))
+            });
+            localStorage.setItem('galleon_history_v3', JSON.stringify(history));
         }
 
         function completeShoppingCycle() {
