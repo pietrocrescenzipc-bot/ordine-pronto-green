@@ -148,17 +148,8 @@
                 </div>
             </div>
 
-            <!-- Aggiunta Rapida Compatta -->
-            <div class="bg-amber-50/80 p-3 rounded-2xl border-2 border-amber-300 mb-4 flex flex-wrap sm:flex-nowrap gap-2 items-center shadow-inner w-full">
-                <span class="font-extrabold text-amber-900 text-[11px] uppercase tracking-wider w-full sm:w-auto">✨ Rapida:</span>
-                <input type="text" id="customItemName" placeholder="Prodotto..." class="flex-grow min-w-[120px] p-2.5 border-2 border-amber-200 rounded-xl text-xs sm:text-sm bg-white font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
-                <input type="text" id="customItemQty" placeholder="Qtà" class="w-16 sm:w-20 p-2.5 border-2 border-amber-200 rounded-xl text-xs sm:text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
-                <input type="text" id="customItemNote" placeholder="Nota" class="w-20 sm:w-28 p-2.5 border-2 border-amber-200 rounded-xl text-xs sm:text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
-                <button onclick="addCustomItem()" class="btn-pro bg-amber-500 hover:bg-amber-600 text-white px-3.5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm shadow-md whitespace-nowrap w-full sm:w-auto">➕ Aggiungi</button>
-            </div>
-
-            <!-- Griglia Categorie -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[55vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
+            <!-- Griglia Categorie (Spazio ampliato) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[62vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
 
             <!-- Pulsante Fisso in Basso -->
             <div class="sticky bottom-2 z-20 pt-2 bg-white/80 backdrop-blur-md rounded-2xl pb-1">
@@ -213,11 +204,20 @@
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-amber-100 text-amber-800 text-3xl mb-2">📋</div>
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
-                <p class="text-slate-500 text-sm mt-1">Verifica i quantitativi prima della conferma ufficiale.</p>
+                <p class="text-slate-500 text-sm mt-1">Verifica i quantitativi e aggiungi eventuali extra prima della conferma.</p>
+            </div>
+
+            <!-- Aggiunta Rapida con Quantità e Nota (Spostata qui) -->
+            <div class="bg-amber-50 p-3.5 rounded-2xl border-2 border-amber-300 mb-5 flex flex-wrap sm:flex-nowrap gap-2 items-center shadow-inner w-full">
+                <span class="font-extrabold text-amber-900 text-xs uppercase tracking-wider w-full sm:w-auto">✨ Aggiunta extra:</span>
+                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow min-w-[120px] p-2.5 border-2 border-amber-200 rounded-xl text-xs sm:text-sm bg-white font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
+                <input type="text" id="customItemQty" placeholder="Qtà" class="w-16 sm:w-20 p-2.5 border-2 border-amber-200 rounded-xl text-xs sm:text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
+                <input type="text" id="customItemNote" placeholder="Nota (es. cassa)" class="w-24 sm:w-32 p-2.5 border-2 border-amber-200 rounded-xl text-xs sm:text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
+                <button onclick="addCustomItem()" class="btn-pro bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm shadow-md whitespace-nowrap w-full sm:w-auto">➕ Aggiungi</button>
             </div>
 
             <div class="mb-6">
-                <div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner w-full"></div>
+                <div id="reviewItemsList" class="max-h-[42vh] overflow-y-auto bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner w-full"></div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
@@ -516,6 +516,7 @@
             autoSaveDraft();
         }
 
+        // Funzione aggiunta rapida aggiornata (ora legata alla schermata controllo finale)
         function addCustomItem() {
             const nameInput = document.getElementById('customItemName');
             const qtyInput = document.getElementById('customItemQty');
@@ -537,7 +538,9 @@
             nameInput.value = '';
             qtyInput.value = '';
             noteInput.value = '';
-            alert(`Prodotto "${name}" aggiunto con successo all'ordine!`);
+            
+            // Ricarichiamo la schermata di controllo per mostrare il nuovo extra aggiunto
+            goToReviewScreen();
         }
 
         function startMode(mode) {
@@ -738,7 +741,6 @@
             }
         }
 
-        // Funzione modificata: salva nello storico prima di svuotare l'intera spesa
         function clearEntireShopping() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La spesa è già vuota.");
