@@ -66,10 +66,10 @@
         items: [] 
     };
     
-    // Meccanismo anti-loop e gestione conflitti di scrittura
     let isApplyingRemoteData = false;
     let lastServerTimestamp = 0;
 
+    // === INIZIALIZZAZIONE ALL'AVVIO ===
     window.onload = function() {
         document.getElementById('inputDate').value = currentSession.date;
         if (currentSession.author) {
@@ -81,13 +81,12 @@
         renderAuthorButtons();
         initCatalogCategories();
 
-        // Ascoltatore Cloud in tempo reale blindato
+        // Ascoltatore in tempo reale da Firebase
         dbRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data && data.session) {
-                // Se il timestamp del server è più recente o uguale, aggiorniamo
                 if (data.timestamp && data.timestamp >= lastServerTimestamp) {
-                    // Evitiamo di sovrascrivere l'input mentre l'utente sta digitando attivamente
+                    // Evita di sovrascrivere se l'utente sta digitando in un input
                     if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
                         return; 
                     }
@@ -95,7 +94,7 @@
                     isApplyingRemoteData = true;
                     currentSession = data.session;
                     if (data.catalog) {
-                        catalog = data.catalog; // Sincronizza anche eventuali modifiche al catalogo
+                        catalog = data.catalog;
                     }
                     lastServerTimestamp = data.timestamp;
                     
@@ -112,13 +111,11 @@
     function syncStateToCloud() {
         if (isApplyingRemoteData) return;
         
-        // Salvataggio locale immediato (garanzia zero perdita dati)
         localStorage.setItem('galleon_session_v6', JSON.stringify(currentSession));
         
         const newTimestamp = Date.now();
         lastServerTimestamp = newTimestamp;
 
-        // Invio atomico al database Firebase
         dbRef.set({
             session: currentSession,
             catalog: catalog,
@@ -136,7 +133,6 @@
             document.getElementById('displayAuthor').innerText = currentSession.author;
         }
 
-        // Resetta lo stato visivo delle checkbox e degli input quantitativi/note
         document.querySelectorAll('input[type="checkbox"]').forEach(chk => chk.checked = false);
         document.querySelectorAll('input[type="text"]').forEach(txt => {
             if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate')) txt.value = '';
@@ -162,7 +158,6 @@
             });
         }
 
-        // Se siamo nella schermata supermercato, aggiorna la vista in tempo reale
         if (!document.getElementById('shopSection').classList.contains('hidden')) {
             renderActiveShoppingList();
         }
