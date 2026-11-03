@@ -341,20 +341,18 @@
 
     </main>
 
-    <!-- LOGICA E SINCRONIZZAZIONE DIRETTA STILE TOMBOLA -->
+    <!-- LOGICA E SINCRONIZZAZIONE PERMANENTE REALTIME DATABASE -->
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForGalleonApp2026",
-            authDomain: "galleon-spesa-live.firebaseapp.com",
-            databaseURL: "https://galleon-spesa-live-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "galleon-spesa-live"
+            databaseURL: "https://galleon-spesa-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "galleon-spesa"
         };
 
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
-        const rootRef = db.ref('galleon_spesa_live_v9');
+        const rootRef = db.ref('galleon_spesa_live_v10');
 
         let catalog = {
             ortofrutta: {
@@ -403,7 +401,7 @@
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
         
-        let currentSession = JSON.parse(localStorage.getItem('galleon_session_v9')) || { 
+        let currentSession = JSON.parse(localStorage.getItem('galleon_session_v10')) || { 
             date: new Date().toISOString().split('T')[0], 
             author: "Orsola", 
             items: [] 
@@ -422,14 +420,14 @@
             renderAuthorButtons();
             initCatalogCategories();
 
-            // Ascolto in tempo reale identico alla logica Tombola
+            // Sincronizzazione in tempo reale identica alla Tombola
             rootRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
                     isSyncing = true;
                     if (data.session) {
                         currentSession = data.session;
-                        localStorage.setItem('galleon_session_v9', JSON.stringify(currentSession));
+                        localStorage.setItem('galleon_session_v10', JSON.stringify(currentSession));
                     }
                     if (data.catalog) {
                         catalog = data.catalog;
@@ -443,7 +441,7 @@
 
         function pushToFirebase() {
             if (isSyncing) return;
-            localStorage.setItem('galleon_session_v9', JSON.stringify(currentSession));
+            localStorage.setItem('galleon_session_v10', JSON.stringify(currentSession));
             rootRef.set({
                 session: currentSession,
                 catalog: catalog
@@ -804,9 +802,9 @@
         }
 
         function confirmAndFinalizeShopping() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
             
-            // ARCHIVIAZIONE STORICO: SOLO i prodotti presi (taken === true)
+            // FILTRAGGIO RIGOROSO: Nello storico vanno SOLTANTO i prodotti spuntati (taken: true)
             const onlyTakenItems = currentSession.items.filter(i => i.taken);
 
             if (onlyTakenItems.length > 0) {
@@ -816,10 +814,10 @@
                     items: onlyTakenItems,
                     timestamp: Date.now()
                 });
-                localStorage.setItem('galleon_history_v9', JSON.stringify(history));
+                localStorage.setItem('galleon_history_v10', JSON.stringify(history));
             }
 
-            // I prodotti NON presi rimangono in memoria
+            // I prodotti NON presi restano salvati per la sessione successiva
             currentSession.items = currentSession.items.filter(i => !i.taken);
             pushToFirebase();
 
@@ -911,7 +909,7 @@
             container.innerHTML = '';
             statsDashboard.innerHTML = '';
 
-            let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
 
             let totalOrders = history.length;
             let totalItemsBought = history.reduce((acc, h) => acc + h.items.length, 0);
@@ -951,15 +949,15 @@
 
         function deleteHistoryItem(idx) {
             if (confirm("Vuoi eliminare questo storico?")) {
-                let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
+                let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
                 history.splice(idx, 1);
-                localStorage.setItem('galleon_history_v9', JSON.stringify(history));
+                localStorage.setItem('galleon_history_v10', JSON.stringify(history));
                 showHistory();
             }
         }
 
         function exportHistoryExcel() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
             if (history.length === 0) {
                 alert("Nessun dato nello storico da esportare!");
                 return;
@@ -980,7 +978,7 @@
         }
 
         function exportHistoryJSON() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
             if (history.length === 0) {
                 alert("Nessun dato nello storico da esportare!");
                 return;
