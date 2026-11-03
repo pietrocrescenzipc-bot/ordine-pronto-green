@@ -406,7 +406,8 @@
             author: "Orsola", 
             items: [] 
         };
-        
+
+        let history = [];
         let isSyncing = false;
 
         window.onload = function() {
@@ -420,7 +421,7 @@
             renderAuthorButtons();
             initCatalogCategories();
 
-            // Sincronizzazione in tempo reale identica alla Tombola
+            // Sincronizzazione in tempo reale di sessione, catalogo e storico
             rootRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -433,6 +434,10 @@
                         catalog = data.catalog;
                         initCatalogCategories();
                     }
+                    if (data.history) {
+                        history = data.history;
+                        localStorage.setItem('galleon_history_v10', JSON.stringify(history));
+                    }
                     applySessionToDOM();
                     isSyncing = false;
                 }
@@ -442,9 +447,11 @@
         function pushToFirebase() {
             if (isSyncing) return;
             localStorage.setItem('galleon_session_v10', JSON.stringify(currentSession));
+            localStorage.setItem('galleon_history_v10', JSON.stringify(history));
             rootRef.set({
                 session: currentSession,
-                catalog: catalog
+                catalog: catalog,
+                history: history
             });
         }
 
@@ -481,6 +488,9 @@
 
             if (!document.getElementById('shopSection').classList.contains('hidden')) {
                 renderActiveShoppingList();
+            }
+            if (!document.getElementById('historySection').classList.contains('hidden')) {
+                renderHistoryList();
             }
         }
 
@@ -802,8 +812,6 @@
         }
 
         function confirmAndFinalizeShopping() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
-            
             // FILTRAGGIO RIGOROSO: Nello storico vanno SOLTANTO i prodotti spuntati (taken: true)
             const onlyTakenItems = currentSession.items.filter(i => i.taken);
 
@@ -814,7 +822,6 @@
                     items: onlyTakenItems,
                     timestamp: Date.now()
                 });
-                localStorage.setItem('galleon_history_v10', JSON.stringify(history));
             }
 
             // I prodotti NON presi restano salvati per la sessione successiva
@@ -823,7 +830,7 @@
 
             document.getElementById('summaryModalSection').classList.add('hidden');
             goHome();
-            alert("Spesa completata! I soli prodotti presi sono stati registrati nello Storico.");
+            alert("Spesa completata! I soli prodotti presi sono stati registrati nello Storico cloud.");
         }
 
         function clearEntireShopping() {
@@ -903,13 +910,16 @@
         function showHistory() {
             document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
             document.getElementById('historySection').classList.remove('hidden');
+            renderHistoryList();
+        }
 
+        function renderHistoryList() {
             const container = document.getElementById('historyContainer');
             const statsDashboard = document.getElementById('statsDashboard');
+            if (!container || !statsDashboard) return;
+
             container.innerHTML = '';
             statsDashboard.innerHTML = '';
-
-            let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
 
             let totalOrders = history.length;
             let totalItemsBought = history.reduce((acc, h) => acc + h.items.length, 0);
@@ -949,15 +959,13 @@
 
         function deleteHistoryItem(idx) {
             if (confirm("Vuoi eliminare questo storico?")) {
-                let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
                 history.splice(idx, 1);
-                localStorage.setItem('galleon_history_v10', JSON.stringify(history));
-                showHistory();
+                pushToFirebase();
+                renderHistoryList();
             }
         }
 
         function exportHistoryExcel() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
             if (history.length === 0) {
                 alert("Nessun dato nello storico da esportare!");
                 return;
@@ -978,7 +986,6 @@
         }
 
         function exportHistoryJSON() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v10')) || [];
             if (history.length === 0) {
                 alert("Nessun dato nello storico da esportare!");
                 return;
