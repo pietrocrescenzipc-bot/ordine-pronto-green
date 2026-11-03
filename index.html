@@ -38,7 +38,7 @@
     <!-- Header Professionale -->
     <header class="bg-slate-900/80 border-b border-slate-800 backdrop-blur-xl sticky top-0 z-40 px-4 md:px-8 py-4 flex justify-between items-center shadow-lg w-full">
         <div class="flex items-center gap-3.5 min-w-0">
-            <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-2xl transition text-slate-200 border border-slate-700/60 shadow-xs flex items-center justify-center focus:outline-none shrink-0">
+            <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-2xl transition text-slate-200 border border-slate-700/60 shadow-xs flex items-center justify-center focus:outline-none shrink-0" title="Menu principale">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
@@ -49,7 +49,7 @@
                 </div>
                 <div class="min-w-0">
                     <h1 class="text-sm md:text-base font-extrabold tracking-tight text-white leading-none truncate">The Galleon</h1>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-400 truncate block">Pizzeria Management</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-400 truncate block">Gestione Spesa Semplice</span>
                 </div>
             </div>
         </div>
@@ -70,41 +70,41 @@
         <div class="flex justify-between items-center pb-5 border-b border-slate-800 mb-6">
             <div class="flex items-center gap-2.5">
                 <span class="text-xl">🧭</span>
-                <span class="font-extrabold text-lg text-white">Navigazione Pro</span>
+                <span class="font-extrabold text-lg text-white">Menu Rapido</span>
             </div>
             <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-slate-400 hover:text-white transition">✕</button>
         </div>
 
-        <nav class="space-y-2 flex-grow">
-            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
+        <nav class="space-y-2.5 flex-grow">
+            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
                 🏠 Home Principale
             </button>
-            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
-                ➕ Inserisci Nuovo Prodotto
+            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+                ➕ Aggiungi Nuovo Prodotto
             </button>
-            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
-                🗑️ Gestisci Catalogo & Prodotti
+            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+                🗑️ Gestisci Catalogo Prodotti
             </button>
-            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
-                📊 Storico & Statistiche Spesa
+            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+                📊 Storico Spese Passate
             </button>
         </nav>
 
         <div class="pt-4 border-t border-slate-800 text-center text-xs text-slate-500 font-medium">
-            The Galleon OS • v4.1 Enterprise
+            The Galleon • Versione Semplificata
         </div>
     </div>
 
     <main class="flex-grow container mx-auto p-3 md:p-8 max-w-6xl w-full box-border">
 
         <!-- SETUP INIZIALE -->
-        <section id="setupSection" class="pro-card rounded-3xl p-5 md:p-10 mt-4 border border-slate-100 w-full">
+        <section id="setupSection" class="pro-card rounded-3xl p-6 md:p-10 mt-4 border border-slate-100 w-full">
             <div class="text-center max-w-xl mx-auto mb-8">
-                <div class="inline-flex p-3.5 rounded-2xl bg-orange-50 text-orange-600 text-3xl shadow-inner mb-3">
-                    📋
+                <div class="inline-flex p-4 rounded-2xl bg-orange-50 text-orange-600 text-4xl shadow-inner mb-3">
+                    🛒
                 </div>
-                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Gestione Spesa Giornaliera</h2>
-                <p class="text-slate-500 text-sm mt-1.5">Ottimizza gli ordini della pizzeria con precisione professionale.</p>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Cosa vuoi fare oggi?</h2>
+                <p class="text-slate-500 text-sm mt-1.5">Seleziona il tuo nome e scegli un'operazione.</p>
             </div>
             
             <div class="grid md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto bg-slate-50 p-5 md:p-6 rounded-3xl border border-slate-200/80 shadow-inner">
@@ -113,24 +113,24 @@
                     <input type="date" id="inputDate" class="w-full p-3.5 border-2 border-slate-200 rounded-2xl text-base font-bold bg-white text-slate-900 focus:border-orange-500 focus:outline-none text-center shadow-xs">
                 </div>
                 <div>
-                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Operatore</label>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Chi sei? (Tocca il nome)</label>
                     <div class="grid grid-cols-3 gap-2 mb-2.5" id="authorButtons"></div>
-                    <input type="text" id="inputAuthor" placeholder="O scrivi nome..." class="w-full p-3 border-2 border-slate-200 rounded-2xl text-sm bg-white text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
+                    <input type="text" id="inputAuthor" placeholder="O scrivi il nome..." class="w-full p-3 border-2 border-slate-200 rounded-2xl text-sm bg-white text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-6">
-                <button onclick="startMode('create')" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4.5 rounded-2xl text-base flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
-                    🛒 CREA LA SPESA
+                <button onclick="startMode('create')" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
+                    📝 COMPILA LA SPESA
                 </button>
-                <button onclick="goToSupermarket()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
+                <button onclick="goToSupermarketDirect()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
                     🛍️ VAI AL SUPERMERCATO
                 </button>
             </div>
 
             <div class="mt-8 text-center">
                 <button onclick="showHistory()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl border border-slate-300 inline-block text-xs uppercase tracking-wider shadow-xs">
-                    📊 Visualizza Storico e Statistiche Avanzate
+                    📊 Visualizza Storico Spese Passate
                 </button>
             </div>
         </section>
@@ -139,11 +139,11 @@
         <section id="createSection" class="hidden pro-card rounded-3xl p-4 md:p-8 mt-4 w-full relative">
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200 flex-wrap gap-3">
                 <div>
-                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Ordine</h2>
-                    <p class="text-slate-500 text-xs md:text-sm">Seleziona i prodotti e imposta quantità e note direttamente nei reparti.</p>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Spesa</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Spunta i prodotti e scrivi quantità o note (es. cassa, bancale).</p>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Azzera</button>
+                    <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Pulisci Tutto</button>
                     <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
                 </div>
             </div>
@@ -153,8 +153,8 @@
 
             <!-- Pulsante Fisso in Basso -->
             <div class="sticky bottom-2 z-20 pt-2 bg-white/80 backdrop-blur-md rounded-2xl pb-1">
-                <button onclick="goToReviewScreen()" class="btn-pro w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-3.5 md:p-4.5 rounded-2xl text-sm md:text-base shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
-                    🔍 Controlla Riepilogo Ordine 🚀
+                <button onclick="goToReviewScreen()" class="btn-pro w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 md:p-5 rounded-2xl text-base md:text-lg shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
+                    🔍 AVANTI: CONTROLLA RIEPILOGO 🚀
                 </button>
             </div>
         </section>
@@ -164,7 +164,7 @@
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
                 <div>
                     <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
-                    <p class="text-slate-500 text-sm">Elimina o monitora i prodotti presenti nei reparti.</p>
+                    <p class="text-slate-500 text-sm">Elimina prodotti non necessari o visualizza i reparti.</p>
                 </div>
                 <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
             </div>
@@ -204,7 +204,7 @@
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-amber-100 text-amber-800 text-3xl mb-2">📋</div>
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
-                <p class="text-slate-500 text-sm mt-1">Verifica i quantitativi e le note prima della conferma ufficiale.</p>
+                <p class="text-slate-500 text-sm mt-1">Verifica la lista prima di confermare e registrarla.</p>
             </div>
 
             <div class="mb-6">
@@ -213,10 +213,10 @@
 
             <div class="grid md:grid-cols-2 gap-4">
                 <button onclick="backToCreateFromReview()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-sm shadow-xs">
-                    ✏️ Modifica Spesa
+                    ✏️ Torna a Modificare
                 </button>
                 <button onclick="confirmAndSaveShoppingList()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
-                    ✅ Conferma e Registra Ordine
+                    ✅ CONFERMA E REGISTRA ORDINE
                 </button>
             </div>
         </section>
@@ -225,12 +225,12 @@
         <section id="postSaveSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
-                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Registrato con Successo!</h2>
-                <p class="text-slate-500 text-sm mt-1">L'ordine è pronto per essere spuntato al supermercato o archiviato.</p>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
+                <p class="text-slate-500 text-sm mt-1">L'ordine è stato registrato nello storico. Vuoi andare subito al supermercato a spuntarlo?</p>
             </div>
 
             <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs w-full">
-                <h3 class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiunta extra al volo:</h3>
+                <h3 class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiungi un prodotto al volo:</h3>
                 <div class="flex flex-wrap lg:flex-nowrap gap-3 items-center">
                     <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm bg-white font-bold text-slate-900 focus:outline-none shadow-xs">
                     <input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
@@ -240,13 +240,18 @@
             </div>
 
             <div class="mb-6">
-                <h4 class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo elementi attivi:</h4>
+                <h4 class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo prodotti in lista:</h4>
                 <div id="savedItemsSummaryList" class="max-h-48 overflow-y-auto bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner w-full"></div>
             </div>
 
-            <button onclick="completeShoppingCycle()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
-                🏠 Torna alla Home Principale
-            </button>
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="goToSupermarketFromPostSave()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base md:text-lg shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2">
+                    🛍️ VAI AL SUPERMERCATO 🛒
+                </button>
+                <button onclick="completeShoppingCycle()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                    🏠 Termina e Torna alla Home
+                </button>
+            </div>
         </section>
 
         <!-- VAI AL SUPERMERCATO -->
@@ -268,8 +273,8 @@
 
             <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full"></div>
 
-            <button onclick="completeShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base shadow-xl shadow-blue-600/20">
-                🎉 Termina Spesa e Salva nello Storico!
+            <button onclick="completeShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-lg shadow-xl shadow-blue-600/20">
+                🎉 TERMINA SPESA E ARCHIVIA!
             </button>
         </section>
 
@@ -277,8 +282,8 @@
         <section id="historySection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
                 <div>
-                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico & Statistiche Spesa</h2>
-                    <p class="text-slate-500 text-xs md:text-sm">Analisi approfondita dei consumi e trend degli ordini passati.</p>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico Spese</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Riepilogo ordini effettuati in passato.</p>
                 </div>
                 <div class="flex gap-2 flex-wrap">
                     <button onclick="exportHistoryExcel()" class="btn-pro bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
@@ -479,17 +484,17 @@
                     row.innerHTML = `
                         <div class="flex items-center justify-between gap-2 w-full">
                             <label class="flex items-center gap-2.5 cursor-pointer flex-grow min-w-0">
-                                <input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="autoSaveDraft()" class="w-5 h-5 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
+                                <input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="autoSaveDraft()" class="w-6 h-6 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
                                 <span class="font-extrabold text-xs md:text-sm leading-snug break-words ${catData.textCol}" title="${item}">${item}</span>
                             </label>
                             <div class="flex items-center gap-1.5 shrink-0">
-                                <button type="button" onclick="adjustQty('${globalId}', -1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">-</button>
-                                <input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="autoSaveDraft()" class="w-11 p-1 border border-slate-300 rounded-xl text-center font-extrabold text-xs bg-white shadow-inner">
-                                <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">+</button>
+                                <button type="button" onclick="adjustQty('${globalId}', -1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-8 h-8 rounded-xl border border-slate-300 flex items-center justify-center text-sm shadow-xs">-</button>
+                                <input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="autoSaveDraft()" class="w-12 p-1.5 border border-slate-300 rounded-xl text-center font-extrabold text-xs bg-white shadow-inner">
+                                <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-8 h-8 rounded-xl border border-slate-300 flex items-center justify-center text-sm shadow-xs">+</button>
                             </div>
                         </div>
                         <div class="w-full pt-1 border-t border-slate-200/60">
-                            <input type="text" id="cat-note-${globalId}" placeholder="Note (es. cassa, bancale...)" oninput="autoSaveDraft()" class="w-full p-1.5 px-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-white text-slate-900 shadow-inner focus:outline-none focus:border-amber-500">
+                            <input type="text" id="cat-note-${globalId}" placeholder="Note (es. cassa, bancale...)" oninput="autoSaveDraft()" class="w-full p-2 px-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-white text-slate-900 shadow-inner focus:outline-none focus:border-amber-500">
                         </div>
                     `;
                     listContainer.appendChild(row);
@@ -534,12 +539,12 @@
             }
         }
 
-        function goToSupermarket() {
+        function goToSupermarketDirect() {
             const dateVal = document.getElementById('inputDate').value;
             const authorVal = document.getElementById('inputAuthor').value.trim();
 
             if (!dateVal || !authorVal) {
-                alert("Inserisci data e operatore.");
+                alert("Inserisci data e operatore prima di procedere.");
                 return;
             }
 
@@ -599,10 +604,10 @@
 
             currentSession.items.forEach(i => {
                 const div = document.createElement('div');
-                div.className = "bg-white p-3 rounded-xl border border-amber-200 flex justify-between items-center text-sm font-bold shadow-xs w-full";
+                div.className = "bg-white p-3.5 rounded-xl border border-amber-200 flex justify-between items-center text-sm font-bold shadow-xs w-full";
                 div.innerHTML = `
                     <span class="text-slate-900 truncate mr-2">🛒 ${i.name}</span>
-                    <span class="bg-amber-100 text-amber-900 px-3 py-1 rounded-lg text-xs shrink-0">Qtà: ${i.qty} ${i.note ? '('+i.note+')' : ''}</span>
+                    <span class="bg-amber-100 text-amber-900 px-3.5 py-1.5 rounded-lg text-xs shrink-0">Qtà: ${i.qty} ${i.note ? '('+i.note+')' : ''}</span>
                 `;
                 listContainer.appendChild(div);
             });
@@ -662,6 +667,12 @@
             document.getElementById('extraPostNote').value = '';
         }
 
+        function goToSupermarketFromPostSave() {
+            document.getElementById('postSaveSection').classList.add('hidden');
+            document.getElementById('shopSection').classList.remove('hidden');
+            renderActiveShoppingList();
+        }
+
         function renderActiveShoppingList() {
             const container = document.getElementById('activeShoppingList');
             container.innerHTML = '';
@@ -674,17 +685,17 @@
 
             currentSession.items.forEach((item, index) => {
                 const card = document.createElement('div');
-                card.className = `p-3.5 rounded-2xl border-2 transition flex items-center justify-between gap-3 shadow-xs w-full box-border ${item.checked ? 'bg-emerald-50 border-emerald-300 opacity-75' : 'bg-white border-slate-200'}`;
+                card.className = `p-4 rounded-2xl border-2 transition flex items-center justify-between gap-3 shadow-xs w-full box-border ${item.checked ? 'bg-emerald-50 border-emerald-300 opacity-75' : 'bg-white border-slate-200'}`;
                 
                 card.innerHTML = `
-                    <label class="flex items-center gap-3 cursor-pointer flex-grow min-w-0">
-                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleItemCheck(${index})" class="w-6 h-6 text-blue-600 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
+                    <label class="flex items-center gap-3.5 cursor-pointer flex-grow min-w-0">
+                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleItemCheck(${index})" class="w-7 h-7 text-blue-600 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
                         <div class="min-w-0">
-                            <span class="font-extrabold text-sm md:text-base block truncate ${item.checked ? 'line-through text-emerald-900' : 'text-slate-900'}">${item.name}</span>
+                            <span class="font-extrabold text-base block truncate ${item.checked ? 'line-through text-emerald-900' : 'text-slate-900'}">${item.name}</span>
                             <span class="text-xs font-bold text-slate-500">Qtà: ${item.qty} ${item.note ? '• ' + item.note : ''}</span>
                         </div>
                     </label>
-                    <button onclick="deleteCheckedItem(${index})" title="Elimina spesa fatta" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 p-2 rounded-xl text-xs font-bold shrink-0 border border-rose-300 flex items-center justify-center">
+                    <button onclick="deleteCheckedItem(${index})" title="Elimina spesa fatta" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 p-2.5 rounded-xl text-xs font-bold shrink-0 border border-rose-300 flex items-center justify-center">
                         🗑️ Elimina
                     </button>
                 `;
@@ -705,7 +716,7 @@
                 autoSaveDraft();
                 renderActiveShoppingList();
             } else {
-                alert("Questo prodotto non è ancora stato spuntato (selezionato). Per eliminarlo, spuntalo prima come fatto oppure gestiscilo dal catalogo.");
+                alert("Spunta prima il prodotto come fatto per poterlo rimuovere.");
             }
         }
 
@@ -714,9 +725,10 @@
                 alert("La spesa è già vuota.");
                 return;
             }
-            if (confirm("Vuoi svuotare l'intera lista della spesa? I prodotti attuali verranno comunque registrati e salvati nello storico.")) {
+            if (confirm("Vuoi svuotare l'intera lista della spesa? I prodotti verranno comunque salvati nello storico.")) {
                 saveHistoryRecord();
                 resetCatalogSelection();
+                goHome();
             }
         }
 
@@ -731,12 +743,11 @@
 
         function completeShopping() {
             saveHistoryRecord();
-            alert("Spesa completata, salvata nello storico e sincronizzata con successo!");
+            alert("Ottimo! Spesa completata, salvata nello storico e schermata ripulita.");
             resetCatalogSelection();
             goHome();
         }
 
-        // Funzione per ripulire completamente la schermata spesa e liberarla dai vecchi prodotti selezionati al termine del ciclo
         function completeShoppingCycle() {
             resetCatalogSelection();
             goHome();
