@@ -1,945 +1,974 @@
 <!DOCTYPE html>
-
 <html lang="it">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Spesa Giornaliera | The Galleon Pizzeria Pro</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-body {
-
-font-family: 'Plus Jakarta Sans', sans-serif;
-
-background-color: #0f172a;
-
-color: #e2e8f0;
-
-}
-
-.pro-card {
-
-background: #ffffff;
-
-color: #0f172a;
-
-box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-
-}
-
-.btn-pro {
-
-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-
-}
-
-.btn-pro:hover {
-
-transform: translateY(-1px);
-
-filter: brightness(1.05);
-
-}
-
-.btn-pro:active {
-
-transform: translateY(1px);
-
-}
-
-#sideMenu {
-
-transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spesa Giornaliera | The Galleon Pizzeria Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        .pro-card {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-pro {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-pro:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+        .btn-pro:active {
+            transform: translateY(1px);
+        }
+        #sideMenu {
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
 </head>
-
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
 
-
-
-<!-- Header Professionale -->
-
-<header class="bg-slate-900/80 border-b border-slate-800 backdrop-blur-xl sticky top-0 z-40 px-4 md:px-8 py-4 flex justify-between items-center shadow-lg">
-
-<div class="flex items-center gap-3.5">
-
-<button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-2xl transition text-slate-200 border border-slate-700/60 shadow-xs flex items-center justify-center focus:outline-none">
-
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
-
-</svg>
-
-</button>
-
-<div class="flex items-center gap-2.5">
-
-<div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center shadow-md text-lg">
-
-🍕
-
-</div>
-
-<div>
-
-<h1 class="text-sm md:text-base font-extrabold tracking-tight text-white leading-none">The Galleon</h1>
-
-<span class="text-[10px] font-bold uppercase tracking-widest text-orange-400">Pizzeria Management</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div id="userInfoHeader" class="text-xs md:text-sm bg-slate-800/90 border border-slate-700/80 px-4 py-2 rounded-2xl font-bold hidden flex items-center gap-3 shadow-inner">
-
-<span id="displayDate" class="text-slate-300"></span>
-
-<span class="text-slate-600">•</span>
-
-<span class="text-amber-400 flex items-center gap-1">👤 <span id="displayAuthor"></span></span>
-
-<button onclick="resetSession()" class="ml-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded-xl text-xs font-extrabold transition">Cambia</button>
-
-</div>
-
-</header>
-
-
-
-<!-- Overlay Sfondo Menu -->
-
-<div id="menuOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/70 z-50 hidden backdrop-blur-sm transition-opacity"></div>
-
-
-
-<!-- Menù Laterale Pro (Drawer) -->
-
-<div id="sideMenu" class="fixed top-0 left-0 bottom-0 w-80 bg-slate-900 border-r border-slate-800 z-50 shadow-2xl transform -translate-x-full flex flex-col p-6 text-slate-200">
-
-<div class="flex justify-between items-center pb-5 border-b border-slate-800 mb-6">
-
-<div class="flex items-center gap-2.5">
-
-<span class="text-xl">🧭</span>
-
-<span class="font-extrabold text-lg text-white">Navigazione Pro</span>
-
-</div>
-
-<button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-slate-400 hover:text-white transition">✕</button>
-
-</div>
-
-
-
-<nav class="space-y-2 flex-grow">
-
-<button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
-
-🏠 Home Principale
-
-</button>
-
-<button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
-
-➕ Inserisci Nuovo Prodotto
-
-</button>
-
-<button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
-
-🗑️ Gestisci Catalogo & Prodotti
-
-</button>
-
-<button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
-
-📊 Storico & Statistiche Spesa
-
-</button>
-
-</nav>
-
-
-
-<div class="pt-4 border-t border-slate-800 text-center text-xs text-slate-500 font-medium">
-
-The Galleon OS • v4.1 Enterprise
-
-</div>
-
-</div>
-
-
-
-<main class="flex-grow container mx-auto p-4 md:p-8 max-w-6xl">
-
-
-
-<!-- SETUP INIZIALE -->
-
-<section id="setupSection" class="pro-card rounded-3xl p-6 md:p-10 mt-4 border border-slate-100">
-
-<div class="text-center max-w-xl mx-auto mb-8">
-
-<div class="inline-flex p-3.5 rounded-2xl bg-orange-50 text-orange-600 text-3xl shadow-inner mb-3">
-
-📋
-
-</div>
-
-<h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Gestione Spesa Giornaliera</h2>
-
-<p class="text-slate-500 text-sm mt-1.5">Ottimizza gli ordini della pizzeria con precisione professionale.</p>
-
-</div>
-
-
-<div class="grid md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto bg-slate-50 p-6 rounded-3xl border border-slate-200/80 shadow-inner">
-
-<div>
-
-<label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">📅 Data di oggi</label>
-
-<input type="date" id="inputDate" class="w-full p-3.5 border-2 border-slate-200 rounded-2xl text-base font-bold bg-white text-slate-900 focus:border-orange-500 focus:outline-none text-center shadow-xs">
-
-</div>
-
-<div>
-
-<label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Operatore</label>
-
-<div class="grid grid-cols-3 gap-2 mb-2.5" id="authorButtons"></div>
-
-<input type="text" id="inputAuthor" placeholder="O scrivi nome..." class="w-full p-3 border-2 border-slate-200 rounded-2xl text-sm bg-white text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
-
-</div>
-
-</div>
-
-
-
-<div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-6">
-
-<button onclick="startMode('create')" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4.5 rounded-2xl text-base flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
-
-🛒 CREA LA SPESA
-
-</button>
-
-<button onclick="goToSupermarket()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
-
-🛍️ VAI AL SUPERMERCATO
-
-</button>
-
-</div>
-
-
-
-<div class="mt-8 text-center">
-
-<button onclick="showHistory()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl border border-slate-300 inline-block text-xs uppercase tracking-wider shadow-xs">
-
-📊 Visualizza Storico e Statistiche Avanzate
-
-</button>
-
-</div>
-
-</section>
-
-
-
-<!-- CREA LA SPESA -->
-
-<section id="createSection" class="hidden pro-card rounded-3xl p-5 md:p-8 mt-4">
-
-<div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
-
-<div>
-
-<h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Ordine</h2>
-
-<p class="text-slate-500 text-xs md:text-sm">Seleziona i prodotti suddivisi per reparto.</p>
-
-</div>
-
-<div class="flex gap-2">
-
-<button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Azzera</button>
-
-<button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
-
-</div>
-
-</div>
-
-
-
-<!-- Aggiunta Rapida -->
-
-<div class="bg-amber-50/80 p-4 rounded-2xl border-2 border-amber-300 mb-6 flex flex-wrap lg:flex-nowrap gap-3 items-center shadow-inner">
-
-<span class="font-extrabold text-amber-900 text-xs uppercase tracking-wider whitespace-nowrap">✨ Aggiunta rapida:</span>
-
-<input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-amber-200 rounded-xl text-sm bg-white font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
-
-<input type="text" id="customItemQty" placeholder="Qtà" class="w-20 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
-
-<input type="text" id="customItemNote" placeholder="Nota (es. cassa)" class="w-28 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
-
-<button onclick="addCustomItem()" class="btn-pro bg-amber-500 hover:bg-amber-600 text-white px-4 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
-
-</div>
-
-
-
-<!-- Griglia Categorie -->
-
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner" id="catalogCategoriesContainer"></div>
-
-
-
-<button onclick="goToReviewScreen()" class="btn-pro w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4.5 rounded-2xl text-base shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
-
-🔍 Controlla Riepilogo Ordine 🚀
-
-</button>
-
-</section>
-
-
-
-<!-- GESTIONE CATALOGO -->
-
-<section id="manageProductsSection" class="hidden pro-card rounded-3xl p-5 md:p-8 mt-4">
-
-<div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
-
-<div>
-
-<h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
-
-<p class="text-slate-500 text-sm">Elimina o monitora i prodotti presenti nei reparti.</p>
-
-</div>
-
-<button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
-
-</div>
-
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[60vh] overflow-y-auto pr-2 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner" id="manageCatalogContainer"></div>
-
-</section>
-
-
-
-<!-- AGGIUNGI PRODOTTO -->
-
-<section id="addProductSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 max-w-xl mx-auto">
-
-<div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
-
-<h2 class="text-xl font-extrabold text-slate-900 tracking-tight">➕ Nuovo Prodotto in Catalogo</h2>
-
-<button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
-
-</div>
-
-<div class="space-y-5">
-
-<div>
-
-<label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Nome Prodotto</label>
-
-<input type="text" id="newProdNameInput" placeholder="Es. RUCOLA FRESCA" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
-
-</div>
-
-<div>
-
-<label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Reparto / Categoria</label>
-
-<select id="newProdCategorySelect" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
-
-<option value="ortofrutta">🍏 Ortofrutta e Freschi</option>
-
-<option value="macelleria">🥩 Macelleria e Pescheria</option>
-
-<option value="latticini">🧀 Latticini, Salumi e Uova</option>
-
-<option value="dispensa">🥫 Dispensa e Scatolame</option>
-
-<option value="bevande">🍷 Bevande e Alcolici</option>
-
-<option value="pulizia">🧹 Pulizia e Detergenti</option>
-
-</select>
-
-</div>
-
-<button onclick="saveNewCatalogProduct()" class="btn-pro w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-orange-500/20">
-
-💾 Salva nel Catalogo
-
-</button>
-
-</div>
-
-</section>
-
-
-
-<!-- SCHERMATA DI CONTROLLO -->
-
-<section id="reviewSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
-
-<div class="text-center mb-6">
-
-<div class="inline-flex p-3 rounded-2xl bg-amber-100 text-amber-800 text-3xl mb-2">📋</div>
-
-<h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
-
-<p class="text-slate-500 text-sm mt-1">Verifica i quantitativi prima della conferma ufficiale.</p>
-
-</div>
-
-
-
-<div class="mb-6">
-
-<div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner"></div>
-
-</div>
-
-
-
-<div class="grid md:grid-cols-2 gap-4">
-
-<button onclick="backToCreateFromReview()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-sm shadow-xs">
-
-✏️ Modifica Spesa
-
-</button>
-
-<button onclick="confirmAndSaveShoppingList()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
-
-✅ Conferma e Registra Ordine
-
-</button>
-
-</div>
-
-</section>
-
-
-
-<!-- SCHERMATA POST-SALVATAGGIO -->
-
-<section id="postSaveSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
-
-<div class="text-center mb-6">
-
-<div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
-
-<h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Registrato con Successo!</h2>
-
-<p class="text-slate-500 text-sm mt-1">L'ordine è pronto per essere spuntato al supermercato o archiviato.</p>
-
-</div>
-
-
-
-<div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs">
-
-<h3 class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiunta extra al volo:</h3>
-
-<div class="flex flex-wrap lg:flex-nowrap gap-3 items-center">
-
-<input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm bg-white font-bold text-slate-900 focus:outline-none shadow-xs">
-
-<input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
-
-<input type="text" id="extraPostNote" placeholder="Nota" class="w-32 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
-
-<button onclick="addExtraItemAfterSave()" class="btn-pro bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
-
-</div>
-
-</div>
-
-
-
-<div class="mb-6">
-
-<h4 class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo elementi attivi:</h4>
-
-<div id="savedItemsSummaryList" class="max-h-48 overflow-y-auto bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner"></div>
-
-</div>
-
-
-
-<button onclick="goHome()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
-
-🏠 Torna alla Home Principale
-
-</button>
-
-</section>
-
-
-
-<!-- VAI AL SUPERMERCATO -->
-
-<section id="shopSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
-
-<div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
-
-<h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
-
-<button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
-
-</div>
-
-
-
-<div class="mb-6 bg-blue-50 p-4 rounded-2xl flex justify-between items-center border-2 border-blue-200 shadow-xs">
-
-<span id="progressText" class="font-extrabold text-blue-950 text-sm md:text-base">Prodotti presi: 0 / 0</span>
-
-<div class="w-1/2 bg-white rounded-full h-3.5 overflow-hidden border-2 border-blue-200 shadow-inner">
-
-<div id="progressBar" class="bg-blue-600 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
-
-</div>
-
-</div>
-
-
-
-<div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner"></div>
-
-
-
-<button onclick="completeShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base shadow-xl shadow-blue-600/20">
-
-🎉 Termina Spesa e Salva nello Storico!
-
-</button>
-
-</section>
-
-
-
-<!-- STORICO & STATISTICHE AVANZATE -->
-
-<section id="historySection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
-
-<div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
-
-<div>
-
-<h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico & Statistiche Spesa</h2>
-
-<p class="text-slate-500 text-xs md:text-sm">Analisi approfondita dei consumi e trend degli ordini passati.</p>
-
-</div>
-
-<div class="flex gap-2 flex-wrap">
-
-<button onclick="exportHistoryExcel()" class="btn-pro bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
-
-📊 Esporta Excel
-
-</button>
-
-<button onclick="exportHistoryJSON()" class="btn-pro bg-slate-800 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
-
-📥 Esporta JSON
-
-</button>
-
-<button onclick="window.print()" class="btn-pro bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
-
-🖨️ Stampa Report
-
-</button>
-
-<button onclick="goHome()" class="btn-pro bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-bold text-xs shadow-xs">⬅️ Home</button>
-
-</div>
-
-</div>
-
-
-
-<!-- Pannello Statistiche KPI -->
-
-<div id="statsDashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
-
-
-
-<!-- Lista Storico -->
-
-<div class="space-y-4 max-h-[50vh] overflow-y-auto pr-2" id="historyContainer"></div>
-
-</section>
-
-
-
-</main>
-
-
-
-<script>
-
-let catalog = JSON.parse(localStorage.getItem('galleon_supermarket_catalog_v3')) || {
-
-ortofrutta: {
-
-title: "🍏 Ortofrutta e Freschi",
-
-headerBg: "bg-emerald-700 text-white",
-
-cardBg: "bg-emerald-50/80 border-emerald-300",
-
-textCol: "text-emerald-950",
-
-items: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE"]
-
-},
-
-macelleria: {
-
-title: "🥩 Macelleria e Pescheria",
-
-headerBg: "bg-rose-700 text-white",
-
-cardBg: "bg-rose-50/80 border-rose-300",
-
-textCol: "text-rose-950",
-
-items: ["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"]
-
-},
-
-latticini: {
-
-title: "🧀 Latticini, Salumi e Uova",
-
-headerBg: "bg-sky-700 text-white",
-
-cardBg: "bg-sky-50/80 border-sky-300",
-
-textCol: "text-sky-950",
-
-items: ["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"]
-
-},
-
-dispensa: {
-
-title: "🥫 Dispensa e Scatolame",
-
-headerBg: "bg-amber-700 text-white",
-
-cardBg: "bg-amber-50/80 border-amber-300",
-
-textCol: "text-amber-950",
-
-items: ["SALE", "PEPE", "PISELLI", "NOCI", "LIMMY", "CONTEN.PANNA COTTA", "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "MARMELLATA", "FRUTTI BOSCO", "CAFFE'", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "TABASCO", "ROTOLONI", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SPUGNE VASSOI", "PELLICOLA", "ORDINARE DOLCE", "RITIRARE DOLCE"]
-
-},
-
-bevande: {
-
-title: "🍷 Bevande e Alcolici",
-
-headerBg: "bg-indigo-700 text-white",
-
-cardBg: "bg-indigo-50/80 border-indigo-300",
-
-textCol: "text-indigo-950",
-
-items: ["COCA COLA", "APEROL"]
-
-},
-
-pulizia: {
-
-title: "🧹 Pulizia e Detergenti",
-
-headerBg: "bg-purple-700 text-white",
-
-cardBg: "bg-purple-50/80 border-purple-300",
-
-textCol: "text-purple-950",
-
-items: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "MICROFIBRA"]
-
-}
-
-};
-
-
-
-const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
-
-let currentSession = { date: new Date().toISOString().split('T')[0], author: "", items: [] };
-
-
-
-window.onload = function() {
-
-document.getElementById('inputDate').value = currentSession.date;
-
-renderAuthorButtons();
-
-initCatalogCategories();
-
-loadAutoSave();
-
-};
-
-
-
-function saveCatalogStorage() {
-
-localStorage.setItem('galleon_supermarket_catalog_v3', JSON.stringify(catalog));
-
-}
-
-
-
-function toggleSidebar() {
-
-const menu = document.getElementById('sideMenu');
-
-const overlay = document.getElementById('menuOverlay');
-
-if (menu.classList.contains('-translate-x-full')) {
-
-menu.classList.remove('-translate-x-full');
-
-overlay.classList.remove('hidden');
-
-} else {
-
-menu.classList.add('-translate-x-full');
-
-overlay.classList.add('hidden');
-
-}
-
-}
-
-
-
-function autoSaveDraft() {
-
-localStorage.setItem('galleon_draft_session', JSON.stringify(currentSession));
-
-}
-
-
-
-function loadAutoSave() {
-
-let draft = localStorage.getItem('galleon_draft_session');
-
-if (draft) {
-
-try {
-
-let parsed = JSON.parse(draft);
-
-if (parsed.author) {
-
-currentSession = parsed;
-
-document.getElementById('inputAuthor').value = currentSession.author;
-
-if (currentSession.date) document.getElementById('inputDate').value = currentSession.date;
-
-document.getElementById('displayDate').innerText = currentSession.date;
-
-document.getElementById('displayAuthor').innerText = currentSession.author;
-
-document.getElementById('userInfoHeader').classList.remove('hidden');
-
-
-if (parsed.items) {
-
-parsed.items.forEach(i => {
-
-Object.keys(catalog).forEach(catKey => {
-
-catalog[catKey].items.forEach((item, itemIdx) => {
-
-if (item === i.name) {
-
-const globalId = `${catKey}-${itemIdx}`;
-
-const chk = document.getElementById(`cat-check-${globalId}`);
-
-const qty = document.getElementById(`cat-qty-${globalId}`);
-
-const note = document.getElementById(`cat-note-${globalId}`);
-
-if (chk && qty) {
-
-chk.checked = true;
-
-qty.value = i.qty;
-
-if (note) note.value = i.note || "";
-
-}
-
-}
-
-});
-
-});
-
-});
-
-}
-
-}
-
-} catch(e) {}
-
-}
-
-}
-
-
-
-function renderAuthorButtons() {
-
-const container = document.getElementById('authorButtons');
-
-container.innerHTML = '';
-
-authors.forEach(name => {
-
-const btn = document.createElement('button');
-
-btn.type = 'button';
-
-btn.className = "btn-pro bg-white hover:bg-slate-100 text-slate-800 font-extrabold py-2.5 px-2 rounded-xl border border-slate-200 text-xs shadow-xs";
-
-btn.innerText = name;
-
-btn.onclick = () => {
-
-document.getElementById('inputAuthor').value = name;
-
-currentSession.author = name;
-
-autoSaveDraft();
-
-};
-
-container.appendChild(btn);
-
-});
-
-}
-
-
-
-function initCatalogCategories() {
-
-const container = document.getElementById('catalogCategoriesContainer');
-
-container.innerHTML = '';
-
-
-
-Object.keys(catalog).forEach(catKey => {
-
-const catData = catalog[catKey];
-
-const catDiv = document.createElement('div');
-
-catDiv.className = "bg-white rounded-2xl border-2 border-slate-200 shadow-md overflow-hidden flex flex-col";
-
-
-catDiv.innerHTML = `
-
-<div class="${catData.headerBg} px-4 py-3 font-extrabold text-sm tracking-wide flex items-center justify-between shadow-xs">
-
-<span>${catData.title}</span>
-
-<span class="bg-black/25 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
-
-</div>
-
-<div class="p-3 space-y-2.5 flex-grow bg-slate-50/50" id="cat-list-${catKey}"></div>
-
-`;
-
-
-container.appendChild(catDiv);
-
-const listContainer = catDiv.querySelector(`#cat-list-${catKey}`);
-
-
-
-catData.items.forEach((item, itemIdx) => {
-
-const globalId = `${catKey}-${itemIdx}`;
-
-const row = document.createElement('div');
-
-row.className = `p-3 rounded-2xl border-2 ${catData.cardBg} transition shadow-xs flex flex-col gap-2`;
-
-row.innerHTML = `
-
-<div class="flex items-center justify-between gap-2">
-
-<label class="flex items-center gap-2.5 cursor-pointer flex-grow min-w-0">
-
-<input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="autoSaveDraft()" class="w-5 h-5 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
-
-<span class="font-extrabold text-xs md:text-sm leading-snug break-words ${catData.textCol}" title="${item}">${item}</span>
-
-</label>
-
-<div class="flex items-center gap-1.5 shrink-0">
-
-<button type="button" onclick="adjustQty('${globalId}', -1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">-</button>
-
-<input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="autoSaveDraft()" class="w-11 p-1 border border-slate-300 rounded-xl text-center font-extrabold text-xs bg-white shadow-inner">
-
-<button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">+</button>
-
-</div>
-
-</div>
-
-<div>
-
-<input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa...)" onin 
+    <!-- Header Professionale -->
+    <header class="bg-slate-900/80 border-b border-slate-800 backdrop-blur-xl sticky top-0 z-40 px-4 md:px-8 py-4 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-3.5">
+            <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-2xl transition text-slate-200 border border-slate-700/60 shadow-xs flex items-center justify-center focus:outline-none">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center shadow-md text-lg">
+                    🍕
+                </div>
+                <div>
+                    <h1 class="text-sm md:text-base font-extrabold tracking-tight text-white leading-none">The Galleon</h1>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-400">Pizzeria Management</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="userInfoHeader" class="text-xs md:text-sm bg-slate-800/90 border border-slate-700/80 px-4 py-2 rounded-2xl font-bold hidden flex items-center gap-3 shadow-inner">
+            <span id="displayDate" class="text-slate-300"></span> 
+            <span class="text-slate-600">•</span> 
+            <span class="text-amber-400 flex items-center gap-1">👤 <span id="displayAuthor"></span></span>
+            <button onclick="resetSession()" class="ml-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded-xl text-xs font-extrabold transition">Cambia</button>
+        </div>
+    </header>
+
+    <!-- Overlay Sfondo Menu -->
+    <div id="menuOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/70 z-50 hidden backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Menù Laterale Pro (Drawer) -->
+    <div id="sideMenu" class="fixed top-0 left-0 bottom-0 w-80 bg-slate-900 border-r border-slate-800 z-50 shadow-2xl transform -translate-x-full flex flex-col p-6 text-slate-200">
+        <div class="flex justify-between items-center pb-5 border-b border-slate-800 mb-6">
+            <div class="flex items-center gap-2.5">
+                <span class="text-xl">🧭</span>
+                <span class="font-extrabold text-lg text-white">Navigazione Pro</span>
+            </div>
+            <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-slate-400 hover:text-white transition">✕</button>
+        </div>
+
+        <nav class="space-y-2 flex-grow">
+            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
+                🏠 Home Principale
+            </button>
+            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
+                ➕ Inserisci Nuovo Prodotto
+            </button>
+            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
+                🗑️ Gestisci Catalogo & Prodotti
+            </button>
+            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition flex items-center gap-3.5 border border-transparent hover:border-slate-700">
+                📊 Storico & Statistiche Spesa
+            </button>
+        </nav>
+
+        <div class="pt-4 border-t border-slate-800 text-center text-xs text-slate-500 font-medium">
+            The Galleon OS • v4.1 Enterprise
+        </div>
+    </div>
+
+    <main class="flex-grow container mx-auto p-4 md:p-8 max-w-6xl">
+
+        <!-- SETUP INIZIALE -->
+        <section id="setupSection" class="pro-card rounded-3xl p-6 md:p-10 mt-4 border border-slate-100">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <div class="inline-flex p-3.5 rounded-2xl bg-orange-50 text-orange-600 text-3xl shadow-inner mb-3">
+                    📋
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Gestione Spesa Giornaliera</h2>
+                <p class="text-slate-500 text-sm mt-1.5">Ottimizza gli ordini della pizzeria con precisione professionale.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto bg-slate-50 p-6 rounded-3xl border border-slate-200/80 shadow-inner">
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">📅 Data di oggi</label>
+                    <input type="date" id="inputDate" class="w-full p-3.5 border-2 border-slate-200 rounded-2xl text-base font-bold bg-white text-slate-900 focus:border-orange-500 focus:outline-none text-center shadow-xs">
+                </div>
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Operatore</label>
+                    <div class="grid grid-cols-3 gap-2 mb-2.5" id="authorButtons"></div>
+                    <input type="text" id="inputAuthor" placeholder="O scrivi nome..." class="w-full p-3 border-2 border-slate-200 rounded-2xl text-sm bg-white text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-6">
+                <button onclick="startMode('create')" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4.5 rounded-2xl text-base flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
+                    🛒 CREA LA SPESA
+                </button>
+                <button onclick="goToSupermarket()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
+                    🛍️ VAI AL SUPERMERCATO
+                </button>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button onclick="showHistory()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl border border-slate-300 inline-block text-xs uppercase tracking-wider shadow-xs">
+                    📊 Visualizza Storico e Statistiche Avanzate
+                </button>
+            </div>
+        </section>
+
+        <!-- CREA LA SPESA -->
+        <section id="createSection" class="hidden pro-card rounded-3xl p-5 md:p-8 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Ordine</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Seleziona i prodotti suddivisi per reparto.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Azzera</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+                </div>
+            </div>
+
+            <!-- Aggiunta Rapida -->
+            <div class="bg-amber-50/80 p-4 rounded-2xl border-2 border-amber-300 mb-6 flex flex-wrap lg:flex-nowrap gap-3 items-center shadow-inner">
+                <span class="font-extrabold text-amber-900 text-xs uppercase tracking-wider whitespace-nowrap">✨ Aggiunta rapida:</span>
+                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-amber-200 rounded-xl text-sm bg-white font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
+                <input type="text" id="customItemQty" placeholder="Qtà" class="w-20 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
+                <input type="text" id="customItemNote" placeholder="Nota (es. cassa)" class="w-28 p-3 border-2 border-amber-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
+                <button onclick="addCustomItem()" class="btn-pro bg-amber-500 hover:bg-amber-600 text-white px-4 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
+            </div>
+
+            <!-- Griglia Categorie -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner" id="catalogCategoriesContainer"></div>
+
+            <button onclick="goToReviewScreen()" class="btn-pro w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4.5 rounded-2xl text-base shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
+                🔍 Controlla Riepilogo Ordine 🚀
+            </button>
+        </section>
+
+        <!-- GESTIONE CATALOGO -->
+        <section id="manageProductsSection" class="hidden pro-card rounded-3xl p-5 md:p-8 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
+                    <p class="text-slate-500 text-sm">Elimina o monitora i prodotti presenti nei reparti.</p>
+                </div>
+                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[60vh] overflow-y-auto pr-2 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner" id="manageCatalogContainer"></div>
+        </section>
+
+        <!-- AGGIUNGI PRODOTTO -->
+        <section id="addProductSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 max-w-xl mx-auto">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">➕ Nuovo Prodotto in Catalogo</h2>
+                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+            </div>
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Nome Prodotto</label>
+                    <input type="text" id="newProdNameInput" placeholder="Es. RUCOLA FRESCA" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
+                </div>
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Reparto / Categoria</label>
+                    <select id="newProdCategorySelect" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
+                        <option value="ortofrutta">🍏 Ortofrutta e Freschi</option>
+                        <option value="macelleria">🥩 Macelleria e Pescheria</option>
+                        <option value="latticini">🧀 Latticini, Salumi e Uova</option>
+                        <option value="dispensa">🥫 Dispensa e Scatolame</option>
+                        <option value="bevande">🍷 Bevande e Alcolici</option>
+                        <option value="pulizia">🧹 Pulizia e Detergenti</option>
+                    </select>
+                </div>
+                <button onclick="saveNewCatalogProduct()" class="btn-pro w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-orange-500/20">
+                    💾 Salva nel Catalogo
+                </button>
+            </div>
+        </section>
+
+        <!-- SCHERMATA DI CONTROLLO -->
+        <section id="reviewSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
+            <div class="text-center mb-6">
+                <div class="inline-flex p-3 rounded-2xl bg-amber-100 text-amber-800 text-3xl mb-2">📋</div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
+                <p class="text-slate-500 text-sm mt-1">Verifica i quantitativi prima della conferma ufficiale.</p>
+            </div>
+
+            <div class="mb-6">
+                <div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="backToCreateFromReview()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-sm shadow-xs">
+                    ✏️ Modifica Spesa
+                </button>
+                <button onclick="confirmAndSaveShoppingList()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
+                    ✅ Conferma e Registra Ordine
+                </button>
+            </div>
+        </section>
+
+        <!-- SCHERMATA POST-SALVATAGGIO -->
+        <section id="postSaveSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
+            <div class="text-center mb-6">
+                <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Registrato con Successo!</h2>
+                <p class="text-slate-500 text-sm mt-1">L'ordine è pronto per essere spuntato al supermercato o archiviato.</p>
+            </div>
+
+            <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs">
+                <h3 class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiunta extra al volo:</h3>
+                <div class="flex flex-wrap lg:flex-nowrap gap-3 items-center">
+                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm bg-white font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-32 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <button onclick="addExtraItemAfterSave()" class="btn-pro bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo elementi attivi:</h4>
+                <div id="savedItemsSummaryList" class="max-h-48 overflow-y-auto bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner"></div>
+            </div>
+
+            <button onclick="goHome()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
+                🏠 Torna alla Home Principale
+            </button>
+        </section>
+
+        <!-- VAI AL SUPERMERCATO -->
+        <section id="shopSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
+                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+            </div>
+
+            <div class="mb-6 bg-blue-50 p-4 rounded-2xl flex justify-between items-center border-2 border-blue-200 shadow-xs">
+                <span id="progressText" class="font-extrabold text-blue-950 text-sm md:text-base">Prodotti presi: 0 / 0</span>
+                <div class="w-1/2 bg-white rounded-full h-3.5 overflow-hidden border-2 border-blue-200 shadow-inner">
+                    <div id="progressBar" class="bg-blue-600 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner"></div>
+
+            <button onclick="completeShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base shadow-xl shadow-blue-600/20">
+                🎉 Termina Spesa e Salva nello Storico!
+            </button>
+        </section>
+
+        <!-- STORICO & STATISTICHE AVANZATE -->
+        <section id="historySection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico & Statistiche Spesa</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Analisi approfondita dei consumi e trend degli ordini passati.</p>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="exportHistoryExcel()" class="btn-pro bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
+                        📊 Esporta Excel
+                    </button>
+                    <button onclick="exportHistoryJSON()" class="btn-pro bg-slate-800 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
+                        📥 Esporta JSON
+                    </button>
+                    <button onclick="window.print()" class="btn-pro bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
+                        🖨️ Stampa Report
+                    </button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-bold text-xs shadow-xs">⬅️ Home</button>
+                </div>
+            </div>
+
+            <!-- Pannello Statistiche KPI -->
+            <div id="statsDashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
+
+            <!-- Lista Storico -->
+            <div class="space-y-4 max-h-[50vh] overflow-y-auto pr-2" id="historyContainer"></div>
+        </section>
+
+    </main>
+
+    <script>
+        let catalog = JSON.parse(localStorage.getItem('galleon_supermarket_catalog_v3')) || {
+            ortofrutta: {
+                title: "🍏 Ortofrutta e Freschi",
+                headerBg: "bg-emerald-700 text-white",
+                cardBg: "bg-emerald-50/80 border-emerald-300",
+                textCol: "text-emerald-950",
+                items: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE"]
+            },
+            macelleria: {
+                title: "🥩 Macelleria e Pescheria",
+                headerBg: "bg-rose-700 text-white",
+                cardBg: "bg-rose-50/80 border-rose-300",
+                textCol: "text-rose-950",
+                items: ["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"]
+            },
+            latticini: {
+                title: "🧀 Latticini, Salumi e Uova",
+                headerBg: "bg-sky-700 text-white",
+                cardBg: "bg-sky-50/80 border-sky-300",
+                textCol: "text-sky-950",
+                items: ["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"]
+            },
+            dispensa: {
+                title: "🥫 Dispensa e Scatolame",
+                headerBg: "bg-amber-700 text-white",
+                cardBg: "bg-amber-50/80 border-amber-300",
+                textCol: "text-amber-950",
+                items: ["SALE", "PEPE", "PISELLI", "NOCI", "LIMMY", "CONTEN.PANNA COTTA", "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "MARMELLATA", "FRUTTI BOSCO", "CAFFE'", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "TABASCO", "ROTOLONI", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SPUGNE VASSOI", "PELLICOLA", "ORDINARE DOLCE", "RITIRARE DOLCE"]
+            },
+            bevande: {
+                title: "🍷 Bevande e Alcolici",
+                headerBg: "bg-indigo-700 text-white",
+                cardBg: "bg-indigo-50/80 border-indigo-300",
+                textCol: "text-indigo-950",
+                items: ["COCA COLA", "APEROL"]
+            },
+            pulizia: {
+                title: "🧹 Pulizia e Detergenti",
+                headerBg: "bg-purple-700 text-white",
+                cardBg: "bg-purple-50/80 border-purple-300",
+                textCol: "text-purple-950",
+                items: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "MICROFIBRA"]
+            }
+        };
+
+        const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
+        let currentSession = { date: new Date().toISOString().split('T')[0], author: "", items: [] };
+
+        window.onload = function() {
+            document.getElementById('inputDate').value = currentSession.date;
+            renderAuthorButtons();
+            initCatalogCategories();
+            loadAutoSave();
+        };
+
+        function saveCatalogStorage() {
+            localStorage.setItem('galleon_supermarket_catalog_v3', JSON.stringify(catalog));
+        }
+
+        function toggleSidebar() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('menuOverlay');
+            if (menu.classList.contains('-translate-x-full')) {
+                menu.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                menu.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function autoSaveDraft() {
+            localStorage.setItem('galleon_draft_session', JSON.stringify(currentSession));
+        }
+
+        function loadAutoSave() {
+            let draft = localStorage.getItem('galleon_draft_session');
+            if (draft) {
+                try {
+                    let parsed = JSON.parse(draft);
+                    if (parsed.author) {
+                        currentSession = parsed;
+                        document.getElementById('inputAuthor').value = currentSession.author;
+                        if (currentSession.date) document.getElementById('inputDate').value = currentSession.date;
+                        document.getElementById('displayDate').innerText = currentSession.date;
+                        document.getElementById('displayAuthor').innerText = currentSession.author;
+                        document.getElementById('userInfoHeader').classList.remove('hidden');
+                        
+                        if (parsed.items) {
+                            parsed.items.forEach(i => {
+                                Object.keys(catalog).forEach(catKey => {
+                                    catalog[catKey].items.forEach((item, itemIdx) => {
+                                        if (item === i.name) {
+                                            const globalId = `${catKey}-${itemIdx}`;
+                                            const chk = document.getElementById(`cat-check-${globalId}`);
+                                            const qty = document.getElementById(`cat-qty-${globalId}`);
+                                            const note = document.getElementById(`cat-note-${globalId}`);
+                                            if (chk && qty) {
+                                                chk.checked = true;
+                                                qty.value = i.qty;
+                                                if (note) note.value = i.note || "";
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    }
+                } catch(e) {}
+            }
+        }
+
+        function renderAuthorButtons() {
+            const container = document.getElementById('authorButtons');
+            container.innerHTML = '';
+            authors.forEach(name => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = "btn-pro bg-white hover:bg-slate-100 text-slate-800 font-extrabold py-2.5 px-2 rounded-xl border border-slate-200 text-xs shadow-xs";
+                btn.innerText = name;
+                btn.onclick = () => {
+                    document.getElementById('inputAuthor').value = name;
+                    currentSession.author = name;
+                    autoSaveDraft();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function initCatalogCategories() {
+            const container = document.getElementById('catalogCategoriesContainer');
+            container.innerHTML = '';
+
+            Object.keys(catalog).forEach(catKey => {
+                const catData = catalog[catKey];
+                const catDiv = document.createElement('div');
+                catDiv.className = "bg-white rounded-2xl border-2 border-slate-200 shadow-md overflow-hidden flex flex-col";
+                
+                catDiv.innerHTML = `
+                    <div class="${catData.headerBg} px-4 py-3 font-extrabold text-sm tracking-wide flex items-center justify-between shadow-xs">
+                        <span>${catData.title}</span>
+                        <span class="bg-black/25 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
+                    </div>
+                    <div class="p-3 space-y-2.5 flex-grow bg-slate-50/50" id="cat-list-${catKey}"></div>
+                `;
+                
+                container.appendChild(catDiv);
+                const listContainer = catDiv.querySelector(`#cat-list-${catKey}`);
+
+                catData.items.forEach((item, itemIdx) => {
+                    const globalId = `${catKey}-${itemIdx}`;
+                    const row = document.createElement('div');
+                    row.className = `p-3 rounded-2xl border-2 ${catData.cardBg} transition shadow-xs flex flex-col gap-2`;
+                    row.innerHTML = `
+                        <div class="flex items-center justify-between gap-2">
+                            <label class="flex items-center gap-2.5 cursor-pointer flex-grow min-w-0">
+                                <input type="checkbox" id="cat-check-${globalId}" value="${item}" onchange="autoSaveDraft()" class="w-5 h-5 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
+                                <span class="font-extrabold text-xs md:text-sm leading-snug break-words ${catData.textCol}" title="${item}">${item}</span>
+                            </label>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button type="button" onclick="adjustQty('${globalId}', -1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">-</button>
+                                <input type="text" id="cat-qty-${globalId}" value="" placeholder="0" oninput="autoSaveDraft()" class="w-11 p-1 border border-slate-300 rounded-xl text-center font-extrabold text-xs bg-white shadow-inner">
+                                <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">+</button>
+                            </div>
+                        </div>
+                        <div>
+                            <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa...)" oninput="autoSaveDraft()" class="w-full py-1.5 px-3 text-xs bg-white/95 border border-slate-300 rounded-xl focus:outline-none focus:border-slate-800 font-bold shadow-inner">
+                        </div>
+                    `;
+                    listContainer.appendChild(row);
+                });
+            });
+        }
+
+        function adjustQty(globalId, delta) {
+            const input = document.getElementById(`cat-qty-${globalId}`);
+            let val = parseFloat(input.value) || 0;
+            val = Math.max(0, val + delta);
+            input.value = val === 0 ? "" : val;
+            autoSaveDraft();
+        }
+
+        function resetCatalogSelection() {
+            if (!confirm("Vuoi davvero azzerare tutti i prodotti selezionati e le quantità?")) return;
+            Object.keys(catalog).forEach(catKey => {
+                catalog[catKey].items.forEach((item, itemIdx) => {
+                    const globalId = `${catKey}-${itemIdx}`;
+                    const chk = document.getElementById(`cat-check-${globalId}`);
+                    const qty = document.getElementById(`cat-qty-${globalId}`);
+                    const note = document.getElementById(`cat-note-${globalId}`);
+                    if (chk) chk.checked = false;
+                    if (qty) qty.value = "";
+                    if (note) note.value = "";
+                });
+            });
+            currentSession.items = [];
+            localStorage.removeItem('galleon_draft_session');
+            localStorage.removeItem('galleon_current_active_list');
+            alert("Spesa azzerata con successo!");
+        }
+
+        function addCustomItem() {
+            const nameInput = document.getElementById('customItemName');
+            const qtyInput = document.getElementById('customItemQty');
+            const noteInput = document.getElementById('customItemNote');
+            const name = nameInput.value.trim().toUpperCase();
+            const qty = qtyInput.value.trim() || "1";
+            const note = noteInput.value.trim();
+            if (!name) return;
+
+            if (!catalog.ortofrutta.items.includes(name)) {
+                catalog.ortofrutta.items.push(name);
+                saveCatalogStorage();
+                initCatalogCategories();
+            }
+
+            nameInput.value = '';
+            qtyInput.value = '';
+            noteInput.value = '';
+            alert(`Prodotto "${name}" aggiunto con successo a Ortofrutta e Freschi!`);
+        }
+
+        function openAddProductModal() {
+            hideAllSections();
+            document.getElementById('addProductSection').classList.remove('hidden');
+        }
+
+        function saveNewCatalogProduct() {
+            const nameInput = document.getElementById('newProdNameInput');
+            const catSelect = document.getElementById('newProdCategorySelect');
+            const name = nameInput.value.trim().toUpperCase();
+            const catKey = catSelect.value;
+
+            if (!name) {
+                alert("Inserisci il nome del prodotto!");
+                return;
+            }
+
+            if (!catalog[catKey].items.includes(name)) {
+                catalog[catKey].items.push(name);
+                saveCatalogStorage();
+                initCatalogCategories();
+                alert(`Prodotto "${name}" inserito correttamente nella categoria!`);
+                nameInput.value = '';
+                goHome();
+            } else {
+                alert("Questo prodotto è già presente nel catalogo!");
+            }
+        }
+
+        function openManageProductsScreen() {
+            hideAllSections();
+            renderManageCatalog();
+            document.getElementById('manageProductsSection').classList.remove('hidden');
+        }
+
+        function renderManageCatalog() {
+            const container = document.getElementById('manageCatalogContainer');
+            container.innerHTML = '';
+
+            Object.keys(catalog).forEach(catKey => {
+                const catData = catalog[catKey];
+                const colDiv = document.createElement('div');
+                colDiv.className = "bg-white rounded-2xl border-2 border-slate-200 shadow-md overflow-hidden flex flex-col";
+                colDiv.innerHTML = `
+                    <div class="${catData.headerBg} px-4 py-3 font-extrabold text-sm tracking-wide flex items-center justify-between">
+                        <span>${catData.title}</span>
+                        <span class="bg-black/25 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
+                    </div>
+                    <div class="p-3 space-y-2 flex-grow bg-slate-50/50" id="manage-list-${catKey}"></div>
+                `;
+                container.appendChild(colDiv);
+                const listContainer = colDiv.querySelector(`#manage-list-${catKey}`);
+                
+                catData.items.forEach((item, itemIdx) => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200 text-xs md:text-sm gap-2 shadow-xs";
+                    row.innerHTML = `
+                        <span class="font-extrabold text-slate-800 break-words flex-grow min-w-0">${item}</span>
+                        <button onclick="removeProductFromCatalog('${catKey}', ${itemIdx})" class="btn-pro bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shrink-0 shadow-xs">🗑️ Elimina</button>
+                    `;
+                    listContainer.appendChild(row);
+                });
+            });
+        }
+
+        function removeProductFromCatalog(catKey, idx) {
+            if (!confirm("Vuoi davvero rimuovere questo prodotto dal catalogo generale?")) return;
+            catalog[catKey].items.splice(idx, 1);
+            saveCatalogStorage();
+            initCatalogCategories();
+            renderManageCatalog();
+        }
+
+        function startMode(mode) {
+            const date = document.getElementById('inputDate').value;
+            const authorInput = document.getElementById('inputAuthor').value.trim();
+            if (!authorInput) {
+                alert("Seleziona o scrivi il nome dell'operatore!");
+                return;
+            }
+            currentSession.date = date;
+            currentSession.author = authorInput;
+            document.getElementById('displayDate').innerText = date;
+            document.getElementById('displayAuthor').innerText = authorInput;
+            document.getElementById('userInfoHeader').classList.remove('hidden');
+            document.getElementById('setupSection').classList.add('hidden');
+            autoSaveDraft();
+
+            if (mode === 'create') {
+                document.getElementById('createSection').classList.remove('hidden');
+            }
+        }
+
+        function goToSupermarket() {
+            const date = document.getElementById('inputDate').value;
+            const authorInput = document.getElementById('inputAuthor').value.trim();
+            if (!authorInput) {
+                alert("Seleziona o scrivi il nome prima di andare al supermercato!");
+                return;
+            }
+            currentSession.date = date;
+            currentSession.author = authorInput;
+            document.getElementById('displayDate').innerText = date;
+            document.getElementById('displayAuthor').innerText = authorInput;
+            document.getElementById('userInfoHeader').classList.remove('hidden');
+            document.getElementById('setupSection').classList.add('hidden');
+
+            prepareActiveShoppingList();
+            document.getElementById('shopSection').classList.remove('hidden');
+        }
+
+        function goToReviewScreen() {
+            currentSession.items = [];
+            Object.keys(catalog).forEach(catKey => {
+                catalog[catKey].items.forEach((item, itemIdx) => {
+                    const globalId = `${catKey}-${itemIdx}`;
+                    const chk = document.getElementById(`cat-check-${globalId}`);
+                    const qtyField = document.getElementById(`cat-qty-${globalId}`);
+                    const noteField = document.getElementById(`cat-note-${globalId}`);
+                    if (chk && chk.checked) {
+                        currentSession.items.push({ 
+                            name: item, 
+                            qty: qtyField && qtyField.value ? qtyField.value : "1", 
+                            note: noteField ? noteField.value : "", 
+                            checked: false 
+                        });
+                    }
+                });
+            });
+
+            if (currentSession.items.length === 0) {
+                alert("Seleziona almeno un prodotto prima di procedere!");
+                return;
+            }
+
+            renderReviewList();
+            document.getElementById('createSection').classList.add('hidden');
+            document.getElementById('reviewSection').classList.remove('hidden');
+        }
+
+        function renderReviewList() {
+            const container = document.getElementById('reviewItemsList');
+            container.innerHTML = '';
+            currentSession.items.forEach((i, idx) => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-white p-3.5 rounded-2xl border-2 border-amber-200 text-sm shadow-xs";
+                let noteHtml = i.note ? `<div class="text-xs text-amber-900 font-extrabold mt-0.5 bg-amber-100 px-2 py-0.5 rounded inline-block">Nota: ${i.note}</div>` : '';
+                div.innerHTML = `
+                    <div class="overflow-hidden pr-2 flex-grow min-w-0">
+                        <span class="font-extrabold text-slate-900 text-base break-words">${i.name}</span>
+                        ${noteHtml}
+                    </div>
+                    <div class="flex items-center gap-2.5 shrink-0">
+                        <span class="font-extrabold text-amber-900 bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 text-xs shadow-inner">${i.qty}</span>
+                        <button onclick="removeReviewItem(${idx})" class="btn-pro bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shadow-xs">🗑️</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function removeReviewItem(idx) {
+            currentSession.items.splice(idx, 1);
+            renderReviewList();
+            autoSaveDraft();
+        }
+
+        function backToCreateFromReview() {
+            document.getElementById('reviewSection').classList.add('hidden');
+            document.getElementById('createSection').classList.remove('hidden');
+        }
+
+        function confirmAndSaveShoppingList() {
+            saveActiveListToStorage();
+            document.getElementById('reviewSection').classList.add('hidden');
+            renderPostSaveSummary();
+            document.getElementById('postSaveSection').classList.remove('hidden');
+        }
+
+        function renderPostSaveSummary() {
+            const container = document.getElementById('savedItemsSummaryList');
+            container.innerHTML = '';
+            currentSession.items.forEach((i, idx) => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 text-xs shadow-xs";
+                let noteHtml = i.note ? `<span class="text-teal-800 font-extrabold ml-1 bg-teal-50 px-1.5 py-0.5 rounded">(${i.note})</span>` : '';
+                div.innerHTML = `
+                    <div class="overflow-hidden pr-2 flex-grow min-w-0">
+                        <span class="font-extrabold text-slate-900 break-words">${i.name}</span>
+                        ${noteHtml}
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span class="font-extrabold text-teal-700">${i.qty}</span>
+                        <button onclick="removePostSaveItem(${idx})" class="btn-pro bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs">🗑️</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function removePostSaveItem(idx) {
+            currentSession.items.splice(idx, 1);
+            saveActiveListToStorage();
+            renderPostSaveSummary();
+        }
+
+        function addExtraItemAfterSave() {
+            const nameInput = document.getElementById('extraPostName');
+            const qtyInput = document.getElementById('extraPostQty');
+            const noteInput = document.getElementById('extraPostNote');
+            const name = nameInput.value.trim().toUpperCase();
+            const qty = qtyInput.value.trim() || "1";
+            const note = noteInput.value.trim();
+            if (!name) return;
+
+            currentSession.items.push({ name: name, qty: qty, note: note, checked: false });
+            saveActiveListToStorage();
+            renderPostSaveSummary();
+
+            nameInput.value = '';
+            qtyInput.value = '';
+            noteInput.value = '';
+        }
+
+        function saveActiveListToStorage() {
+            localStorage.setItem('galleon_current_active_list', JSON.stringify(currentSession));
+            autoSaveDraft();
+        }
+
+        function prepareActiveShoppingList() {
+            let saved = localStorage.getItem('galleon_current_active_list');
+            if (saved) {
+                let parsed = JSON.parse(saved);
+                if(parsed.items && parsed.items.length > 0) {
+                    currentSession.items = parsed.items;
+                }
+                if(parsed.author) currentSession.author = parsed.author;
+                if(parsed.date) currentSession.date = parsed.date;
+            }
+
+            const container = document.getElementById('activeShoppingList');
+            container.innerHTML = '';
+            if (currentSession.items.length === 0) {
+                container.innerHTML = '<p class="text-center text-slate-500 py-6 col-span-2 text-sm font-bold">Nessun prodotto in lista.</p>';
+                updateProgress();
+                return;
+            }
+            currentSession.items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = `flex items-center justify-between p-3.5 rounded-2xl border-2 transition shadow-sm ${item.checked ? 'bg-emerald-50/70 border-emerald-300 opacity-75 line-through' : 'bg-white border-slate-200'}`;
+                let noteHtml = item.note ? `<div class="text-xs ${item.checked ? 'text-emerald-900 font-extrabold' : 'text-blue-800 font-extrabold'} mt-0.5">Nota: ${item.note}</div>` : '';
+                div.innerHTML = `
+                    <label class="flex items-center gap-3.5 flex-grow cursor-pointer overflow-hidden pr-2 min-w-0">
+                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-6 h-6 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
+                        <div class="overflow-hidden min-w-0">
+                            <span class="font-extrabold text-sm md:text-base ${item.checked ? 'text-emerald-950' : 'text-slate-900'} break-words">${item.name}</span>
+                            ${noteHtml}
+                        </div>
+                    </label>
+                    <span class="bg-blue-50 px-3.5 py-1.5 rounded-xl border-2 border-blue-200 font-extrabold text-blue-700 text-xs shrink-0 shadow-inner">${item.qty}</span>
+                `;
+                container.appendChild(div);
+            });
+            updateProgress();
+        }
+
+        function toggleCheck(index) {
+            currentSession.items[index].checked = !currentSession.items[index].checked;
+            saveActiveListToStorage();
+            prepareActiveShoppingList();
+        }
+
+        function updateProgress() {
+            const total = currentSession.items.length;
+            const checkedCount = currentSession.items.filter(i => i.checked).length;
+            const percent = total > 0 ? (checkedCount / total) * 100 : 0;
+            document.getElementById('progressText').innerText = `Prodotti presi: ${checkedCount} / ${total}`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+        }
+
+        function completeShopping() {
+            if (currentSession.items.length === 0) return;
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            history.unshift({ date: currentSession.date, author: currentSession.author, items: [...currentSession.items], timestamp: new Date().toLocaleString() });
+            localStorage.setItem('galleon_history', JSON.stringify(history));
+            localStorage.removeItem('galleon_current_active_list');
+            localStorage.removeItem('galleon_draft_session');
+            alert("Spesa completata e registrata nello storico con successo! 🎉");
+            goHome();
+        }
+
+        function showHistory() {
+            hideAllSections();
+            renderStatsDashboard();
+            const container = document.getElementById('historyContainer');
+            container.innerHTML = '';
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            
+            if (history.length === 0) {
+                container.innerHTML = '<p class="text-center text-slate-500 py-8 text-sm font-bold">Nessuno storico spesa disponibile.</p>';
+            } else {
+                history.forEach((session, idx) => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white border-2 border-slate-200 rounded-2xl p-4.5 shadow-sm";
+                    let itemsHtml = session.items.map(i => {
+                        let noteStr = i.note ? ` <span class="text-xs text-indigo-700 font-extrabold">(${i.note})</span>` : '';
+                        return `
+                            <li class="text-xs md:text-sm flex justify-between py-2 border-b border-slate-100 last:border-0 items-center">
+                                <span class="${i.checked ? 'line-through text-emerald-800 font-extrabold' : 'text-slate-800 font-bold'} break-words pr-2">${i.name}${noteStr}</span>
+                                <span class="font-extrabold text-slate-700 shrink-0 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">${i.qty}</span>
+                            </li>
+                        `;
+                    }).join('');
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center mb-3 flex-wrap gap-1">
+                            <span class="font-extrabold text-slate-900 text-sm md:text-base">📅 ${session.date} — Operatore: <span class="text-orange-600">${session.author}</span></span>
+                            <button onclick="deleteHistoryItem(${idx})" class="btn-pro text-rose-600 hover:text-rose-800 text-xs font-extrabold bg-rose-50 px-3 py-1 rounded-xl border border-rose-200">🗑️ Elimina</button>
+                        </div>
+                        <ul class="bg-slate-50 rounded-xl p-3 shadow-inner max-h-44 overflow-y-auto border border-slate-200 space-y-1">${itemsHtml}</ul>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            document.getElementById('historySection').classList.remove('hidden');
+        }
+
+        function renderStatsDashboard() {
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            let totalSessions = history.length;
+            let totalItemsAllTime = 0;
+            let operatorCounts = {};
+
+            history.forEach(s => {
+                totalItemsAllTime += s.items.length;
+                operatorCounts[s.author] = (operatorCounts[s.author] || 0) + 1;
+            });
+
+            let avgItems = totalSessions > 0 ? (totalItemsAllTime / totalSessions).toFixed(1) : 0;
+            let topOperator = Object.keys(operatorCounts).reduce((a, b) => operatorCounts[a] > operatorCounts[b] ? a : b, 'N/D');
+
+            const dash = document.getElementById('statsDashboard');
+            dash.innerHTML = `
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Ordini Totali</span>
+                    <div class="text-2xl font-extrabold text-orange-400 mt-1">${totalSessions}</div>
+                </div>
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Media Prodotti/Ordine</span>
+                    <div class="text-2xl font-extrabold text-emerald-400 mt-1">${avgItems}</div>
+                </div>
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Totale Articoli Gestiti</span>
+                    <div class="text-2xl font-extrabold text-blue-400 mt-1">${totalItemsAllTime}</div>
+                </div>
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Top Operatore</span>
+                    <div class="text-2xl font-extrabold text-amber-400 mt-1 truncate">${topOperator}</div>
+                </div>
+            `;
+        }
+
+        function exportHistoryExcel() {
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            if (history.length === 0) {
+                alert("Nessun dato nello storico da esportare!");
+                return;
+            }
+
+            // Creazione foglio Excel in formato HTML Tabellare compatibile (.xls)
+            let htmlTable = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+            <head><meta charset="UTF-8"></head><body>
+            <table border="1">
+                <tr>
+                    <th>Data Spesa</th>
+                    <th>Operatore</th>
+                    <th>Prodotto</th>
+                    <th>Quantità / Peso</th>
+                    <th>Nota</th>
+                    <th>Stato (Preso)</th>
+                </tr>`;
+
+            history.forEach(session => {
+                session.items.forEach(item => {
+                    htmlTable += `<tr>
+                        <td>${session.date}</td>
+                        <td>${session.author}</td>
+                        <td>${item.name}</td>
+                        <td>${item.qty}</td>
+                        <td>${item.note || ''}</td>
+                        <td>${item.checked ? 'Sì' : 'No'}</td>
+                    </tr>`;
+                });
+            });
+
+            htmlTable += `</table></body></html>`;
+
+            let blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `The_Galleon_Storico_Spesa_${new Date().toISOString().split('T')[0]}.xls`;
+            a.click();
+        }
+
+        function exportHistoryJSON() {
+            let history = localStorage.getItem('galleon_history') || '[]';
+            let blob = new Blob([history], { type: 'application/json' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `the_galleon_storico_spesa_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        function deleteHistoryItem(idx) {
+            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
+            history.splice(idx, 1);
+            localStorage.setItem('galleon_history', JSON.stringify(history));
+            showHistory();
+        }
+
+        function hideAllSections() {
+            document.getElementById('setupSection').classList.add('hidden');
+            document.getElementById('createSection').classList.add('hidden');
+            document.getElementById('reviewSection').classList.add('hidden');
+            document.getElementById('postSaveSection').classList.add('hidden');
+            document.getElementById('shopSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            document.getElementById('manageProductsSection').classList.add('hidden');
+            document.getElementById('addProductSection').classList.add('hidden');
+        }
+
+        function goHome() {
+            hideAllSections();
+            document.getElementById('setupSection').classList.remove('hidden');
+        }
+
+        function resetSession() {
+            localStorage.removeItem('galleon_draft_session');
+            document.getElementById('userInfoHeader').classList.add('hidden');
+            goHome();
+        }
+    </script>
+</body>
+</html>
