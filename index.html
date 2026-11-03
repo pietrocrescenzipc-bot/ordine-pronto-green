@@ -352,13 +352,32 @@
         };
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
-        let currentSession = { date: new Date().toISOString().split('T')[0], author: "", items: [] };
+        let currentSession = JSON.parse(localStorage.getItem('galleon_draft_session')) || { date: new Date().toISOString().split('T')[0], author: "", items: [] };
 
         window.onload = function() {
             document.getElementById('inputDate').value = currentSession.date;
+            if (currentSession.author) {
+                document.getElementById('inputAuthor').value = currentSession.author;
+                document.getElementById('displayDate').innerText = currentSession.date;
+                document.getElementById('displayAuthor').innerText = currentSession.author;
+                document.getElementById('userInfoHeader').classList.remove('hidden');
+            }
             renderAuthorButtons();
             initCatalogCategories();
             loadAutoSave();
+
+            // Sincronizzazione in tempo reale tra dispositivi tramite storage event
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'galleon_draft_session' && event.newValue) {
+                    try {
+                        currentSession = JSON.parse(event.newValue);
+                        // Se siamo nella schermata supermercato, aggiorniamo la vista live
+                        if (!document.getElementById('shopSection').classList.contains('hidden')) {
+                            renderActiveShoppingList();
+                        }
+                    } catch(e) {}
+                }
+            });
         };
 
         function saveCatalogStorage() {
@@ -471,9 +490,6 @@
                                 <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">+</button>
                             </div>
                         </div>
-                        <div>
-                            <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa...)" oninput="autoSaveDraft()" class="w-full py-1.5 px-3 text-xs bg-white/95 border border-slate-300 rounded-xl focus:outline-none focus:border-slate-800 font-bold shadow-inner">
-                        </div>
                     `;
                     listContainer.appendChild(row);
                 });
@@ -481,217 +497,140 @@
         }
 
         function adjustQty(globalId, delta) {
-            const input = document.getElementById(`cat-qty-${globalId}`);
-            let val = parseFloat(input.value) || 0;
-            val = Math.max(0, val + delta);
-            input.value = val === 0 ? "" : val;
+            const qtyInput = document.getElementById(`cat-qty-${globalId}`);
+            const chk = document.getElementById(`cat-check-${globalId}`);
+            let current = parseInt(qtyInput.value) || 0;
+            current += delta;
+            if (current < 0) current = 0;
+            qtyInput.value = current > 0 ? current : "";
+            if (current > 0) {
+                chk.checked = true;
+            }
             autoSaveDraft();
-        }
-
-        function resetCatalogSelection() {
-            if (!confirm("Vuoi davvero azzerare tutti i prodotti selezionati e le quantità?")) return;
-            Object.keys(catalog).forEach(catKey => {
-                catalog[catKey].items.forEach((item, itemIdx) => {
-                    const globalId = `${catKey}-${itemIdx}`;
-                    const chk = document.getElementById(`cat-check-${globalId}`);
-                    const qty = document.getElementById(`cat-qty-${globalId}`);
-                    const note = document.getElementById(`cat-note-${globalId}`);
-                    if (chk) chk.checked = false;
-                    if (qty) qty.value = "";
-                    if (note) note.value = "";
-                });
-            });
-            currentSession.items = [];
-            localStorage.removeItem('galleon_draft_session');
-            localStorage.removeItem('galleon_current_active_list');
-            alert("Spesa azzerata con successo!");
         }
 
         function addCustomItem() {
             const nameInput = document.getElementById('customItemName');
             const qtyInput = document.getElementById('customItemQty');
             const noteInput = document.getElementById('customItemNote');
+            
             const name = nameInput.value.trim().toUpperCase();
             const qty = qtyInput.value.trim() || "1";
             const note = noteInput.value.trim();
-            if (!name) return;
 
-            if (!catalog.ortofrutta.items.includes(name)) {
-                catalog.ortofrutta.items.push(name);
-                saveCatalogStorage();
-                initCatalogCategories();
+            if (!name) {
+                alert("Inserisci il nome del prodotto personalizzato.");
+                return;
             }
+
+            // Aggiungiamo temporaneamente alla sessione
+            if (!currentSession.items) currentSession.items = [];
+            currentSession.items.push({ name, qty, note, checked: false });
+            autoSaveDraft();
 
             nameInput.value = '';
             qtyInput.value = '';
             noteInput.value = '';
-            alert(`Prodotto "${name}" aggiunto con successo a Ortofrutta e Freschi!`);
-        }
-
-        function openAddProductModal() {
-            hideAllSections();
-            document.getElementById('addProductSection').classList.remove('hidden');
-        }
-
-        function saveNewCatalogProduct() {
-            const nameInput = document.getElementById('newProdNameInput');
-            const catSelect = document.getElementById('newProdCategorySelect');
-            const name = nameInput.value.trim().toUpperCase();
-            const catKey = catSelect.value;
-
-            if (!name) {
-                alert("Inserisci il nome del prodotto!");
-                return;
-            }
-
-            if (!catalog[catKey].items.includes(name)) {
-                catalog[catKey].items.push(name);
-                saveCatalogStorage();
-                initCatalogCategories();
-                alert(`Prodotto "${name}" inserito correttamente nella categoria!`);
-                nameInput.value = '';
-                goHome();
-            } else {
-                alert("Questo prodotto è già presente nel catalogo!");
-            }
-        }
-
-        function openManageProductsScreen() {
-            hideAllSections();
-            renderManageCatalog();
-            document.getElementById('manageProductsSection').classList.remove('hidden');
-        }
-
-        function renderManageCatalog() {
-            const container = document.getElementById('manageCatalogContainer');
-            container.innerHTML = '';
-
-            Object.keys(catalog).forEach(catKey => {
-                const catData = catalog[catKey];
-                const colDiv = document.createElement('div');
-                colDiv.className = "bg-white rounded-2xl border-2 border-slate-200 shadow-md overflow-hidden flex flex-col";
-                colDiv.innerHTML = `
-                    <div class="${catData.headerBg} px-4 py-3 font-extrabold text-sm tracking-wide flex items-center justify-between">
-                        <span>${catData.title}</span>
-                        <span class="bg-black/25 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
-                    </div>
-                    <div class="p-3 space-y-2 flex-grow bg-slate-50/50" id="manage-list-${catKey}"></div>
-                `;
-                container.appendChild(colDiv);
-                const listContainer = colDiv.querySelector(`#manage-list-${catKey}`);
-                
-                catData.items.forEach((item, itemIdx) => {
-                    const row = document.createElement('div');
-                    row.className = "flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200 text-xs md:text-sm gap-2 shadow-xs";
-                    row.innerHTML = `
-                        <span class="font-extrabold text-slate-800 break-words flex-grow min-w-0">${item}</span>
-                        <button onclick="removeProductFromCatalog('${catKey}', ${itemIdx})" class="btn-pro bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shrink-0 shadow-xs">🗑️ Elimina</button>
-                    `;
-                    listContainer.appendChild(row);
-                });
-            });
-        }
-
-        function removeProductFromCatalog(catKey, idx) {
-            if (!confirm("Vuoi davvero rimuovere questo prodotto dal catalogo generale?")) return;
-            catalog[catKey].items.splice(idx, 1);
-            saveCatalogStorage();
-            initCatalogCategories();
-            renderManageCatalog();
+            alert(`Prodotto "${name}" aggiunto con successo all'ordine!`);
         }
 
         function startMode(mode) {
-            const date = document.getElementById('inputDate').value;
-            const authorInput = document.getElementById('inputAuthor').value.trim();
-            if (!authorInput) {
-                alert("Seleziona o scrivi il nome dell'operatore!");
+            const dateVal = document.getElementById('inputDate').value;
+            const authorVal = document.getElementById('inputAuthor').value.trim();
+
+            if (!dateVal || !authorVal) {
+                alert("Inserisci la data e il nome dell'operatore per procedere.");
                 return;
             }
-            currentSession.date = date;
-            currentSession.author = authorInput;
-            document.getElementById('displayDate').innerText = date;
-            document.getElementById('displayAuthor').innerText = authorInput;
-            document.getElementById('userInfoHeader').classList.remove('hidden');
-            document.getElementById('setupSection').classList.add('hidden');
+
+            currentSession.date = dateVal;
+            currentSession.author = authorVal;
             autoSaveDraft();
 
+            document.getElementById('displayDate').innerText = dateVal;
+            document.getElementById('displayAuthor').innerText = authorVal;
+            document.getElementById('userInfoHeader').classList.remove('hidden');
+
             if (mode === 'create') {
+                document.getElementById('setupSection').classList.add('hidden');
                 document.getElementById('createSection').classList.remove('hidden');
             }
         }
 
         function goToSupermarket() {
-            const date = document.getElementById('inputDate').value;
-            const authorInput = document.getElementById('inputAuthor').value.trim();
-            if (!authorInput) {
-                alert("Seleziona o scrivi il nome prima di andare al supermercato!");
+            const dateVal = document.getElementById('inputDate').value;
+            const authorVal = document.getElementById('inputAuthor').value.trim();
+
+            if (!dateVal || !authorVal) {
+                alert("Inserisci data e operatore.");
                 return;
             }
-            currentSession.date = date;
-            currentSession.author = authorInput;
-            document.getElementById('displayDate').innerText = date;
-            document.getElementById('displayAuthor').innerText = authorInput;
-            document.getElementById('userInfoHeader').classList.remove('hidden');
-            document.getElementById('setupSection').classList.add('hidden');
 
-            prepareActiveShoppingList();
+            currentSession.date = dateVal;
+            currentSession.author = authorVal;
+
+            // Raccogliamo i prodotti selezionati se non sono già stati salvati
+            collectSelectedItems();
+
+            document.getElementById('setupSection').classList.add('hidden');
             document.getElementById('shopSection').classList.remove('hidden');
+            renderActiveShoppingList();
         }
 
-        function goToReviewScreen() {
-            currentSession.items = [];
+        function collectSelectedItems() {
+            let collected = [];
+            // Raccogliamo dai checkbox del catalogo
             Object.keys(catalog).forEach(catKey => {
                 catalog[catKey].items.forEach((item, itemIdx) => {
                     const globalId = `${catKey}-${itemIdx}`;
                     const chk = document.getElementById(`cat-check-${globalId}`);
-                    const qtyField = document.getElementById(`cat-qty-${globalId}`);
-                    const noteField = document.getElementById(`cat-note-${globalId}`);
+                    const qty = document.getElementById(`cat-qty-${globalId}`);
                     if (chk && chk.checked) {
-                        currentSession.items.push({ 
-                            name: item, 
-                            qty: qtyField && qtyField.value ? qtyField.value : "1", 
-                            note: noteField ? noteField.value : "", 
-                            checked: false 
+                        collected.push({
+                            name: item,
+                            qty: qty.value.trim() || "1",
+                            note: "",
+                            checked: false
                         });
                     }
                 });
             });
 
+            // Manteniamo eventuali elementi custom già presenti
+            if (currentSession.items && currentSession.items.length > 0) {
+                currentSession.items.forEach(i => {
+                    if (!collected.some(c => c.name === i.name)) {
+                        collected.push(i);
+                    }
+                });
+            }
+
+            currentSession.items = collected;
+            autoSaveDraft();
+        }
+
+        function goToReviewScreen() {
+            collectSelectedItems();
             if (currentSession.items.length === 0) {
-                alert("Seleziona almeno un prodotto prima di procedere!");
+                alert("Seleziona almeno un prodotto prima di procedere.");
                 return;
             }
 
-            renderReviewList();
             document.getElementById('createSection').classList.add('hidden');
             document.getElementById('reviewSection').classList.remove('hidden');
-        }
 
-        function renderReviewList() {
-            const container = document.getElementById('reviewItemsList');
-            container.innerHTML = '';
-            currentSession.items.forEach((i, idx) => {
+            const listContainer = document.getElementById('reviewItemsList');
+            listContainer.innerHTML = '';
+
+            currentSession.items.forEach(i => {
                 const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-white p-3.5 rounded-2xl border-2 border-amber-200 text-sm shadow-xs";
-                let noteHtml = i.note ? `<div class="text-xs text-amber-900 font-extrabold mt-0.5 bg-amber-100 px-2 py-0.5 rounded inline-block">Nota: ${i.note}</div>` : '';
+                div.className = "bg-white p-3 rounded-xl border border-amber-200 flex justify-between items-center text-sm font-bold shadow-xs";
                 div.innerHTML = `
-                    <div class="overflow-hidden pr-2 flex-grow min-w-0">
-                        <span class="font-extrabold text-slate-900 text-base break-words">${i.name}</span>
-                        ${noteHtml}
-                    </div>
-                    <div class="flex items-center gap-2.5 shrink-0">
-                        <span class="font-extrabold text-amber-900 bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 text-xs shadow-inner">${i.qty}</span>
-                        <button onclick="removeReviewItem(${idx})" class="btn-pro bg-rose-500 hover:bg-rose-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs shadow-xs">🗑️</button>
-                    </div>
+                    <span class="text-slate-900">🛒 ${i.name}</span>
+                    <span class="bg-amber-100 text-amber-900 px-3 py-1 rounded-lg text-xs">Qtà: ${i.qty} ${i.note ? '('+i.note+')' : ''}</span>
                 `;
-                container.appendChild(div);
+                listContainer.appendChild(div);
             });
-        }
-
-        function removeReviewItem(idx) {
-            currentSession.items.splice(idx, 1);
-            renderReviewList();
-            autoSaveDraft();
         }
 
         function backToCreateFromReview() {
@@ -700,274 +639,292 @@
         }
 
         function confirmAndSaveShoppingList() {
-            saveActiveListToStorage();
+            saveHistoryRecord();
             document.getElementById('reviewSection').classList.add('hidden');
-            renderPostSaveSummary();
             document.getElementById('postSaveSection').classList.remove('hidden');
+            renderPostSaveSummary();
+        }
+
+        function saveHistoryRecord() {
+            let history = JSON.parse(localStorage.getItem('galleon_history_v3')) || [];
+            history.unshift({
+                id: Date.now(),
+                date: currentSession.date,
+                author: currentSession.author,
+                items: currentSession.items
+            });
+            localStorage.setItem('galleon_history_v3', JSON.stringify(history));
         }
 
         function renderPostSaveSummary() {
             const container = document.getElementById('savedItemsSummaryList');
             container.innerHTML = '';
-            currentSession.items.forEach((i, idx) => {
+            currentSession.items.forEach(i => {
                 const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 text-xs shadow-xs";
-                let noteHtml = i.note ? `<span class="text-teal-800 font-extrabold ml-1 bg-teal-50 px-1.5 py-0.5 rounded">(${i.note})</span>` : '';
+                div.className = "bg-white p-2.5 rounded-xl border border-slate-200 flex justify-between items-center text-xs font-bold";
                 div.innerHTML = `
-                    <div class="overflow-hidden pr-2 flex-grow min-w-0">
-                        <span class="font-extrabold text-slate-900 break-words">${i.name}</span>
-                        ${noteHtml}
-                    </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                        <span class="font-extrabold text-teal-700">${i.qty}</span>
-                        <button onclick="removePostSaveItem(${idx})" class="btn-pro bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs">🗑️</button>
-                    </div>
+                    <span class="text-slate-900">${i.name}</span>
+                    <span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded">Qtà: ${i.qty}</span>
                 `;
                 container.appendChild(div);
             });
         }
 
-        function removePostSaveItem(idx) {
-            currentSession.items.splice(idx, 1);
-            saveActiveListToStorage();
-            renderPostSaveSummary();
-        }
-
         function addExtraItemAfterSave() {
-            const nameInput = document.getElementById('extraPostName');
-            const qtyInput = document.getElementById('extraPostQty');
-            const noteInput = document.getElementById('extraPostNote');
-            const name = nameInput.value.trim().toUpperCase();
-            const qty = qtyInput.value.trim() || "1";
-            const note = noteInput.value.trim();
+            const name = document.getElementById('extraPostName').value.trim().toUpperCase();
+            const qty = document.getElementById('extraPostQty').value.trim() || "1";
+            const note = document.getElementById('extraPostNote').value.trim();
+
             if (!name) return;
 
-            currentSession.items.push({ name: name, qty: qty, note: note, checked: false });
-            saveActiveListToStorage();
+            currentSession.items.push({ name, qty, note, checked: false });
+            autoSaveDraft();
             renderPostSaveSummary();
 
-            nameInput.value = '';
-            qtyInput.value = '';
-            noteInput.value = '';
+            document.getElementById('extraPostName').value = '';
+            document.getElementById('extraPostQty').value = '';
+            document.getElementById('extraPostNote').value = '';
         }
 
-        function saveActiveListToStorage() {
-            localStorage.setItem('galleon_current_active_list', JSON.stringify(currentSession));
-            autoSaveDraft();
-        }
-
-        function prepareActiveShoppingList() {
-            let saved = localStorage.getItem('galleon_current_active_list');
-            if (saved) {
-                let parsed = JSON.parse(saved);
-                if(parsed.items && parsed.items.length > 0) {
-                    currentSession.items = parsed.items;
-                }
-                if(parsed.author) currentSession.author = parsed.author;
-                if(parsed.date) currentSession.date = parsed.date;
-            }
-
+        function renderActiveShoppingList() {
             const container = document.getElementById('activeShoppingList');
             container.innerHTML = '';
-            if (currentSession.items.length === 0) {
-                container.innerHTML = '<p class="text-center text-slate-500 py-6 col-span-2 text-sm font-bold">Nessun prodotto in lista.</p>';
+
+            if (!currentSession.items || currentSession.items.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-slate-500 font-bold py-8">Nessun prodotto in lista.</p>`;
                 updateProgress();
                 return;
             }
+
             currentSession.items.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = `flex items-center justify-between p-3.5 rounded-2xl border-2 transition shadow-sm ${item.checked ? 'bg-emerald-50/70 border-emerald-300 opacity-75 line-through' : 'bg-white border-slate-200'}`;
-                let noteHtml = item.note ? `<div class="text-xs ${item.checked ? 'text-emerald-900 font-extrabold' : 'text-blue-800 font-extrabold'} mt-0.5">Nota: ${item.note}</div>` : '';
-                div.innerHTML = `
-                    <label class="flex items-center gap-3.5 flex-grow cursor-pointer overflow-hidden pr-2 min-w-0">
-                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck(${index})" class="w-6 h-6 text-slate-900 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
-                        <div class="overflow-hidden min-w-0">
-                            <span class="font-extrabold text-sm md:text-base ${item.checked ? 'text-emerald-950' : 'text-slate-900'} break-words">${item.name}</span>
-                            ${noteHtml}
+                const card = document.createElement('div');
+                card.className = `p-3.5 rounded-2xl border-2 transition flex items-center justify-between gap-3 shadow-xs ${item.checked ? 'bg-emerald-50 border-emerald-300 opacity-75' : 'bg-white border-slate-200'}`;
+                
+                card.innerHTML = `
+                    <label class="flex items-center gap-3 cursor-pointer flex-grow min-w-0">
+                        <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleItemCheck(${index})" class="w-6 h-6 text-blue-600 rounded-lg cursor-pointer shrink-0 border-2 border-slate-400">
+                        <div class="min-w-0">
+                            <span class="font-extrabold text-sm md:text-base block truncate ${item.checked ? 'line-through text-emerald-900' : 'text-slate-900'}">${item.name}</span>
+                            <span class="text-xs font-bold text-slate-500">Qtà: ${item.qty} ${item.note ? '• ' + item.note : ''}</span>
                         </div>
                     </label>
-                    <span class="bg-blue-50 px-3.5 py-1.5 rounded-xl border-2 border-blue-200 font-extrabold text-blue-700 text-xs shrink-0 shadow-inner">${item.qty}</span>
+                    <button onclick="deleteCheckedItem(${index})" title="Elimina spesa fatta" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 p-2 rounded-xl text-xs font-bold shrink-0 border border-rose-300 flex items-center justify-center">
+                        🗑️ Elimina
+                    </button>
                 `;
-                container.appendChild(div);
+                container.appendChild(card);
             });
             updateProgress();
         }
 
-        function toggleCheck(index) {
+        function toggleItemCheck(index) {
             currentSession.items[index].checked = !currentSession.items[index].checked;
-            saveActiveListToStorage();
-            prepareActiveShoppingList();
+            autoSaveDraft();
+            renderActiveShoppingList();
+        }
+
+        // Funzione richiesta: elimina la spesa fatta e selezionata, se non è selezionata lasciala
+        function deleteCheckedItem(index) {
+            if (currentSession.items[index].checked) {
+                currentSession.items.splice(index, 1);
+                autoSaveDraft();
+                renderActiveShoppingList();
+            } else {
+                alert("Questo prodotto non è ancora stato spuntato (selezionato). Per eliminarlo, spuntalo prima come fatto oppure gestiscilo dal catalogo.");
+            }
         }
 
         function updateProgress() {
             const total = currentSession.items.length;
             const checkedCount = currentSession.items.filter(i => i.checked).length;
             const percent = total > 0 ? (checkedCount / total) * 100 : 0;
+
             document.getElementById('progressText').innerText = `Prodotti presi: ${checkedCount} / ${total}`;
             document.getElementById('progressBar').style.width = `${percent}%`;
         }
 
         function completeShopping() {
-            if (currentSession.items.length === 0) return;
-            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
-            history.unshift({ date: currentSession.date, author: currentSession.author, items: [...currentSession.items], timestamp: new Date().toLocaleString() });
-            localStorage.setItem('galleon_history', JSON.stringify(history));
-            localStorage.removeItem('galleon_current_active_list');
-            localStorage.removeItem('galleon_draft_session');
-            alert("Spesa completata e registrata nello storico con successo! 🎉");
+            alert("Spesa completata e sincronizzata con successo!");
             goHome();
         }
 
-        function showHistory() {
-            hideAllSections();
-            renderStatsDashboard();
-            const container = document.getElementById('historyContainer');
-            container.innerHTML = '';
-            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
-            
-            if (history.length === 0) {
-                container.innerHTML = '<p class="text-center text-slate-500 py-8 text-sm font-bold">Nessuno storico spesa disponibile.</p>';
-            } else {
-                history.forEach((session, idx) => {
-                    const card = document.createElement('div');
-                    card.className = "bg-white border-2 border-slate-200 rounded-2xl p-4.5 shadow-sm";
-                    let itemsHtml = session.items.map(i => {
-                        let noteStr = i.note ? ` <span class="text-xs text-indigo-700 font-extrabold">(${i.note})</span>` : '';
-                        return `
-                            <li class="text-xs md:text-sm flex justify-between py-2 border-b border-slate-100 last:border-0 items-center">
-                                <span class="${i.checked ? 'line-through text-emerald-800 font-extrabold' : 'text-slate-800 font-bold'} break-words pr-2">${i.name}${noteStr}</span>
-                                <span class="font-extrabold text-slate-700 shrink-0 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">${i.qty}</span>
-                            </li>
-                        `;
-                    }).join('');
-                    card.innerHTML = `
-                        <div class="flex justify-between items-center mb-3 flex-wrap gap-1">
-                            <span class="font-extrabold text-slate-900 text-sm md:text-base">📅 ${session.date} — Operatore: <span class="text-orange-600">${session.author}</span></span>
-                            <button onclick="deleteHistoryItem(${idx})" class="btn-pro text-rose-600 hover:text-rose-800 text-xs font-extrabold bg-rose-50 px-3 py-1 rounded-xl border border-rose-200">🗑️ Elimina</button>
-                        </div>
-                        <ul class="bg-slate-50 rounded-xl p-3 shadow-inner max-h-44 overflow-y-auto border border-slate-200 space-y-1">${itemsHtml}</ul>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-            document.getElementById('historySection').classList.remove('hidden');
-        }
-
-        function renderStatsDashboard() {
-            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
-            let totalSessions = history.length;
-            let totalItemsAllTime = 0;
-            let operatorCounts = {};
-
-            history.forEach(s => {
-                totalItemsAllTime += s.items.length;
-                operatorCounts[s.author] = (operatorCounts[s.author] || 0) + 1;
-            });
-
-            let avgItems = totalSessions > 0 ? (totalItemsAllTime / totalSessions).toFixed(1) : 0;
-            let topOperator = Object.keys(operatorCounts).reduce((a, b) => operatorCounts[a] > operatorCounts[b] ? a : b, 'N/D');
-
-            const dash = document.getElementById('statsDashboard');
-            dash.innerHTML = `
-                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Ordini Totali</span>
-                    <div class="text-2xl font-extrabold text-orange-400 mt-1">${totalSessions}</div>
-                </div>
-                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Media Prodotti/Ordine</span>
-                    <div class="text-2xl font-extrabold text-emerald-400 mt-1">${avgItems}</div>
-                </div>
-                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Totale Articoli Gestiti</span>
-                    <div class="text-2xl font-extrabold text-blue-400 mt-1">${totalItemsAllTime}</div>
-                </div>
-                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Top Operatore</span>
-                    <div class="text-2xl font-extrabold text-amber-400 mt-1 truncate">${topOperator}</div>
-                </div>
-            `;
-        }
-
-        function exportHistoryExcel() {
-            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
-            if (history.length === 0) {
-                alert("Nessun dato nello storico da esportare!");
-                return;
-            }
-
-            // Creazione foglio Excel in formato HTML Tabellare compatibile (.xls)
-            let htmlTable = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-            <head><meta charset="UTF-8"></head><body>
-            <table border="1">
-                <tr>
-                    <th>Data Spesa</th>
-                    <th>Operatore</th>
-                    <th>Prodotto</th>
-                    <th>Quantità / Peso</th>
-                    <th>Nota</th>
-                    <th>Stato (Preso)</th>
-                </tr>`;
-
-            history.forEach(session => {
-                session.items.forEach(item => {
-                    htmlTable += `<tr>
-                        <td>${session.date}</td>
-                        <td>${session.author}</td>
-                        <td>${item.name}</td>
-                        <td>${item.qty}</td>
-                        <td>${item.note || ''}</td>
-                        <td>${item.checked ? 'Sì' : 'No'}</td>
-                    </tr>`;
+        function resetCatalogSelection() {
+            Object.keys(catalog).forEach(catKey => {
+                catalog[catKey].items.forEach((item, itemIdx) => {
+                    const globalId = `${catKey}-${itemIdx}`;
+                    const chk = document.getElementById(`cat-check-${globalId}`);
+                    const qty = document.getElementById(`cat-qty-${globalId}`);
+                    if (chk) chk.checked = false;
+                    if (qty) qty.value = "";
                 });
             });
-
-            htmlTable += `</table></body></html>`;
-
-            let blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel' });
-            let url = URL.createObjectURL(blob);
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = `The_Galleon_Storico_Spesa_${new Date().toISOString().split('T')[0]}.xls`;
-            a.click();
-        }
-
-        function exportHistoryJSON() {
-            let history = localStorage.getItem('galleon_history') || '[]';
-            let blob = new Blob([history], { type: 'application/json' });
-            let url = URL.createObjectURL(blob);
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = `the_galleon_storico_spesa_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-        }
-
-        function deleteHistoryItem(idx) {
-            let history = JSON.parse(localStorage.getItem('galleon_history') || '[]');
-            history.splice(idx, 1);
-            localStorage.setItem('galleon_history', JSON.stringify(history));
-            showHistory();
-        }
-
-        function hideAllSections() {
-            document.getElementById('setupSection').classList.add('hidden');
-            document.getElementById('createSection').classList.add('hidden');
-            document.getElementById('reviewSection').classList.add('hidden');
-            document.getElementById('postSaveSection').classList.add('hidden');
-            document.getElementById('shopSection').classList.add('hidden');
-            document.getElementById('historySection').classList.add('hidden');
-            document.getElementById('manageProductsSection').classList.add('hidden');
-            document.getElementById('addProductSection').classList.add('hidden');
+            currentSession.items = [];
+            autoSaveDraft();
+            alert("Selezione azzerata.");
         }
 
         function goHome() {
-            hideAllSections();
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
             document.getElementById('setupSection').classList.remove('hidden');
         }
 
         function resetSession() {
             localStorage.removeItem('galleon_draft_session');
+            currentSession = { date: new Date().toISOString().split('T')[0], author: "", items: [] };
             document.getElementById('userInfoHeader').classList.add('hidden');
+            document.getElementById('inputAuthor').value = "";
             goHome();
+        }
+
+        function openAddProductModal() {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('addProductSection').classList.remove('hidden');
+        }
+
+        function saveNewCatalogProduct() {
+            const name = document.getElementById('newProdNameInput').value.trim().toUpperCase();
+            const category = document.getElementById('newProdCategorySelect').value;
+
+            if (!name) {
+                alert("Inserisci il nome del prodotto.");
+                return;
+            }
+
+            if (!catalog[category].items.includes(name)) {
+                catalog[category].items.push(name);
+                saveCatalogStorage();
+                initCatalogCategories();
+                alert(`Prodotto "${name}" aggiunto con successo al reparto!`);
+                goHome();
+            } else {
+                alert("Questo prodotto è già presente in questo reparto.");
+            }
+        }
+
+        function openManageProductsScreen() {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('manageProductsSection').classList.remove('hidden');
+            
+            const container = document.getElementById('manageCatalogContainer');
+            container.innerHTML = '';
+
+            Object.keys(catalog).forEach(catKey => {
+                const catData = catalog[catKey];
+                const div = document.createElement('div');
+                div.className = "bg-white rounded-2xl border-2 border-slate-200 shadow-md p-4 flex flex-col";
+                div.innerHTML = `
+                    <h3 class="font-extrabold text-sm mb-3 text-slate-900 border-b pb-2">${catData.title}</h3>
+                    <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        ${catData.items.map((item, idx) => `
+                            <div class="flex justify-between items-center bg-slate-50 p-2 rounded-xl border border-slate-200 text-xs font-bold">
+                                <span class="text-slate-800 truncate mr-2">${item}</span>
+                                <button onclick="deleteCatalogItem('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-bold px-2 py-1 rounded">❌</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteCatalogItem(catKey, index) {
+            if (confirm("Vuoi davvero rimuovere questo prodotto dal catalogo?")) {
+                catalog[catKey].items.splice(index, 1);
+                saveCatalogStorage();
+                openManageProductsScreen();
+                initCatalogCategories();
+            }
+        }
+
+        function showHistory() {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('historySection').classList.remove('hidden');
+
+            let history = JSON.parse(localStorage.getItem('galleon_history_v3')) || [];
+            const container = document.getElementById('historyContainer');
+            const kpiContainer = document.getElementById('statsDashboard');
+            
+            container.innerHTML = '';
+            kpiContainer.innerHTML = '';
+
+            // Calcolo KPI rapidi
+            const totalOrders = history.length;
+            let totalItemsCount = 0;
+            history.forEach(h => { if(h.items) totalItemsCount += h.items.length; });
+
+            kpiContainer.innerHTML = `
+                <div class="bg-blue-50 border-2 border-blue-200 p-4 rounded-2xl shadow-xs">
+                    <span class="text-xs font-extrabold text-blue-900 uppercase">Totale Ordini</span>
+                    <h3 class="text-2xl font-black text-blue-950 mt-1">${totalOrders}</h3>
+                </div>
+                <div class="bg-emerald-50 border-2 border-emerald-200 p-4 rounded-2xl shadow-xs">
+                    <span class="text-xs font-extrabold text-emerald-900 uppercase">Prodotti Ordinati</span>
+                    <h3 class="text-2xl font-black text-emerald-950 mt-1">${totalItemsCount}</h3>
+                </div>
+            `;
+
+            if (history.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500 font-bold py-8">Nessun ordine nello storico.</p>`;
+                return;
+            }
+
+            history.forEach(h => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-2xl border-2 border-slate-200 shadow-sm space-y-3";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center border-b pb-2 flex-wrap gap-2">
+                        <div>
+                            <span class="font-black text-sm text-slate-900">📅 ${h.date}</span>
+                            <span class="ml-3 text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg">👤 ${h.author}</span>
+                        </div>
+                        <button onclick="deleteHistoryRecord(${h.id})" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1.5 rounded-xl text-xs font-bold border border-rose-200">🗑️ Elimina</button>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-2">
+                        ${h.items.map(i => `
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200 text-xs flex justify-between font-bold">
+                                <span class="text-slate-800">${i.name}</span>
+                                <span class="text-slate-600">Qtà: ${i.qty}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function deleteHistoryRecord(id) {
+            if (confirm("Vuoi eliminare questo report dallo storico?")) {
+                let history = JSON.parse(localStorage.getItem('galleon_history_v3')) || [];
+                history = history.filter(h => h.id !== id);
+                localStorage.setItem('galleon_history_v3', JSON.stringify(history));
+                showHistory();
+            }
+        }
+
+        function exportHistoryJSON() {
+            let history = localStorage.getItem('galleon_history_v3') || "[]";
+            let blob = new Blob([history], {type: "application/json"});
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `storico_spesa_galleon_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        function exportHistoryExcel() {
+            let history = JSON.parse(localStorage.getItem('galleon_history_v3')) || [];
+            let csv = "Data,Operatore,Prodotto,Quantita,Note\n";
+            history.forEach(h => {
+                h.items.forEach(i => {
+                    csv += `"${h.date}","${h.author}","${i.name}","${i.qty}","${i.note || ''}"\n`;
+                });
+            });
+            let blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `storico_spesa_galleon_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
         }
     </script>
 </body>
