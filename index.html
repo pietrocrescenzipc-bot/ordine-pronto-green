@@ -341,7 +341,7 @@
 
     </main>
 
-    <!-- LOGICA E SINCRONIZZAZIONE FIREBASE (Stile Tombola) -->
+    <!-- LOGICA E SINCRONIZZAZIONE DIRETTA STILE TOMBOLA -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForGalleonApp2026",
@@ -354,8 +354,7 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
-        const sessionRef = db.ref('galleon_spesa_live_v8/session');
-        const catalogRef = db.ref('galleon_spesa_live_v8/catalog');
+        const rootRef = db.ref('galleon_spesa_live_v9');
 
         let catalog = {
             ortofrutta: {
@@ -404,13 +403,13 @@
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
         
-        let currentSession = JSON.parse(localStorage.getItem('galleon_session_v8')) || { 
+        let currentSession = JSON.parse(localStorage.getItem('galleon_session_v9')) || { 
             date: new Date().toISOString().split('T')[0], 
             author: "Orsola", 
             items: [] 
         };
         
-        let isReceivingUpdate = false;
+        let isSyncing = false;
 
         window.onload = function() {
             document.getElementById('inputDate').value = currentSession.date;
@@ -423,31 +422,32 @@
             renderAuthorButtons();
             initCatalogCategories();
 
-            // Sincronizzazione in tempo reale stile "Tombola" (ascolto mirato sui nodi)
-            sessionRef.on('value', (snapshot) => {
-                const serverSession = snapshot.val();
-                if (serverSession) {
-                    isReceivingUpdate = true;
-                    currentSession = serverSession;
-                    localStorage.setItem('galleon_session_v8', JSON.stringify(currentSession));
+            // Ascolto in tempo reale identico alla logica Tombola
+            rootRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    isSyncing = true;
+                    if (data.session) {
+                        currentSession = data.session;
+                        localStorage.setItem('galleon_session_v9', JSON.stringify(currentSession));
+                    }
+                    if (data.catalog) {
+                        catalog = data.catalog;
+                        initCatalogCategories();
+                    }
                     applySessionToDOM();
-                    isReceivingUpdate = false;
-                }
-            });
-
-            catalogRef.on('value', (snapshot) => {
-                const serverCatalog = snapshot.val();
-                if (serverCatalog) {
-                    catalog = serverCatalog;
-                    initCatalogCategories();
+                    isSyncing = false;
                 }
             });
         };
 
-        function syncStateToCloud() {
-            if (isReceivingUpdate) return;
-            localStorage.setItem('galleon_session_v8', JSON.stringify(currentSession));
-            sessionRef.set(currentSession);
+        function pushToFirebase() {
+            if (isSyncing) return;
+            localStorage.setItem('galleon_session_v9', JSON.stringify(currentSession));
+            rootRef.set({
+                session: currentSession,
+                catalog: catalog
+            });
         }
 
         function applySessionToDOM() {
@@ -511,7 +511,7 @@
                     document.getElementById('inputAuthor').value = auth;
                     currentSession.author = auth;
                     document.getElementById('displayAuthor').innerText = auth;
-                    syncStateToCloud();
+                    pushToFirebase();
                 };
                 container.appendChild(btn);
             });
@@ -587,13 +587,13 @@
                     currentSession.items.splice(existingIndex, 1);
                 }
             }
-            syncStateToCloud();
+            pushToFirebase();
         }
 
         function resetCatalogSelection() {
             if (confirm("Vuoi deselezionare tutti i prodotti della spesa corrente?")) {
                 currentSession.items = [];
-                syncStateToCloud();
+                pushToFirebase();
                 applySessionToDOM();
             }
         }
@@ -607,7 +607,7 @@
             document.getElementById('displayDate').innerText = dateVal;
             document.getElementById('displayAuthor').innerText = authorVal;
 
-            syncStateToCloud();
+            pushToFirebase();
             
             document.getElementById('setupSection').classList.add('hidden');
             document.getElementById('createSection').classList.remove('hidden');
@@ -656,7 +656,7 @@
                 return;
             }
 
-            syncStateToCloud();
+            pushToFirebase();
             document.getElementById('createSection').classList.add('hidden');
             document.getElementById('reviewSection').classList.remove('hidden');
             
@@ -676,7 +676,7 @@
         }
 
         function confirmAndSaveShoppingList() {
-            syncStateToCloud();
+            pushToFirebase();
             document.getElementById('reviewSection').classList.add('hidden');
             document.getElementById('postSaveSection').classList.remove('hidden');
             
@@ -701,7 +701,7 @@
             }
 
             currentSession.items.push({ name, qty, note, taken: false });
-            syncStateToCloud();
+            pushToFirebase();
 
             document.getElementById('extraPostName').value = '';
             document.getElementById('extraPostQty').value = '';
@@ -755,7 +755,7 @@
 
         function toggleItemTaken(idx) {
             currentSession.items[idx].taken = !currentSession.items[idx].taken;
-            syncStateToCloud();
+            pushToFirebase();
             renderActiveShoppingList();
         }
 
@@ -804,9 +804,9 @@
         }
 
         function confirmAndFinalizeShopping() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v8')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
             
-            // FILTRAGGIO RIGOROSO: Vengono salvati nello storico SOLO i prodotti con taken === true
+            // ARCHIVIAZIONE STORICO: SOLO i prodotti presi (taken === true)
             const onlyTakenItems = currentSession.items.filter(i => i.taken);
 
             if (onlyTakenItems.length > 0) {
@@ -816,12 +816,12 @@
                     items: onlyTakenItems,
                     timestamp: Date.now()
                 });
-                localStorage.setItem('galleon_history_v8', JSON.stringify(history));
+                localStorage.setItem('galleon_history_v9', JSON.stringify(history));
             }
 
-            // I prodotti NON presi rimangono in memoria per la prossima volta
+            // I prodotti NON presi rimangono in memoria
             currentSession.items = currentSession.items.filter(i => !i.taken);
-            syncStateToCloud();
+            pushToFirebase();
 
             document.getElementById('summaryModalSection').classList.add('hidden');
             goHome();
@@ -831,7 +831,7 @@
         function clearEntireShopping() {
             if (confirm("Vuoi svuotare interamente la spesa corrente?")) {
                 currentSession.items = [];
-                syncStateToCloud();
+                pushToFirebase();
                 renderActiveShoppingList();
             }
         }
@@ -852,7 +852,7 @@
 
             if (!catalog[category].items.includes(name)) {
                 catalog[category].items.push(name);
-                catalogRef.set(catalog);
+                pushToFirebase();
                 alert(`Prodotto "${name}" aggiunto con successo al reparto ${catalog[category].title}!`);
                 document.getElementById('newProdNameInput').value = '';
                 goHome();
@@ -897,7 +897,7 @@
         function deleteCatalogItem(catKey, idx) {
             if (confirm("Vuoi rimuovere questo prodotto dal catalogo?")) {
                 catalog[catKey].items.splice(idx, 1);
-                catalogRef.set(catalog);
+                pushToFirebase();
                 openManageProductsScreen();
             }
         }
@@ -911,7 +911,7 @@
             container.innerHTML = '';
             statsDashboard.innerHTML = '';
 
-            let history = JSON.parse(localStorage.getItem('galleon_history_v8')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
 
             let totalOrders = history.length;
             let totalItemsBought = history.reduce((acc, h) => acc + h.items.length, 0);
@@ -951,15 +951,15 @@
 
         function deleteHistoryItem(idx) {
             if (confirm("Vuoi eliminare questo storico?")) {
-                let history = JSON.parse(localStorage.getItem('galleon_history_v8')) || [];
+                let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
                 history.splice(idx, 1);
-                localStorage.setItem('galleon_history_v8', JSON.stringify(history));
+                localStorage.setItem('galleon_history_v9', JSON.stringify(history));
                 showHistory();
             }
         }
 
         function exportHistoryExcel() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v8')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
             if (history.length === 0) {
                 alert("Nessun dato nello storico da esportare!");
                 return;
@@ -980,7 +980,7 @@
         }
 
         function exportHistoryJSON() {
-            let history = JSON.parse(localStorage.getItem('galleon_history_v8')) || [];
+            let history = JSON.parse(localStorage.getItem('galleon_history_v9')) || [];
             if (history.length === 0) {
                 alert("Nessun dato nello storico da esportare!");
                 return;
