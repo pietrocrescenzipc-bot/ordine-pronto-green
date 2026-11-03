@@ -632,7 +632,7 @@
                 id: Date.now(),
                 date: currentSession.date,
                 author: currentSession.author,
-                items: currentSession.items
+                items: JSON.parse(JSON.stringify(currentSession.items))
             });
             localStorage.setItem('galleon_history_v3', JSON.stringify(history));
         }
@@ -741,10 +741,24 @@
             document.getElementById('progressBar').style.width = `${percent}%`;
         }
 
+        // Funzione aggiornata: salva l'ordine intero nello storico, archivia,
+        // ma rimuove solo i prodotti spuntati. Quelli NON spuntati rimangono in memoria!
         function completeShopping() {
-            saveHistoryRecord();
-            alert("Ottimo! Spesa completata, salvata nello storico e schermata ripulita.");
-            resetCatalogSelection();
+            saveHistoryRecord(); // Registra tutto l'ordine nello storico
+            
+            // Filtriamo la lista: teniamo solo i prodotti che NON sono stati spuntati (es. non trovati)
+            if (currentSession.items && currentSession.items.length > 0) {
+                currentSession.items = currentSession.items.filter(item => !item.checked);
+            }
+
+            autoSaveDraft();
+            
+            if (currentSession.items.length > 0) {
+                alert("Spesa completata e archiviata! I prodotti non trovati (non spuntati) sono rimasti in memoria per il prossimo giro.");
+            } else {
+                alert("Spesa completata, salvata nello storico e schermata ripulita con successo!");
+            }
+            
             goHome();
         }
 
