@@ -636,8 +636,8 @@
         }
 
         function goToReviewScreen() {
-            if (currentSession.items.length === 0) {
-                alert("Seleziona almeno un prodotto prima di procedere!");
+            if (!currentSession.items || currentSession.items.length === 0) {
+                alert("Seleziona almeno un prodotto prima di procedere con il riepilogo!");
                 return;
             }
             document.getElementById('createSection').classList.add('hidden');
