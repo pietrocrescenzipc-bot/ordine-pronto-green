@@ -471,12 +471,14 @@
                 document.getElementById('displayAuthor').innerText = currentSession.author;
             }
 
+            // Deseleziona tutto visivamente
             document.querySelectorAll('input[type="checkbox"]').forEach(chk => chk.checked = false);
             document.querySelectorAll('input[type="text"]').forEach(txt => {
                 if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate')) txt.value = '';
             });
 
-            if (currentSession.items) {
+            // Riconnette gli elementi salvati alla grafica
+            if (currentSession.items && currentSession.items.length > 0) {
                 currentSession.items.forEach(i => {
                     Object.keys(catalog).forEach(catKey => {
                         catalog[catKey].items.forEach((item, itemIdx) => {
@@ -485,11 +487,9 @@
                                 const chk = document.getElementById(`cat-check-${globalId}`);
                                 const qty = document.getElementById(`cat-qty-${globalId}`);
                                 const note = document.getElementById(`cat-note-${globalId}`);
-                                if (chk && qty) {
-                                    chk.checked = true;
-                                    qty.value = i.qty || '';
-                                    if (note) note.value = i.note || "";
-                                }
+                                if (chk) chk.checked = true;
+                                if (qty) qty.value = i.qty || '';
+                                if (note) note.value = i.note || '';
                             }
                         });
                     });
@@ -571,7 +571,7 @@
                 container.appendChild(cardDiv);
             });
             
-            // Allinea le checkbox e i dati salvati subito dopo aver creato il DOM
+            // Allinea le checkbox subito dopo aver inserito gli elementi nel DOM
             applySessionToDOM();
         }
 
@@ -582,13 +582,15 @@
             const note = document.getElementById(`cat-note-${globalId}`);
             const itemName = catalog[catKey].items[itemIdx];
 
+            if (!chk) return;
+
             let existingIndex = currentSession.items.findIndex(i => i.name === itemName);
 
-            if (chk && chk.checked) {
+            if (chk.checked) {
                 const itemObj = {
                     name: itemName,
-                    qty: qty && qty.value.trim() ? qty.value.trim() : "1",
-                    note: note ? note.value.trim() : "",
+                    qty: (qty && qty.value.trim()) ? qty.value.trim() : "1",
+                    note: (note && note.value.trim()) ? note.value.trim() : "",
                     taken: existingIndex >= 0 ? currentSession.items[existingIndex].taken : false
                 };
                 if (existingIndex >= 0) {
@@ -647,10 +649,35 @@
         }
 
         function goToReviewScreen() {
+            // Lettura diretta dal DOM per garantire la coerenza al 100% prima del passaggio
+            Object.keys(catalog).forEach(catKey => {
+                catalog[catKey].items.forEach((item, itemIdx) => {
+                    const globalId = `${catKey}-${itemIdx}`;
+                    const chk = document.getElementById(`cat-check-${globalId}`);
+                    if (chk && chk.checked) {
+                        const qty = document.getElementById(`cat-qty-${globalId}`);
+                        const note = document.getElementById(`cat-note-${globalId}`);
+                        const existingIdx = currentSession.items.findIndex(i => i.name === item);
+                        const itemObj = {
+                            name: item,
+                            qty: (qty && qty.value.trim()) ? qty.value.trim() : "1",
+                            note: (note && note.value.trim()) ? note.value.trim() : "",
+                            taken: existingIdx >= 0 ? currentSession.items[existingIdx].taken : false
+                        };
+                        if (existingIdx >= 0) {
+                            currentSession.items[existingIdx] = itemObj;
+                        } else {
+                            currentSession.items.push(itemObj);
+                        }
+                    }
+                });
+            });
+
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("Seleziona almeno un prodotto prima di procedere con il riepilogo!");
                 return;
             }
+
             document.getElementById('createSection').classList.add('hidden');
             document.getElementById('reviewSection').classList.remove('hidden');
             
