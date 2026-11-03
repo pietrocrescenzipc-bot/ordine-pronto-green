@@ -140,7 +140,7 @@
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200 flex-wrap gap-3">
                 <div>
                     <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Ordine</h2>
-                    <p class="text-slate-500 text-xs md:text-sm">Seleziona i prodotti suddivisi per reparto.</p>
+                    <p class="text-slate-500 text-xs md:text-sm">Seleziona i prodotti e imposta quantità e note direttamente nei reparti.</p>
                 </div>
                 <div class="flex gap-2">
                     <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Azzera</button>
@@ -148,7 +148,7 @@
                 </div>
             </div>
 
-            <!-- Griglia Categorie (Spazio ampliato) -->
+            <!-- Griglia Categorie -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[62vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
 
             <!-- Pulsante Fisso in Basso -->
@@ -204,20 +204,11 @@
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-amber-100 text-amber-800 text-3xl mb-2">📋</div>
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
-                <p class="text-slate-500 text-sm mt-1">Verifica i quantitativi e aggiungi eventuali extra prima della conferma.</p>
-            </div>
-
-            <!-- Aggiunta Rapida con Quantità e Nota (Spostata qui) -->
-            <div class="bg-amber-50 p-3.5 rounded-2xl border-2 border-amber-300 mb-5 flex flex-wrap sm:flex-nowrap gap-2 items-center shadow-inner w-full">
-                <span class="font-extrabold text-amber-900 text-xs uppercase tracking-wider w-full sm:w-auto">✨ Aggiunta extra:</span>
-                <input type="text" id="customItemName" placeholder="Nome prodotto..." class="flex-grow min-w-[120px] p-2.5 border-2 border-amber-200 rounded-xl text-xs sm:text-sm bg-white font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
-                <input type="text" id="customItemQty" placeholder="Qtà" class="w-16 sm:w-20 p-2.5 border-2 border-amber-200 rounded-xl text-xs sm:text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
-                <input type="text" id="customItemNote" placeholder="Nota (es. cassa)" class="w-24 sm:w-32 p-2.5 border-2 border-amber-200 rounded-xl text-xs sm:text-sm bg-white text-center font-bold text-slate-900 focus:outline-none focus:border-amber-500 shadow-xs">
-                <button onclick="addCustomItem()" class="btn-pro bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm shadow-md whitespace-nowrap w-full sm:w-auto">➕ Aggiungi</button>
+                <p class="text-slate-500 text-sm mt-1">Verifica i quantitativi e le note prima della conferma ufficiale.</p>
             </div>
 
             <div class="mb-6">
-                <div id="reviewItemsList" class="max-h-[42vh] overflow-y-auto bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner w-full"></div>
+                <div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner w-full"></div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
@@ -475,7 +466,7 @@
                         <span>${catData.title}</span>
                         <span class="bg-black/25 text-xs px-2.5 py-0.5 rounded-full">${catData.items.length}</span>
                     </div>
-                    <div class="p-3 space-y-2.5 flex-grow bg-slate-50/50 w-full" id="cat-list-${catKey}"></div>
+                    <div class="p-3 space-y-3 flex-grow bg-slate-50/50 w-full" id="cat-list-${catKey}"></div>
                 `;
                 
                 container.appendChild(catDiv);
@@ -497,6 +488,9 @@
                                 <button type="button" onclick="adjustQty('${globalId}', 1)" class="btn-pro bg-white hover:bg-slate-100 font-extrabold w-7 h-7 rounded-xl border border-slate-300 flex items-center justify-center text-xs shadow-xs">+</button>
                             </div>
                         </div>
+                        <div class="w-full pt-1 border-t border-slate-200/60">
+                            <input type="text" id="cat-note-${globalId}" placeholder="Note (es. cassa, bancale...)" oninput="autoSaveDraft()" class="w-full p-1.5 px-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-white text-slate-900 shadow-inner focus:outline-none focus:border-amber-500">
+                        </div>
                     `;
                     listContainer.appendChild(row);
                 });
@@ -514,33 +508,6 @@
                 chk.checked = true;
             }
             autoSaveDraft();
-        }
-
-        // Funzione aggiunta rapida aggiornata (ora legata alla schermata controllo finale)
-        function addCustomItem() {
-            const nameInput = document.getElementById('customItemName');
-            const qtyInput = document.getElementById('customItemQty');
-            const noteInput = document.getElementById('customItemNote');
-            
-            const name = nameInput.value.trim().toUpperCase();
-            const qty = qtyInput.value.trim() || "1";
-            const note = noteInput.value.trim();
-
-            if (!name) {
-                alert("Inserisci il nome del prodotto personalizzato.");
-                return;
-            }
-
-            if (!currentSession.items) currentSession.items = [];
-            currentSession.items.push({ name, qty, note, checked: false });
-            autoSaveDraft();
-
-            nameInput.value = '';
-            qtyInput.value = '';
-            noteInput.value = '';
-            
-            // Ricarichiamo la schermata di controllo per mostrare il nuovo extra aggiunto
-            goToReviewScreen();
         }
 
         function startMode(mode) {
@@ -593,11 +560,12 @@
                     const globalId = `${catKey}-${itemIdx}`;
                     const chk = document.getElementById(`cat-check-${globalId}`);
                     const qty = document.getElementById(`cat-qty-${globalId}`);
+                    const note = document.getElementById(`cat-note-${globalId}`);
                     if (chk && chk.checked) {
                         collected.push({
                             name: item,
                             qty: qty.value.trim() || "1",
-                            note: "",
+                            note: note ? note.value.trim() : "",
                             checked: false
                         });
                     }
@@ -672,7 +640,7 @@
                 div.className = "bg-white p-2.5 rounded-xl border border-slate-200 flex justify-between items-center text-xs font-bold w-full";
                 div.innerHTML = `
                     <span class="text-slate-900 truncate mr-2">${i.name}</span>
-                    <span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded shrink-0">Qtà: ${i.qty}</span>
+                    <span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded shrink-0">Qtà: ${i.qty} ${i.note ? '('+i.note+')' : ''}</span>
                 `;
                 container.appendChild(div);
             });
@@ -775,8 +743,10 @@
                     const globalId = `${catKey}-${itemIdx}`;
                     const chk = document.getElementById(`cat-check-${globalId}`);
                     const qty = document.getElementById(`cat-qty-${globalId}`);
+                    const note = document.getElementById(`cat-note-${globalId}`);
                     if (chk) chk.checked = false;
                     if (qty) qty.value = "";
+                    if (note) note.value = "";
                 });
             });
             currentSession.items = [];
@@ -904,7 +874,7 @@
                         ${h.items.map(i => `
                             <div class="bg-slate-50 p-2 rounded-xl border border-slate-200 text-xs flex justify-between font-bold w-full box-border">
                                 <span class="text-slate-800 truncate mr-2">${i.name}</span>
-                                <span class="text-slate-600 shrink-0">Qtà: ${i.qty}</span>
+                                <span class="text-slate-600 shrink-0">Qtà: ${i.qty} ${i.note ? '('+i.note+')' : ''}</span>
                             </div>
                         `).join('')}
                     </div>
