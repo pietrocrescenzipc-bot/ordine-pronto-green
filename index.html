@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spesa Giornaliera | The Galleon Pizzeria Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
@@ -59,13 +58,13 @@
 
         <div class="flex items-center gap-2">
             <div class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-xl font-extrabold flex items-center gap-1.5 shadow-xs">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SYNC LIVE
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ONLINE
             </div>
 
-            <div id="userInfoHeader" class="text-xs md:text-sm bg-slate-800/90 border border-slate-700/80 px-3 py-2 rounded-2xl font-bold hidden items-center gap-2 shadow-inner shrink-0">
+            <div id="userInfoHeader" class="text-xs md:text-sm bg-slate-800/90 border border-slate-700/80 px-3 py-2 rounded-2xl font-bold flex items-center gap-2 shadow-inner shrink-0">
                 <span id="displayDate" class="text-slate-300 hidden sm:inline"></span> 
                 <span class="text-slate-600 hidden sm:inline">•</span> 
-                <span class="text-amber-400 flex items-center gap-1">👤 <span id="displayAuthor"></span></span>
+                <span class="text-amber-400 flex items-center gap-1">👤 <span id="displayAuthor">Orsola</span></span>
                 <button onclick="resetSession()" class="ml-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded-xl text-[11px] font-extrabold transition">Cambia</button>
             </div>
         </div>
@@ -100,7 +99,7 @@
         </nav>
 
         <div class="pt-4 border-t border-slate-800 text-center text-xs text-slate-500 font-medium">
-            The Galleon • Sincronizzazione Live
+            The Galleon • Gestione Sicura
         </div>
     </div>
 
@@ -157,10 +156,8 @@
                 </div>
             </div>
 
-            <!-- Griglia Categorie -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[62vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
 
-            <!-- Pulsante Fisso in Basso -->
             <div class="sticky bottom-2 z-20 pt-2 bg-white/80 backdrop-blur-md rounded-2xl pb-1">
                 <button onclick="goToReviewScreen()" class="btn-pro w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 md:p-5 rounded-2xl text-base md:text-lg shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
                     🔍 AVANTI: CONTROLLA RIEPILOGO 🚀
@@ -235,7 +232,7 @@
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
-                <p class="text-slate-500 text-sm mt-1">L'ordine è stato registrato nello storico. Vuoi andare subito al supermercato a spuntarlo?</p>
+                <p class="text-slate-500 text-sm mt-1">L'ordine è pronto. Vuoi andare subito al supermercato a spuntarlo?</p>
             </div>
 
             <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs w-full">
@@ -337,10 +334,8 @@
                 </div>
             </div>
 
-            <!-- Pannello Statistiche KPI -->
             <div id="statsDashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
 
-            <!-- Lista Storico -->
             <div class="space-y-4 max-h-[50vh] overflow-y-auto pr-2 w-full" id="historyContainer"></div>
         </section>
 
@@ -359,7 +354,7 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
-        const dbRef = db.ref('galleon_spesa_live_v5');
+        const dbRef = db.ref('galleon_spesa_live_v6');
 
         let catalog = {
             ortofrutta: {
@@ -407,48 +402,56 @@
         };
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
-        let currentSession = JSON.parse(localStorage.getItem('galleon_local_session')) || { date: new Date().toISOString().split('T')[0], author: "Orsola", items: [] };
+        
+        // Recupero immediato dallo storage locale per garantire zero perdita di dati
+        let currentSession = JSON.parse(localStorage.getItem('galleon_session_v6')) || { 
+            date: new Date().toISOString().split('T')[0], 
+            author: "Orsola", 
+            items: [] 
+        };
+        
         let isSyncing = false;
 
         window.onload = function() {
             document.getElementById('inputDate').value = currentSession.date;
             if (currentSession.author) {
                 document.getElementById('inputAuthor').value = currentSession.author;
-                document.getElementById('displayDate').innerText = currentSession.date;
                 document.getElementById('displayAuthor').innerText = currentSession.author;
-                document.getElementById('userInfoHeader').classList.remove('hidden');
-                document.getElementById('userInfoHeader').classList.add('flex');
             }
+            document.getElementById('displayDate').innerText = currentSession.date;
+            
             renderAuthorButtons();
             initCatalogCategories();
 
-            // Sincronizzazione in tempo reale blindata (stile Tombola)
+            // Ascoltatore Cloud (gestito in modo sicuro con fallback locale)
             dbRef.on('value', (snapshot) => {
                 const data = snapshot.val();
-                if (data) {
-                    isSyncing = true;
-                    if (data.catalog) {
-                        catalog = data.catalog;
-                        initCatalogCategories();
-                    }
-                    if (data.session && data.session.items && data.session.items.length > 0) {
-                        currentSession = data.session;
-                        localStorage.setItem('galleon_local_session', JSON.stringify(currentSession));
-                        applySessionToDOM();
-                    }
-                    isSyncing = false;
+                if (data && data.session && data.session.items) {
+                    // Prende i dati dal cloud se contengono elementi validi
+                    currentSession = data.session;
+                    localStorage.setItem('galleon_session_v6', JSON.stringify(currentSession));
+                    applySessionToDOM();
                 }
+            }, (error) => {
+                console.warn("Modalità offline attiva o restrizioni Cloud rilevate:", error);
             });
         };
 
         function syncStateToCloud() {
             if (isSyncing) return;
-            localStorage.setItem('galleon_local_session', JSON.stringify(currentSession));
-            dbRef.set({
-                session: currentSession,
-                catalog: catalog,
-                timestamp: Date.now()
-            });
+            // Salva sempre prima in locale (garanzia al 100%)
+            localStorage.setItem('galleon_session_v6', JSON.stringify(currentSession));
+            
+            // Tenta la sincronizzazione cloud in background
+            try {
+                dbRef.set({
+                    session: currentSession,
+                    catalog: catalog,
+                    timestamp: Date.now()
+                });
+            } catch (e) {
+                console.error("Errore sync cloud:", e);
+            }
         }
 
         function applySessionToDOM() {
@@ -457,8 +460,6 @@
                 document.getElementById('inputAuthor').value = currentSession.author;
                 document.getElementById('displayDate').innerText = currentSession.date;
                 document.getElementById('displayAuthor').innerText = currentSession.author;
-                document.getElementById('userInfoHeader').classList.remove('hidden');
-                document.getElementById('userInfoHeader').classList.add('flex');
             }
 
             if (currentSession.items) {
@@ -579,7 +580,7 @@
 
         function startMode(mode) {
             const dateVal = document.getElementById('inputDate').value;
-            const authorVal = document.getElementById('inputAuthor').value.trim() || "Orsola";
+            const authorVal = document.getElementById('inputAuthor').value.trim() || currentSession.author || "Orsola";
 
             currentSession.date = dateVal;
             currentSession.author = authorVal;
@@ -587,8 +588,6 @@
 
             document.getElementById('displayDate').innerText = dateVal;
             document.getElementById('displayAuthor').innerText = authorVal;
-            document.getElementById('userInfoHeader').classList.remove('hidden');
-            document.getElementById('userInfoHeader').classList.add('flex');
 
             if (mode === 'create') {
                 document.getElementById('setupSection').classList.add('hidden');
@@ -596,7 +595,7 @@
             }
         }
 
-        // ACCESSO IMMEDIATO AL SUPERMERCATO (Legge subito la lista dal Cloud/Memoria)
+        // ACCESSO IMMEDIATO AL SUPERMERCATO (Non chiede più il nome e apre subito la lista)
         function goToSupermarketDirect() {
             const dateVal = document.getElementById('inputDate').value;
             const authorVal = document.getElementById('inputAuthor').value.trim() || currentSession.author || "Orsola";
@@ -632,7 +631,6 @@
                 });
             });
 
-            // Se l'utente non ha spuntato nulla al momento ma c'erano già prodotti salvati in precedenza, li mantiene intatti
             if (collected.length === 0 && currentSession.items && currentSession.items.length > 0) {
                 return;
             }
@@ -838,7 +836,7 @@
             syncStateToCloud();
 
             document.getElementById('summaryModalSection').classList.add('hidden');
-            alert("Spesa completata! I prodotti presi sono nello storico, quelli non trovati sono rimasti in memoria.");
+            alert("Spesa completata! I prodotti presi sono nello storico.");
             goHome();
         }
 
@@ -887,10 +885,8 @@
         }
 
         function resetSession() {
-            localStorage.removeItem('galleon_local_session');
+            localStorage.removeItem('galleon_session_v6');
             currentSession = { date: new Date().toISOString().split('T')[0], author: "Orsola", items: [] };
-            document.getElementById('userInfoHeader').classList.add('hidden');
-            document.getElementById('userInfoHeader').classList.remove('flex');
             document.getElementById('inputAuthor').value = "";
             resetCatalogSelection();
             syncStateToCloud();
