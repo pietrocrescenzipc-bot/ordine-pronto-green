@@ -471,13 +471,11 @@
                 document.getElementById('displayAuthor').innerText = currentSession.author;
             }
 
-            // Deseleziona tutto visivamente
             document.querySelectorAll('input[type="checkbox"]').forEach(chk => chk.checked = false);
             document.querySelectorAll('input[type="text"]').forEach(txt => {
                 if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate')) txt.value = '';
             });
 
-            // Riconnette gli elementi salvati alla grafica
             if (currentSession.items && currentSession.items.length > 0) {
                 currentSession.items.forEach(i => {
                     Object.keys(catalog).forEach(catKey => {
@@ -571,7 +569,6 @@
                 container.appendChild(cardDiv);
             });
             
-            // Allinea le checkbox subito dopo aver inserito gli elementi nel DOM
             applySessionToDOM();
         }
 
@@ -649,7 +646,8 @@
         }
 
         function goToReviewScreen() {
-            // Lettura diretta dal DOM per garantire la coerenza al 100% prima del passaggio
+            // Sola lettura diretta dal DOM: scansiona tutte le categorie e raccoglie le spunte
+            currentSession.items = [];
             Object.keys(catalog).forEach(catKey => {
                 catalog[catKey].items.forEach((item, itemIdx) => {
                     const globalId = `${catKey}-${itemIdx}`;
@@ -657,18 +655,12 @@
                     if (chk && chk.checked) {
                         const qty = document.getElementById(`cat-qty-${globalId}`);
                         const note = document.getElementById(`cat-note-${globalId}`);
-                        const existingIdx = currentSession.items.findIndex(i => i.name === item);
-                        const itemObj = {
+                        currentSession.items.push({
                             name: item,
                             qty: (qty && qty.value.trim()) ? qty.value.trim() : "1",
                             note: (note && note.value.trim()) ? note.value.trim() : "",
-                            taken: existingIdx >= 0 ? currentSession.items[existingIdx].taken : false
-                        };
-                        if (existingIdx >= 0) {
-                            currentSession.items[existingIdx] = itemObj;
-                        } else {
-                            currentSession.items.push(itemObj);
-                        }
+                            taken: false
+                        });
                     }
                 });
             });
@@ -678,6 +670,7 @@
                 return;
             }
 
+            syncStateToCloud();
             document.getElementById('createSection').classList.add('hidden');
             document.getElementById('reviewSection').classList.remove('hidden');
             
