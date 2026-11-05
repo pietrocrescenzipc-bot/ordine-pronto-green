@@ -859,7 +859,7 @@
             });
         }
 
-        /* FORMATTAZIONE WHATSAPP AGGIORNATA (PRODOTTO IN GRASSETTO, QUANTITÀ E NOTA SEPARATE DA VIRGOLA) */
+        /* FORMATTAZIONE WHATSAPP AGGIORNATA: PRODOTTO IN GRASSETTO E QUANTITÀ/NOTA A CAPO CON VIRGOLA */
         function sendWhatsAppList() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La lista della spesa è vuota!");
@@ -894,10 +894,13 @@
                 text += `\`\`\`${cleanTitle.toUpperCase()}\`\`\`\n`;
 
                 grouped[catKey].forEach(i => {
-                    text += `• *${i.name}*`;
-                    if (i.qty) text += `, ${i.qty}`;
-                    if (i.note) text += `, ${i.note}`;
-                    text += `\n`;
+                    text += `• *${i.name}*\n`;
+                    let details = [];
+                    if (i.qty) details.push(i.qty);
+                    if (i.note) details.push(i.note);
+                    if (details.length > 0) {
+                        text += `  ${details.join(', ')}\n`;
+                    }
                 });
                 text += `\n`;
             });
