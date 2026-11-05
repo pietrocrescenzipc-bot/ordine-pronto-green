@@ -242,20 +242,41 @@
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
-                <p class="text-slate-500 text-sm mt-1">L'ordine è pronto. Vuoi mandarlo su WhatsApp o andare al supermercato?</p>
+                <p class="text-slate-500 text-sm mt-1">Invia la lista ordinata su WhatsApp o vai al supermercato.</p>
             </div>
 
-            <!-- Riquadro WhatsApp personalizzabile -->
-            <div class="bg-emerald-50/90 p-5 rounded-2xl border-2 border-emerald-300 mb-6 shadow-inner text-center">
-                <h3 class="font-extrabold text-emerald-950 mb-2 text-sm uppercase tracking-wider">📲 Invia Lista Ordine via WhatsApp</h3>
-                <p class="text-slate-600 text-xs mb-3">Inserisci il numero di telefono a cui inviare la spesa:</p>
+            <!-- Riquadro WhatsApp con Rubrica rapida e Selettore Lingua -->
+            <div class="bg-emerald-50/90 p-5 rounded-2xl border-2 border-emerald-300 mb-6 shadow-inner">
+                <h3 class="font-extrabold text-emerald-950 mb-3 text-sm uppercase tracking-wider text-center">📲 Invio WhatsApp Ordinato</h3>
+                
+                <!-- Selezione Lingua -->
+                <div class="mb-4 max-w-xs mx-auto">
+                    <label class="block text-slate-700 font-bold mb-1 text-xs uppercase tracking-wider text-center">🌐 Lingua Messaggio:</label>
+                    <select id="whatsappLangSelect" class="w-full p-2 border-2 border-emerald-300 rounded-xl text-sm font-bold bg-white text-slate-900 focus:outline-none text-center shadow-xs">
+                        <option value="it">🇮🇹 Italiano</option>
+                        <option value="bn">🇧🇩 বাংলা (Bengalese)</option>
+                    </select>
+                </div>
+
+                <!-- Rubrica Rapida (Cliccabile) -->
+                <div class="mb-3">
+                    <label class="block text-slate-700 font-bold mb-1.5 text-xs uppercase tracking-wider text-center">Rubrica Rapida (Tocca per selezionare):</label>
+                    <div class="flex flex-wrap justify-center gap-2" id="whatsappContactsContainer">
+                        <!-- Generato dinamicamente via JS -->
+                    </div>
+                </div>
+
+                <!-- Campo Numero -->
                 <div class="flex flex-wrap sm:flex-nowrap justify-center items-center gap-2 max-w-md mx-auto mb-4">
                     <span class="text-base font-extrabold text-slate-700 bg-white border-2 border-emerald-200 px-3 py-2.5 rounded-xl">+39</span>
-                    <input type="tel" id="whatsappPhoneInput" value="3391318613" placeholder="Es. 3391234567" class="w-full sm:w-auto flex-grow p-2.5 border-2 border-emerald-200 rounded-xl text-base font-extrabold text-slate-900 bg-white text-center focus:outline-none focus:border-emerald-500 shadow-xs">
+                    <input type="tel" id="whatsappPhoneInput" placeholder="Inserisci numero..." class="w-full sm:w-auto flex-grow p-2.5 border-2 border-emerald-200 rounded-xl text-base font-extrabold text-slate-900 bg-white text-center focus:outline-none focus:border-emerald-500 shadow-xs">
                 </div>
-                <button onclick="sendWhatsAppList()" class="btn-pro w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-8 py-4 rounded-2xl text-base md:text-lg shadow-lg shadow-emerald-600/20 inline-flex items-center justify-center gap-2.5">
-                    💬 INVIA SU WHATSAPP ADESSO
-                </button>
+
+                <div class="text-center">
+                    <button onclick="sendWhatsAppList()" class="btn-pro w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-8 py-4 rounded-2xl text-base md:text-lg shadow-lg shadow-emerald-600/20 inline-flex items-center justify-center gap-2.5">
+                        💬 INVIA LISTA SU WHATSAPP
+                    </button>
+                </div>
             </div>
 
             <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs w-full">
@@ -395,6 +416,7 @@
         let catalog = {
             ortofrutta: {
                 title: "🍏 Ortofrutta e Freschi",
+                titleBn: "🍏 ফলমূল এবং তাজা খাবার (Ortofrutta)",
                 headerBg: "bg-emerald-700 text-white",
                 cardBg: "bg-emerald-50/80 border-emerald-300",
                 textCol: "text-emerald-950",
@@ -402,6 +424,7 @@
             },
             macelleria: {
                 title: "🥩 Macelleria e Pescheria",
+                titleBn: "🥩 মাংস এবং মাছ (Macelleria e Pescheria)",
                 headerBg: "bg-rose-700 text-white",
                 cardBg: "bg-rose-50/80 border-rose-300",
                 textCol: "text-rose-950",
@@ -409,6 +432,7 @@
             },
             latticini: {
                 title: "🧀 Latticini, Salumi e Uova",
+                titleBn: "🧀 দুग्धজাত খাবার এবং ডিম (Latticini)",
                 headerBg: "bg-sky-700 text-white",
                 cardBg: "bg-sky-50/80 border-sky-300",
                 textCol: "text-sky-950",
@@ -416,6 +440,7 @@
             },
             dispensa: {
                 title: "🥫 Dispensa e Scatolame",
+                titleBn: "🥫 প্যান্ট্রি এবং ক্যানড ফুড (Dispensa)",
                 headerBg: "bg-amber-700 text-white",
                 cardBg: "bg-amber-50/80 border-amber-300",
                 textCol: "text-amber-950",
@@ -423,6 +448,7 @@
             },
             bevande: {
                 title: "🍷 Bevande e Alcolici",
+                titleBn: "🍷 পানীয় (Bevande)",
                 headerBg: "bg-indigo-700 text-white",
                 cardBg: "bg-indigo-50/80 border-indigo-300",
                 textCol: "text-indigo-950",
@@ -430,6 +456,7 @@
             },
             pulizia: {
                 title: "🧹 Pulizia e Detergenti",
+                titleBn: "🧹 পরিষ্কার পরিচ্ছন্নতা (Pulizia)",
                 headerBg: "bg-purple-700 text-white",
                 cardBg: "bg-purple-50/80 border-purple-300",
                 textCol: "text-purple-950",
@@ -438,6 +465,12 @@
         };
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
+        
+        // Rubrica rapida WhatsApp preimpostata
+        const whatsappContacts = [
+            { name: "Pietro", phone: "3391318613" },
+            { name: "Antonio", phone: "3465034838" }
+        ];
         
         let currentSession = JSON.parse(localStorage.getItem('galleon_session_v10')) || { 
             date: new Date().toISOString().split('T')[0], 
@@ -457,6 +490,7 @@
             document.getElementById('displayDate').innerText = currentSession.date;
             
             renderAuthorButtons();
+            renderWhatsAppContacts();
             initCatalogCategories();
             populateCategorySelect();
 
@@ -565,6 +599,22 @@
             });
         }
 
+        function renderWhatsAppContacts() {
+            const container = document.getElementById('whatsappContactsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            whatsappContacts.forEach(contact => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'btn-pro px-3 py-1.5 bg-white border-2 border-emerald-300 rounded-xl font-bold text-xs text-emerald-900 hover:bg-emerald-600 hover:text-white transition shadow-xs flex items-center gap-1.5';
+                btn.innerHTML = `👤 ${contact.name} <span class="text-[10px] opacity-75">(${contact.phone})</span>`;
+                btn.onclick = () => {
+                    document.getElementById('whatsappPhoneInput').value = contact.phone;
+                };
+                container.appendChild(btn);
+            });
+        }
+
         function initCatalogCategories() {
             const container = document.getElementById('catalogCategoriesContainer');
             if (!container) return;
@@ -578,6 +628,7 @@
                 let itemsHtml = '';
                 cat.items.forEach((item, idx) => {
                     const globalId = `${catKey}-${idx}`;
+                    /* Input con eventi puliti che prevengono la chiusura della tastiera */
                     itemsHtml += `
                         <div class="p-3 bg-white/95 rounded-xl border border-slate-200/80 shadow-2xs space-y-2">
                             <div class="flex items-center gap-3">
@@ -763,7 +814,7 @@
             });
         }
 
-        /* Funzione per formattare e inviare il messaggio WhatsApp elegante e ordinato per reparti */
+        /* Messaggio WhatsApp pulito, ordinato, senza troppe emoticon e con supporto multilingua (Italiano / Bengalese) */
         function sendWhatsAppList() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La lista della spesa è vuota!");
@@ -778,7 +829,9 @@
                 return;
             }
 
-            // Raggruppa gli articoli della spesa per reparto/categoria
+            const langSelect = document.getElementById('whatsappLangSelect');
+            const lang = langSelect ? langSelect.value : 'it';
+
             const grouped = {};
             currentSession.items.forEach(item => {
                 const catKey = item.category || 'dispensa';
@@ -786,28 +839,35 @@
                 grouped[catKey].push(item);
             });
 
-            // Formattazione del testo per WhatsApp
-            let text = `🍕 *THE GALLEON - LISTA DELLA SPESA*\n`;
-            text += `📅 *Data:* ${currentSession.date}\n`;
-            text += `👤 *Compilato da:* ${currentSession.author}\n`;
-            text += `───────────────────────\n\n`;
+            let text = "";
+            if (lang === 'bn') {
+                text += `*দ্য গ্যালিয়ন - শপিং লিস্ট*\n`;
+                text += `*তারিখ:* ${currentSession.date}\n`;
+                text += `*তৈরি করেছেন:* ${currentSession.author}\n`;
+                text += `───────────────────────\n\n`;
+            } else {
+                text += `*THE GALLEON - LISTA DELLA SPESA*\n`;
+                text += `*Data:* ${currentSession.date}\n`;
+                text += `*Compilato da:* ${currentSession.author}\n`;
+                text += `───────────────────────\n\n`;
+            }
 
             Object.keys(grouped).forEach(catKey => {
-                const title = catalog[catKey] ? catalog[catKey].title : "📦 Altri Prodotti";
-                text += `*${title.toUpperCase()}*\n`;
+                const catObj = catalog[catKey];
+                const catTitle = (lang === 'bn' && catObj && catObj.titleBn) ? catObj.titleBn : (catObj ? catObj.title : "ALTRI PRODOTTI");
+                text += `*${catTitle.toUpperCase()}*\n`;
 
                 grouped[catKey].forEach(i => {
-                    text += `  ▪️ *${i.name}*`;
-                    if (i.qty) text += `  ➡️  *Qtà: ${i.qty}*`;
-                    if (i.note) text += `\n       └ 📝 _Note: ${i.note}_`;
+                    text += `  • *${i.name}*`;
+                    if (i.qty) text += ` (Qtà: ${i.qty})`;
+                    if (i.note) text += `\n    [Note: _${i.note}_]`;
                     text += `\n`;
                 });
                 text += `\n`;
             });
 
             text += `───────────────────────\n`;
-            text += `✅ *Totale Prodotti:* ${currentSession.items.length}\n`;
-            text += `🚀 _Messaggio inviato da Galleon Spesa Pro_`;
+            text += lang === 'bn' ? `*মোট পণ্য:* ${currentSession.items.length}` : `*Totale Prodotti:* ${currentSession.items.length}`;
 
             const encodedText = encodeURIComponent(text);
             const whatsappUrl = `https://wa.me/39${phone}?text=${encodedText}`;
@@ -1165,6 +1225,7 @@
 
                     catalog[catKey] = {
                         title: "🏷️ " + newCatName,
+                        titleBn: "🏷️ " + newCatName,
                         headerBg: chosenColor.headerBg,
                         cardBg: chosenColor.cardBg,
                         items: []
