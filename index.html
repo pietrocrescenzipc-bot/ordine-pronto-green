@@ -152,15 +152,17 @@
                 </div>
                 <div class="flex gap-2">
                     <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Pulisci Tutto</button>
-                    <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
                 </div>
             </div>
 
-            <!-- Rimossa la limitazione di altezza e lo scroll interno -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
 
-            <div class="sticky bottom-2 z-20 pt-2 bg-white/80 backdrop-blur-md rounded-2xl pb-1">
-                <button onclick="goToReviewScreen()" class="btn-pro w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 md:p-5 rounded-2xl text-base md:text-lg shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
+            <div class="sticky bottom-2 z-20 pt-2 bg-white/80 backdrop-blur-md rounded-2xl pb-1 flex gap-3">
+                <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 px-6 rounded-2xl text-sm shadow-md flex items-center justify-center gap-2">
+                    ⬅️ Indietro
+                </button>
+                <button onclick="goToReviewScreen()" class="btn-pro flex-grow bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 md:p-5 rounded-2xl text-base md:text-lg shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
                     🔍 AVANTI: CONTROLLA RIEPILOGO 🚀
                 </button>
             </div>
@@ -173,19 +175,23 @@
                     <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
                     <p class="text-slate-500 text-sm">Elimina prodotti non necessari o visualizza i reparti.</p>
                 </div>
-                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+                <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
             </div>
-            <!-- Rimossa la limitazione di altezza e lo scroll interno -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="manageCatalogContainer"></div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full mb-6" id="manageCatalogContainer"></div>
+            <div>
+                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                    ⬅️ Indietro alla Home
+                </button>
+            </div>
         </section>
 
         <!-- AGGIUNGI PRODOTTO -->
         <section id="addProductSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 max-w-xl mx-auto w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
                 <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">➕ Nuovo Prodotto in Catalogo</h2>
-                <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+                <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
             </div>
-            <div class="space-y-5">
+            <div class="space-y-5 mb-6">
                 <div>
                     <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Nome Prodotto</label>
                     <input type="text" id="newProdNameInput" placeholder="Es. RUCOLA FRESCA" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
@@ -205,6 +211,11 @@
                     💾 Salva nel Catalogo
                 </button>
             </div>
+            <div>
+                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                    ⬅️ Indietro alla Home
+                </button>
+            </div>
         </section>
 
         <!-- SCHERMATA DI CONTROLLO -->
@@ -220,8 +231,8 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
-                <button onclick="backToCreateFromReview()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-sm shadow-xs">
-                    ✏️ Torna a Modificare
+                <button onclick="backToCreateFromReview()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                    ⬅️ Indietro / Modifica
                 </button>
                 <button onclick="confirmAndSaveShoppingList()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
                     ✅ CONFERMA E REGISTRA ORDINE
@@ -234,7 +245,15 @@
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
-                <p class="text-slate-500 text-sm mt-1">L'ordine è pronto. Vuoi andare subito al supermercato a spuntarlo?</p>
+                <p class="text-slate-500 text-sm mt-1">L'ordine è pronto. Vuoi mandarlo su WhatsApp o andare al supermercato?</p>
+            </div>
+
+            <div class="bg-emerald-50/90 p-5 rounded-2xl border-2 border-emerald-300 mb-6 shadow-inner text-center">
+                <h3 class="font-extrabold text-emerald-950 mb-2 text-sm uppercase tracking-wider">📲 Invia Lista su WhatsApp</h3>
+                <p class="text-slate-600 text-xs mb-4">Invia immediatamente la lista ordinata al numero dedicato (339 131 8613).</p>
+                <button onclick="sendWhatsAppList()" class="btn-pro bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-6 py-4 rounded-2xl text-base shadow-lg shadow-emerald-600/20 inline-flex items-center gap-2">
+                    💬 Invia Lista WhatsApp 3391318613
+                </button>
             </div>
 
             <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs w-full">
@@ -268,7 +287,7 @@
                 <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
                 <div class="flex gap-2">
                     <button onclick="clearEntireShopping()" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-300 flex items-center gap-1">🗑️ Svuota Tutta la Spesa</button>
-                    <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
                 </div>
             </div>
 
@@ -279,12 +298,16 @@
                 </div>
             </div>
 
-            <!-- Rimossa la limitazione di altezza e lo scroll interno -->
             <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full"></div>
 
-            <button onclick="promptCompleteShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-lg shadow-xl shadow-blue-600/20">
-                🎉 TERMINA SPESA E ARCHIVIA!
-            </button>
+            <div class="space-y-3">
+                <button onclick="promptCompleteShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-lg shadow-xl shadow-blue-600/20">
+                    🎉 TERMINA SPESA E ARCHIVIA!
+                </button>
+                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                    ⬅️ Indietro alla Home
+                </button>
+            </div>
         </section>
 
         <!-- SCHERMATA RIEPILOGO FINALE SUPERMERCATO -->
@@ -307,7 +330,7 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
-                <button onclick="backToShopFromSummary()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs">
+                <button onclick="backToShopFromSummary()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Torna al Supermercato
                 </button>
                 <button onclick="confirmAndFinalizeShopping()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
@@ -333,13 +356,23 @@
                     <button onclick="window.print()" class="btn-pro bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
                         🖨️ Stampa Report
                     </button>
-                    <button onclick="goHome()" class="btn-pro bg-slate-200 text-slate-700 px-4 py-2.5 rounded-bold text-xs shadow-xs">⬅️ Home</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-200 text-slate-700 px-4 py-2.5 rounded-bold text-xs shadow-xs">⬅️ Indietro</button>
                 </div>
+            </div>
+
+            <div class="flex justify-end mb-4 gap-2">
+                <button onclick="clearEntireHistory()" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-4 py-2 rounded-xl font-bold text-xs border border-rose-300">🗑️ Svuota Intero Storico</button>
             </div>
 
             <div id="statsDashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
 
-            <div class="space-y-4 pr-2 w-full" id="historyContainer"></div>
+            <div class="space-y-4 pr-2 w-full mb-6" id="historyContainer"></div>
+
+            <div>
+                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                    ⬅️ Indietro alla Home
+                </button>
+            </div>
         </section>
 
     </main>
@@ -465,7 +498,9 @@
                 document.getElementById('displayAuthor').innerText = currentSession.author;
             }
 
-            document.querySelectorAll('input[type="checkbox"]').forEach(chk => chk.checked = false);
+            document.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+                if(!chk.classList.contains('shop-chk')) chk.checked = false;
+            });
             document.querySelectorAll('input[type="text"]').forEach(txt => {
                 if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate')) txt.value = '';
             });
@@ -539,18 +574,16 @@
                 let itemsHtml = '';
                 cat.items.forEach((item, idx) => {
                     const globalId = `${catKey}-${idx}`;
-                    /* Aumentata la dimensione del font dei prodotti a text-lg/text-xl per maggiore leggibilità e facilità di click */
                     itemsHtml += `
                         <div class="flex items-center gap-2 p-2 bg-white/90 rounded-xl border border-slate-200/60 shadow-2xs">
                             <input type="checkbox" id="cat-check-${globalId}" onchange="updateLiveSession()" class="w-6 h-6 rounded-lg text-orange-600 focus:ring-orange-500 cursor-pointer accent-orange-600 shrink-0">
-                            <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-base md:text-lg cursor-pointer leading-tight">${item}</label>
-                            <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSession()" placeholder="Qtà" class="w-16 p-2 text-base md:text-lg border border-slate-300 rounded-lg text-center font-bold bg-white text-slate-900 focus:outline-none focus:border-orange-500">
-                            <input type="text" id="cat-note-${globalId}" oninput="updateLiveSession()" placeholder="Note" class="w-20 p-2 text-base md:text-lg border border-slate-300 rounded-lg text-center font-bold bg-white text-slate-900 focus:outline-none focus:border-orange-500">
+                            <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-base md:text-lg cursor-pointer leading-tight min-w-0 break-words">${item}</label>
+                            <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSession()" placeholder="Qtà" class="w-16 p-2 text-base md:text-lg border border-slate-300 rounded-lg text-center font-bold bg-white text-slate-900 focus:outline-none focus:border-orange-500 shrink-0">
+                            <input type="text" id="cat-note-${globalId}" oninput="updateLiveSession()" placeholder="Note" class="w-24 md:w-28 p-2 text-base md:text-lg border border-slate-300 rounded-lg text-center font-bold bg-white text-slate-900 focus:outline-none focus:border-orange-500 shrink-0">
                         </div>
                     `;
                 });
 
-                /* Rimosso l'overflow-y-auto interno così la scheda del reparto si allunga verso il basso senza barra di scorrimento */
                 card.innerHTML = `
                     <div class="${cat.headerBg} p-3 font-extrabold text-sm flex items-center justify-between">
                         <span>${cat.title}</span>
@@ -648,14 +681,13 @@
 
             currentSession.items.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'flex justify-between items-center p-3 bg-white rounded-xl border border-amber-200 shadow-2xs';
-                /* Aumentata la dimensione font nel riepilogo */
+                div.className = 'flex justify-between items-center p-3 bg-white rounded-xl border border-amber-200 shadow-2xs gap-3';
                 div.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <span class="font-extrabold text-slate-900 text-base md:text-lg">${item.name}</span>
-                        ${item.qty ? `<span class="bg-amber-100 text-amber-800 text-sm font-bold px-2 py-0.5 rounded-lg">Qtà: ${item.qty}</span>` : ''}
+                    <div class="flex items-center gap-2 min-w-0 flex-grow">
+                        <span class="font-extrabold text-slate-900 text-base md:text-lg break-words">${item.name}</span>
+                        ${item.qty ? `<span class="bg-amber-100 text-amber-800 text-sm font-bold px-2 py-0.5 rounded-lg shrink-0">Qtà: ${item.qty}</span>` : ''}
                     </div>
-                    ${item.note ? `<span class="text-sm font-bold text-slate-500 italic">" ${item.note} "</span>` : ''}
+                    ${item.note ? `<span class="text-sm font-bold text-slate-500 italic text-right max-w-[40%] truncate">"${item.note}"</span>` : ''}
                 `;
                 container.appendChild(div);
             });
@@ -686,17 +718,36 @@
 
             currentSession.items.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'flex justify-between items-center p-2.5 bg-white rounded-xl border border-slate-200 text-sm';
-                /* Aumentata dimensione dei caratteri */
+                div.className = 'flex justify-between items-center p-2.5 bg-white rounded-xl border border-slate-200 text-sm gap-2';
                 div.innerHTML = `
-                    <span class="font-extrabold text-slate-900 text-base md:text-lg">${item.name}</span>
-                    <div class="flex items-center gap-2 text-sm font-bold text-slate-600">
+                    <span class="font-extrabold text-slate-900 text-base md:text-lg min-w-0 break-words">${item.name}</span>
+                    <div class="flex items-center gap-2 text-sm font-bold text-slate-600 shrink-0">
                         ${item.qty ? `<span class="bg-slate-100 px-2 py-0.5 rounded-md">Qtà: ${item.qty}</span>` : ''}
-                        ${item.note ? `<span class="text-slate-400 font-normal italic">${item.note}</span>` : ''}
+                        ${item.note ? `<span class="text-slate-400 font-normal italic max-w-[120px] truncate">${item.note}</span>` : ''}
                     </div>
                 `;
                 container.appendChild(div);
             });
+        }
+
+        function sendWhatsAppList() {
+            if (!currentSession.items || currentSession.items.length === 0) {
+                alert("La lista è vuota!");
+                return;
+            }
+
+            let text = `🛒 *SPESA THE GALLEON*\n📅 Data: ${currentSession.date}\n👤 Autore: ${currentSession.author}\n\n`;
+            currentSession.items.forEach(i => {
+                text += `• *${i.name}*`;
+                if (i.qty) text += ` (Qtà: ${i.qty})`;
+                if (i.note) text += ` - Note: _${i.note}_`;
+                text += `\n`;
+            });
+
+            const encodedText = encodeURIComponent(text);
+            const phone = "3391318613";
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodedText}`;
+            window.open(whatsappUrl, '_blank');
         }
 
         function addExtraItemAfterSave() {
@@ -756,21 +807,20 @@
                 if (item.done) takenCount++;
 
                 const card = document.createElement('div');
-                card.className = `p-4 rounded-2xl border-2 flex items-center justify-between transition ${item.done ? 'bg-emerald-50 border-emerald-300 opacity-60' : 'bg-white border-slate-200 shadow-xs'}`;
+                card.className = `p-4 rounded-2xl border-2 flex items-center justify-between transition ${item.done ? 'bg-emerald-50 border-emerald-300 opacity-60' : 'bg-white border-slate-200 shadow-xs'} gap-3`;
 
-                /* Aumentata notevolmente la dimensione del font e degli elementi touch in modalità spesa per velocizzare i click al supermercato */
                 card.innerHTML = `
                     <div class="flex items-center gap-3 min-w-0 flex-grow cursor-pointer" onclick="toggleItemDone(${idx})">
-                        <input type="checkbox" ${item.done ? 'checked' : ''} class="w-7 h-7 rounded-lg text-blue-600 focus:ring-blue-500 accent-blue-600 shrink-0 cursor-pointer">
+                        <input type="checkbox" ${item.done ? 'checked' : ''} class="shop-chk w-7 h-7 rounded-lg text-blue-600 focus:ring-blue-500 accent-blue-600 shrink-0 cursor-pointer">
                         <div class="min-w-0 flex-grow">
-                            <span class="font-black ${item.done ? 'line-through text-slate-400' : 'text-slate-900'} text-lg md:text-xl block truncate">${item.name}</span>
+                            <span class="font-black ${item.done ? 'line-through text-slate-400' : 'text-slate-900'} text-lg md:text-xl block break-words">${item.name}</span>
                             <div class="flex items-center gap-2 mt-0.5 text-sm md:text-base font-bold text-slate-500 flex-wrap">
-                                ${item.qty ? `<span class="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md">Qtà: ${item.qty}</span>` : ''}
-                                ${item.note ? `<span class="italic text-slate-400">${item.note}</span>` : ''}
+                                ${item.qty ? `<span class="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md shrink-0">Qtà: ${item.qty}</span>` : ''}
+                                ${item.note ? `<span class="italic text-slate-400 break-words">${item.note}</span>` : ''}
                             </div>
                         </div>
                     </div>
-                    <button onclick="removeItemFromActiveShop(${idx})" class="text-rose-400 hover:text-rose-600 p-2 rounded-xl text-lg hover:bg-rose-50 transition shrink-0 ml-2" title="Elimina">🗑️</button>
+                    <button onclick="removeItemFromActiveShop(${idx})" class="text-rose-400 hover:text-rose-600 p-2 rounded-xl text-lg hover:bg-rose-50 transition shrink-0 ml-1" title="Elimina">🗑️</button>
                 `;
                 container.appendChild(card);
             });
@@ -825,7 +875,7 @@
                 takenContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Nessun prodotto spuntato.</p>';
             } else {
                 taken.forEach(i => {
-                    takenContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-emerald-200 text-base md:text-lg font-extrabold text-slate-800">${i.name} ${i.qty ? `(${i.qty})` : ''}</div>`;
+                    takenContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-emerald-200 text-base md:text-lg font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(${i.qty})` : ''}</div>`;
                 });
             }
 
@@ -833,7 +883,7 @@
                 missingContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Tutti i prodotti sono stati presi!</p>';
             } else {
                 missing.forEach(i => {
-                    missingContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-amber-200 text-base md:text-lg font-extrabold text-slate-800">${i.name} ${i.qty ? `(${i.qty})` : ''}</div>`;
+                    missingContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-amber-200 text-base md:text-lg font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(${i.qty})` : ''}</div>`;
                 });
             }
 
@@ -898,7 +948,7 @@
                 return;
             }
 
-            history.forEach(h => {
+            history.forEach((h, hIdx) => {
                 const card = document.createElement('div');
                 card.className = 'bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-2xs';
 
@@ -908,12 +958,15 @@
                 });
 
                 card.innerHTML = `
-                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200 flex-wrap gap-2">
                         <div>
                             <span class="font-extrabold text-slate-900 text-sm">${h.date}</span>
                             <span class="text-xs text-slate-500 font-bold ml-2">👤 ${h.author}</span>
                         </div>
-                        <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full">${h.items.length} prodotti</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full">${h.items.length} prodotti</span>
+                            <button onclick="removeHistoryItem(${hIdx})" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-600 px-2.5 py-1 rounded-xl text-xs font-extrabold border border-rose-200">🗑️ Elimina Spesa</button>
+                        </div>
                     </div>
                     <div class="flex flex-wrap gap-1.5">
                         ${itemsHtml}
@@ -921,6 +974,22 @@
                 `;
                 container.appendChild(card);
             });
+        }
+
+        function removeHistoryItem(idx) {
+            if (confirm("Vuoi eliminare questa spesa dallo storico?")) {
+                history.splice(idx, 1);
+                pushToFirebase();
+                renderHistoryList();
+            }
+        }
+
+        function clearEntireHistory() {
+            if (confirm("Sei sicuro di voler svuotare completamente lo storico di tutte le spese?")) {
+                history = [];
+                pushToFirebase();
+                renderHistoryList();
+            }
         }
 
         function exportHistoryExcel() {
@@ -967,14 +1036,13 @@
                 let itemsHtml = '';
                 cat.items.forEach((item, idx) => {
                     itemsHtml += `
-                        <div class="flex items-center justify-between p-2 bg-white/90 rounded-xl border border-slate-200/60 shadow-2xs">
-                            <span class="font-extrabold text-slate-900 text-base md:text-lg">${item}</span>
-                            <button onclick="removeProductFromCatalog('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-bold p-1 text-base">✕</button>
+                        <div class="flex items-center justify-between p-2 bg-white/90 rounded-xl border border-slate-200/60 shadow-2xs gap-2">
+                            <span class="font-extrabold text-slate-900 text-base md:text-lg min-w-0 break-words">${item}</span>
+                            <button onclick="removeProductFromCatalog('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-bold p-1 text-base shrink-0">✕</button>
                         </div>
                     `;
                 });
 
-                /* Rimosso l'overflow-y-auto interno anche per la gestione del catalogo */
                 card.innerHTML = `
                     <div class="${cat.headerBg} p-3 font-extrabold text-sm flex items-center justify-between">
                         <span>${cat.title}</span>
