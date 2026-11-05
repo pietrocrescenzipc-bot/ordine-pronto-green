@@ -255,7 +255,7 @@
                     </button>
                 </div>
 
-                <!-- Modulo Nuova Registrazione Contatto (Inizialmente Nascosto) -->
+                <!-- Modulo Nuova Registrazione Contatto -->
                 <div id="newContactFormContainer" class="hidden mb-4 p-4 bg-white rounded-2xl border-2 border-emerald-400 space-y-3 shadow-md">
                     <h4 class="font-extrabold text-emerald-950 text-xs uppercase tracking-wider">Registra Nuovo Contatto WhatsApp</h4>
                     <div class="grid sm:grid-cols-2 gap-2">
@@ -451,7 +451,6 @@
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
         
-        // Rubrica WhatsApp salvata in localStorage per permettere l'aggiunta dinamica
         let whatsappContacts = JSON.parse(localStorage.getItem('galleon_wa_contacts_v10')) || [
             { name: "Pietro", phone: "3391318613" },
             { name: "Antonio", phone: "3465034838" }
@@ -860,7 +859,6 @@
             });
         }
 
-        /* MESSAGGIO WHATSAPP CON FORMATTAZIONE AVANZATA (COME RICHIESTO) */
         function sendWhatsAppList() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La lista della spesa è vuota!");
@@ -882,7 +880,6 @@
                 grouped[catKey].push(item);
             });
 
-            // Intestazione in grassetto
             let text = `*THE GALLEON - LISTA DELLA SPESA*\n`;
             text += `*Data:* ${currentSession.date}\n`;
             text += `*Compilato da:* ${currentSession.author}\n`;
@@ -893,11 +890,9 @@
                 let rawTitle = catObj ? catObj.title : "ALTRI PRODOTTI";
                 let cleanTitle = rawTitle.replace(/[^a-zA-ZÀ-ÿ\s]/g, '').trim();
                 
-                // Categoria con font monospazio (senza parentesi quadre)
                 text += `\`\`\`${cleanTitle.toUpperCase()}\`\`\`\n`;
 
                 grouped[catKey].forEach(i => {
-                    // Nome prodotto in grassetto (senza parentesi)
                     text += `• *${i.name}*`;
                     if (i.qty) text += ` - Qtà: ${i.qty}`;
                     if (i.note) text += ` - Nota: ${i.note}`;
@@ -1060,6 +1055,8 @@
             document.getElementById('shopSection').classList.remove('hidden');
         }
 
+        // CORRETTO: Sposta i prodotti spuntati nello storico e li rimuove dalla lista attiva,
+        // mentre i non spuntati (non trovati) rimangono in memoria per la prossima spesa.
         function confirmAndFinalizeShopping() {
             const taken = currentSession.items.filter(i => i.done);
             const missing = currentSession.items.filter(i => !i.done);
@@ -1076,7 +1073,7 @@
             currentSession.items = missing;
             pushToFirebaseDebounced();
 
-            alert("Spesa completata ed archiviata con successo!");
+            alert("Spesa completata, prodotti presi archiviati e prodotti non trovati mantenuti in lista!");
             goHome();
         }
 
