@@ -380,7 +380,7 @@
 
     </main>
 
-    <!-- LOGICA APPLICATIVA IN ITALIANO -->
+    <!-- LOGICA APPLICATIVA IN ITALIANO (OTTIMIZZATA PER TASTIERA MOBILE) -->
     <script>
         const firebaseConfig = {
             databaseURL: "https://galleon-spesa-default-rtdb.europe-west1.firebasedatabase.app",
@@ -446,6 +446,7 @@
 
         let history = [];
         let isSyncing = false;
+        let saveTimeout = null;
 
         window.onload = function() {
             document.getElementById('inputDate').value = currentSession.date;
@@ -462,8 +463,7 @@
 
             rootRef.on('value', (snapshot) => {
                 const data = snapshot.val();
-                if (data) {
-                    isSyncing = true;
+                if (data && !isSyncing) {
                     if (data.session) {
                         currentSession = data.session;
                         localStorage.setItem('galleon_session_v10', JSON.stringify(currentSession));
@@ -478,20 +478,27 @@
                         localStorage.setItem('galleon_history_v10', JSON.stringify(history));
                     }
                     applySessionToDOM();
-                    isSyncing = false;
                 }
             });
         };
 
-        function pushToFirebase() {
-            if (isSyncing) return;
+        function pushToFirebaseDebounced() {
+            if (saveTimeout) clearTimeout(saveTimeout);
+            isSyncing = true;
             localStorage.setItem('galleon_session_v10', JSON.stringify(currentSession));
             localStorage.setItem('galleon_history_v10', JSON.stringify(history));
-            rootRef.set({
-                session: currentSession,
-                catalog: catalog,
-                history: history
-            });
+            
+            saveTimeout = setTimeout(() => {
+                rootRef.set({
+                    session: currentSession,
+                    catalog: catalog,
+                    history: history
+                }).then(() => {
+                    isSyncing = false;
+                }).catch(() => {
+                    isSyncing = false;
+                });
+            }, 600); // Ritardo ottimizzato per permettere alla tastiera di rimanere aperta senza interferenze
         }
 
         function applySessionToDOM() {
@@ -506,7 +513,9 @@
                 if(!chk.classList.contains('shop-chk')) chk.checked = false;
             });
             document.querySelectorAll('input[type="text"]').forEach(txt => {
-                if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate') && !txt.id.includes('newCategoryNameInput') && !txt.id.includes('whatsappPhoneInput')) txt.value = '';
+                if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate') && !txt.id.includes('newCategoryNameInput') && !txt.id.includes('whatsappPhoneInput')) {
+                    if (document.activeElement !== txt) txt.value = '';
+                }
             });
 
             if (currentSession.items && currentSession.items.length > 0) {
@@ -519,8 +528,8 @@
                                 const qty = document.getElementById(`cat-qty-${globalId}`);
                                 const note = document.getElementById(`cat-note-${globalId}`);
                                 if (chk) chk.checked = true;
-                                if (qty) qty.value = i.qty || '';
-                                if (note) note.value = i.note || '';
+                                if (qty && document.activeElement !== qty) qty.value = i.qty || '';
+                                if (note && document.activeElement !== note) note.value = i.note || '';
                             }
                         });
                     });
@@ -559,7 +568,7 @@
                     document.getElementById('inputAuthor').value = author;
                     currentSession.author = author;
                     document.getElementById('displayAuthor').innerText = author;
-                    pushToFirebase();
+                    pushToFirebaseDebounced();
                 };
                 container.appendChild(btn);
             });
@@ -601,8 +610,8 @@
                                 <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-base md:text-lg cursor-pointer leading-snug break-words">${item}</label>
                             </div>
                             <div class="flex items-center gap-2 pl-9">
-                                <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSession()" placeholder="Qtà" class="w-24 p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg text-center font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
-                                <input type="text" id="cat-note-${globalId}" oninput="updateLiveSession()" placeholder="Note (es. cassa, bancale)..." class="flex-grow p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
+                                <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSessionSilent()" placeholder="Qtà" class="w-24 p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg text-center font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
+                                <input type="text" id="cat-note-${globalId}" oninput="updateLiveSessionSilent()" placeholder="Note (es. cassa, bancale)..." class="flex-grow p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
                             </div>
                         </div>
                     `;
@@ -648,7 +657,7 @@
             }
         }
 
-        function updateLiveSession() {
+        function updateLiveSessionSilent() {
             const date = document.getElementById('inputDate').value || new Date().toISOString().split('T')[0];
             const author = document.getElementById('inputAuthor').value.trim() || 'Orsola';
 
@@ -679,14 +688,18 @@
             });
 
             currentSession.items = selectedItems;
-            pushToFirebase();
+            pushToFirebaseDebounced();
+        }
+
+        function updateLiveSession() {
+            updateLiveSessionSilent();
         }
 
         function resetCatalogSelection() {
             if (confirm("Vuoi azzerare tutta la selezione corrente?")) {
                 currentSession.items = [];
                 applySessionToDOM();
-                pushToFirebase();
+                pushToFirebaseDebounced();
             }
         }
 
@@ -710,7 +723,7 @@
 
             currentSession.date = date;
             currentSession.author = author;
-            pushToFirebase();
+            pushToFirebaseDebounced();
 
             if (mode === 'create') {
                 hideAllSections();
@@ -719,7 +732,7 @@
         }
 
         function goToReviewScreen() {
-            updateLiveSession();
+            updateLiveSessionSilent();
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("Non hai selezionato alcun prodotto!");
                 return;
@@ -751,7 +764,7 @@
         }
 
         function confirmAndSaveShoppingList() {
-            pushToFirebase();
+            pushToFirebaseDebounced();
             renderSavedItemsSummary();
             hideAllSections();
             document.getElementById('postSaveSection').classList.remove('hidden');
@@ -848,7 +861,7 @@
             qtyInput.value = '';
             noteInput.value = '';
 
-            pushToFirebase();
+            pushToFirebaseDebounced();
             renderSavedItemsSummary();
         }
 
@@ -908,13 +921,13 @@
 
         function toggleItemDone(idx) {
             currentSession.items[idx].done = !currentSession.items[idx].done;
-            pushToFirebase();
+            pushToFirebaseDebounced();
             renderActiveShoppingList();
         }
 
         function removeItemFromActiveShop(idx) {
             currentSession.items.splice(idx, 1);
-            pushToFirebase();
+            pushToFirebaseDebounced();
             renderActiveShoppingList();
         }
 
@@ -929,7 +942,7 @@
         function clearEntireShopping() {
             if (confirm("Sei sicuro di voler cancellare TUTTA la spesa in corso?")) {
                 currentSession.items = [];
-                pushToFirebase();
+                pushToFirebaseDebounced();
                 renderActiveShoppingList();
             }
         }
@@ -988,7 +1001,7 @@
             }
 
             currentSession.items = missing;
-            pushToFirebase();
+            pushToFirebaseDebounced();
 
             alert("Spesa completata ed archiviata con successo!");
             goHome();
@@ -1057,7 +1070,7 @@
         function removeHistoryItem(idx) {
             if (confirm("Vuoi eliminare questa spesa dallo storico?")) {
                 history.splice(idx, 1);
-                pushToFirebase();
+                pushToFirebaseDebounced();
                 renderHistoryList();
             }
         }
@@ -1065,7 +1078,7 @@
         function clearEntireHistory() {
             if (confirm("Sei sicuro di voler svuotare completamente lo storico di tutte le spese?")) {
                 history = [];
-                pushToFirebase();
+                pushToFirebaseDebounced();
                 renderHistoryList();
             }
         }
@@ -1137,7 +1150,7 @@
         function removeProductFromCatalog(catKey, idx) {
             if (confirm(`Rimuovere "${catalog[catKey].items[idx]}" dal catalogo?`)) {
                 catalog[catKey].items.splice(idx, 1);
-                pushToFirebase();
+                pushToFirebaseDebounced();
                 renderManageCatalog();
             }
         }
@@ -1188,7 +1201,7 @@
 
             if (!catalog[catKey].items.includes(name)) {
                 catalog[catKey].items.push(name);
-                pushToFirebase();
+                pushToFirebaseDebounced();
                 alert(`Prodotto "${name}" aggiunto con successo!`);
                 nameInput.value = '';
                 newCatInput.value = '';
@@ -1204,7 +1217,7 @@
                 currentSession.author = newAuthor.trim();
                 document.getElementById('inputAuthor').value = currentSession.author;
                 document.getElementById('displayAuthor').innerText = currentSession.author;
-                pushToFirebase();
+                pushToFirebaseDebounced();
             }
         }
     </script>
