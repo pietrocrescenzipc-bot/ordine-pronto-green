@@ -859,6 +859,7 @@
             });
         }
 
+        /* FORMATTAZIONE WHATSAPP AGGIORNATA (PRODOTTO IN GRASSETTO, QUANTITÀ E NOTA SEPARATE DA VIRGOLA) */
         function sendWhatsAppList() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La lista della spesa è vuota!");
@@ -894,8 +895,8 @@
 
                 grouped[catKey].forEach(i => {
                     text += `• *${i.name}*`;
-                    if (i.qty) text += ` - Qtà: ${i.qty}`;
-                    if (i.note) text += ` - Nota: ${i.note}`;
+                    if (i.qty) text += `, ${i.qty}`;
+                    if (i.note) text += `, ${i.note}`;
                     text += `\n`;
                 });
                 text += `\n`;
@@ -1055,8 +1056,6 @@
             document.getElementById('shopSection').classList.remove('hidden');
         }
 
-        // CORRETTO: Sposta i prodotti spuntati nello storico e li rimuove dalla lista attiva,
-        // mentre i non spuntati (non trovati) rimangono in memoria per la prossima spesa.
         function confirmAndFinalizeShopping() {
             const taken = currentSession.items.filter(i => i.done);
             const missing = currentSession.items.filter(i => !i.done);
