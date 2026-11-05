@@ -156,7 +156,8 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[62vh] overflow-y-auto pr-1 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
+            <!-- Rimossa la limitazione di altezza e lo scroll interno -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
 
             <div class="sticky bottom-2 z-20 pt-2 bg-white/80 backdrop-blur-md rounded-2xl pb-1">
                 <button onclick="goToReviewScreen()" class="btn-pro w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 md:p-5 rounded-2xl text-base md:text-lg shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
@@ -174,7 +175,8 @@
                 </div>
                 <button onclick="goHome()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-bold text-xs border border-slate-300">⬅️ Home</button>
             </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[60vh] overflow-y-auto pr-2 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="manageCatalogContainer"></div>
+            <!-- Rimossa la limitazione di altezza e lo scroll interno -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="manageCatalogContainer"></div>
         </section>
 
         <!-- AGGIUNGI PRODOTTO -->
@@ -214,7 +216,7 @@
             </div>
 
             <div class="mb-6">
-                <div id="reviewItemsList" class="max-h-[50vh] overflow-y-auto bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner w-full"></div>
+                <div id="reviewItemsList" class="bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner w-full"></div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
@@ -238,16 +240,16 @@
             <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs w-full">
                 <h3 class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiungi un prodotto al volo:</h3>
                 <div class="flex flex-wrap lg:flex-nowrap gap-3 items-center">
-                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm bg-white font-bold text-slate-900 focus:outline-none shadow-xs">
-                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
-                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-32 p-3 border-2 border-teal-200 rounded-xl text-sm bg-white text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-lg font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-lg text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-32 p-3 border-2 border-teal-200 rounded-xl text-lg text-center font-bold text-slate-900 focus:outline-none shadow-xs">
                     <button onclick="addExtraItemAfterSave()" class="btn-pro bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
                 </div>
             </div>
 
             <div class="mb-6">
                 <h4 class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo prodotti in lista:</h4>
-                <div id="savedItemsSummaryList" class="max-h-48 overflow-y-auto bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner w-full"></div>
+                <div id="savedItemsSummaryList" class="bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner w-full"></div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
@@ -277,7 +279,8 @@
                 </div>
             </div>
 
-            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 max-h-[60vh] overflow-y-auto pr-2 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full"></div>
+            <!-- Rimossa la limitazione di altezza e lo scroll interno -->
+            <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full"></div>
 
             <button onclick="promptCompleteShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-lg shadow-xl shadow-blue-600/20">
                 🎉 TERMINA SPESA E ARCHIVIA!
@@ -295,11 +298,11 @@
             <div class="grid md:grid-cols-2 gap-4 mb-6">
                 <div class="bg-emerald-50 border-2 border-emerald-200 p-4 rounded-2xl shadow-inner">
                     <h3 class="font-extrabold text-emerald-950 text-sm mb-3 uppercase tracking-wider">✅ Prodotti Presi (Vanno nello Storico)</h3>
-                    <div id="summaryTakenList" class="max-h-48 overflow-y-auto space-y-2 pr-1"></div>
+                    <div id="summaryTakenList" class="space-y-2 pr-1"></div>
                 </div>
                 <div class="bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl shadow-inner">
                     <h3 class="font-extrabold text-amber-950 text-sm mb-3 uppercase tracking-wider">❌ Prodotti Non Trovati (Rimasti in Memoria)</h3>
-                    <div id="summaryMissingList" class="max-h-48 overflow-y-auto space-y-2 pr-1"></div>
+                    <div id="summaryMissingList" class="space-y-2 pr-1"></div>
                 </div>
             </div>
 
@@ -336,7 +339,7 @@
 
             <div id="statsDashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
 
-            <div class="space-y-4 max-h-[50vh] overflow-y-auto pr-2 w-full" id="historyContainer"></div>
+            <div class="space-y-4 pr-2 w-full" id="historyContainer"></div>
         </section>
 
     </main>
@@ -421,7 +424,6 @@
             renderAuthorButtons();
             initCatalogCategories();
 
-            // Sincronizzazione in tempo reale di sessione, catalogo e storico
             rootRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -495,30 +497,29 @@
         }
 
         function toggleSidebar() {
-            const menu = document.getElementById('sideMenu');
-            const overlay = document.getElementById('menuOverlay');
-            if (menu.classList.contains('-translate-x-full')) {
-                menu.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
+            const sideMenu = document.getElementById('sideMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            if (sideMenu.classList.contains('-translate-x-full')) {
+                sideMenu.classList.remove('-translate-x-full');
+                menuOverlay.classList.remove('hidden');
             } else {
-                menu.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
+                sideMenu.classList.add('-translate-x-full');
+                menuOverlay.classList.add('hidden');
             }
         }
 
         function renderAuthorButtons() {
             const container = document.getElementById('authorButtons');
-            if (!container) return;
             container.innerHTML = '';
-            authors.forEach(auth => {
+            authors.forEach(author => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = "p-2.5 rounded-xl text-xs font-extrabold border-2 border-slate-200 bg-white hover:border-orange-500 hover:text-orange-600 transition text-slate-700 shadow-xs";
-                btn.innerText = auth;
+                btn.className = 'py-2 px-1 bg-white border-2 border-slate-200 rounded-xl font-bold text-xs text-slate-700 hover:border-orange-500 hover:text-orange-600 transition shadow-xs';
+                btn.innerText = author;
                 btn.onclick = () => {
-                    document.getElementById('inputAuthor').value = auth;
-                    currentSession.author = auth;
-                    document.getElementById('displayAuthor').innerText = auth;
+                    document.getElementById('inputAuthor').value = author;
+                    currentSession.author = author;
+                    document.getElementById('displayAuthor').innerText = author;
                     pushToFirebase();
                 };
                 container.appendChild(btn);
@@ -532,194 +533,205 @@
 
             Object.keys(catalog).forEach(catKey => {
                 const cat = catalog[catKey];
-                let cardDiv = document.createElement('div');
-                cardDiv.className = `rounded-2xl border-2 ${cat.cardBg} p-4 shadow-sm flex flex-col`;
-                
-                let htmlHeader = `
-                    <div class="px-3 py-2 rounded-xl ${cat.headerBg} font-extrabold text-xs uppercase tracking-wider mb-3 shadow-xs flex justify-between items-center">
-                        <span>${cat.title}</span>
-                        <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-md">${cat.items.length} prodotti</span>
-                    </div>
-                    <div class="space-y-2.5 flex-grow overflow-y-auto max-h-72 pr-1">
-                `;
+                const card = document.createElement('div');
+                card.className = `${cat.cardBg} rounded-2xl border-2 shadow-xs overflow-hidden flex flex-col`;
 
                 let itemsHtml = '';
-                cat.items.forEach((item, itemIdx) => {
-                    const globalId = `${catKey}-${itemIdx}`;
+                cat.items.forEach((item, idx) => {
+                    const globalId = `${catKey}-${idx}`;
+                    /* Aumentata la dimensione del font dei prodotti a text-lg/text-xl per maggiore leggibilità e facilità di click */
                     itemsHtml += `
-                        <div class="bg-white/90 p-2.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col gap-2">
-                            <div class="flex items-center justify-between gap-2">
-                                <label class="flex items-center gap-2 cursor-pointer flex-grow min-w-0">
-                                    <input type="checkbox" id="cat-check-${globalId}" onchange="updateItemSelection('${catKey}', ${itemIdx})" class="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 shrink-0">
-                                    <span class="text-xs font-extrabold text-slate-800 uppercase tracking-tight truncate">${item}</span>
-                                </label>
-                                <input type="text" id="cat-qty-${globalId}" placeholder="Qtà" oninput="updateItemSelection('${catKey}', ${itemIdx})" class="w-14 p-1.5 border border-slate-200 rounded-lg text-xs text-center font-bold text-slate-900 bg-slate-50 focus:outline-none focus:border-orange-500 shrink-0">
-                            </div>
-                            <input type="text" id="cat-note-${globalId}" placeholder="Nota (es. cassa, bancale...)" oninput="updateItemSelection('${catKey}', ${itemIdx})" class="w-full p-1.5 border border-slate-200 rounded-lg text-[11px] font-semibold text-slate-800 bg-slate-50 focus:outline-none focus:border-orange-500">
+                        <div class="flex items-center gap-2 p-2 bg-white/90 rounded-xl border border-slate-200/60 shadow-2xs">
+                            <input type="checkbox" id="cat-check-${globalId}" onchange="updateLiveSession()" class="w-6 h-6 rounded-lg text-orange-600 focus:ring-orange-500 cursor-pointer accent-orange-600 shrink-0">
+                            <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-base md:text-lg cursor-pointer leading-tight">${item}</label>
+                            <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSession()" placeholder="Qtà" class="w-16 p-2 text-base md:text-lg border border-slate-300 rounded-lg text-center font-bold bg-white text-slate-900 focus:outline-none focus:border-orange-500">
+                            <input type="text" id="cat-note-${globalId}" oninput="updateLiveSession()" placeholder="Note" class="w-20 p-2 text-base md:text-lg border border-slate-300 rounded-lg text-center font-bold bg-white text-slate-900 focus:outline-none focus:border-orange-500">
                         </div>
                     `;
                 });
 
-                cardDiv.innerHTML = htmlHeader + itemsHtml + `</div>`;
-                container.appendChild(cardDiv);
+                /* Rimosso l'overflow-y-auto interno così la scheda del reparto si allunga verso il basso senza barra di scorrimento */
+                card.innerHTML = `
+                    <div class="${cat.headerBg} p-3 font-extrabold text-sm flex items-center justify-between">
+                        <span>${cat.title}</span>
+                        <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full">${cat.items.length}</span>
+                    </div>
+                    <div class="p-3 space-y-2 flex-grow">
+                        ${itemsHtml}
+                    </div>
+                `;
+                container.appendChild(card);
             });
-            
+
             applySessionToDOM();
         }
 
-        function updateItemSelection(catKey, itemIdx) {
-            const globalId = `${catKey}-${itemIdx}`;
-            const chk = document.getElementById(`cat-check-${globalId}`);
-            const qty = document.getElementById(`cat-qty-${globalId}`);
-            const note = document.getElementById(`cat-note-${globalId}`);
-            const itemName = catalog[catKey].items[itemIdx];
+        function updateLiveSession() {
+            const date = document.getElementById('inputDate').value || new Date().toISOString().split('T')[0];
+            const author = document.getElementById('inputAuthor').value.trim() || 'Orsola';
 
-            if (!chk) return;
+            currentSession.date = date;
+            currentSession.author = author;
+            document.getElementById('displayDate').innerText = date;
+            document.getElementById('displayAuthor').innerText = author;
 
-            let existingIndex = currentSession.items.findIndex(i => i.name === itemName);
+            const selectedItems = [];
 
-            if (chk.checked) {
-                const itemObj = {
-                    name: itemName,
-                    qty: (qty && qty.value.trim()) ? qty.value.trim() : "1",
-                    note: (note && note.value.trim()) ? note.value.trim() : "",
-                    taken: existingIndex >= 0 ? currentSession.items[existingIndex].taken : false
-                };
-                if (existingIndex >= 0) {
-                    currentSession.items[existingIndex] = itemObj;
-                } else {
-                    currentSession.items.push(itemObj);
-                }
-            } else {
-                if (existingIndex >= 0) {
-                    currentSession.items.splice(existingIndex, 1);
-                }
-            }
-            pushToFirebase();
-        }
-
-        function resetCatalogSelection() {
-            if (confirm("Vuoi deselezionare tutti i prodotti della spesa corrente?")) {
-                currentSession.items = [];
-                pushToFirebase();
-                applySessionToDOM();
-            }
-        }
-
-        function startMode(mode) {
-            const dateVal = document.getElementById('inputDate').value;
-            const authorVal = document.getElementById('inputAuthor').value.trim() || "Orsola";
-            
-            currentSession.date = dateVal;
-            currentSession.author = authorVal;
-            document.getElementById('displayDate').innerText = dateVal;
-            document.getElementById('displayAuthor').innerText = authorVal;
-
-            pushToFirebase();
-            
-            document.getElementById('setupSection').classList.add('hidden');
-            document.getElementById('createSection').classList.remove('hidden');
-            applySessionToDOM();
-        }
-
-        function goToSupermarketDirect() {
-            startMode('shop');
-            document.getElementById('createSection').classList.add('hidden');
-            document.getElementById('shopSection').classList.remove('hidden');
-            renderActiveShoppingList();
-        }
-
-        function goHome() {
-            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-            document.getElementById('setupSection').classList.remove('hidden');
-        }
-
-        function resetSession() {
-            if (confirm("Vuoi cambiare utente o data della sessione?")) {
-                goHome();
-            }
-        }
-
-        function goToReviewScreen() {
-            currentSession.items = [];
             Object.keys(catalog).forEach(catKey => {
-                catalog[catKey].items.forEach((item, itemIdx) => {
-                    const globalId = `${catKey}-${itemIdx}`;
+                catalog[catKey].items.forEach((item, idx) => {
+                    const globalId = `${catKey}-${idx}`;
                     const chk = document.getElementById(`cat-check-${globalId}`);
+                    const qty = document.getElementById(`cat-qty-${globalId}`);
+                    const note = document.getElementById(`cat-note-${globalId}`);
+
                     if (chk && chk.checked) {
-                        const qty = document.getElementById(`cat-qty-${globalId}`);
-                        const note = document.getElementById(`cat-note-${globalId}`);
-                        currentSession.items.push({
+                        selectedItems.push({
                             name: item,
-                            qty: (qty && qty.value.trim()) ? qty.value.trim() : "1",
-                            note: (note && note.value.trim()) ? note.value.trim() : "",
-                            taken: false
+                            category: catKey,
+                            qty: qty ? qty.value.trim() : '',
+                            note: note ? note.value.trim() : '',
+                            done: false
                         });
                     }
                 });
             });
 
-            if (!currentSession.items || currentSession.items.length === 0) {
-                alert("Seleziona almeno un prodotto prima di procedere con il riepilogo!");
+            currentSession.items = selectedItems;
+            pushToFirebase();
+        }
+
+        function resetCatalogSelection() {
+            if (confirm("Vuoi azzerare tutta la selezione corrente?")) {
+                currentSession.items = [];
+                applySessionToDOM();
+                pushToFirebase();
+            }
+        }
+
+        function hideAllSections() {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+        }
+
+        function goHome() {
+            hideAllSections();
+            document.getElementById('setupSection').classList.remove('hidden');
+        }
+
+        function startMode(mode) {
+            const date = document.getElementById('inputDate').value;
+            const author = document.getElementById('inputAuthor').value.trim();
+
+            if (!author) {
+                alert("Per favore seleziona o inserisci il tuo nome!");
                 return;
             }
 
+            currentSession.date = date;
+            currentSession.author = author;
             pushToFirebase();
-            document.getElementById('createSection').classList.add('hidden');
-            document.getElementById('reviewSection').classList.remove('hidden');
-            
-            const listContainer = document.getElementById('reviewItemsList');
-            listContainer.innerHTML = '';
-            currentSession.items.forEach(i => {
-                let div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-amber-200 shadow-xs text-xs font-bold text-slate-800";
-                div.innerHTML = `<span>🛒 ${i.name} <span class="text-orange-600 font-extrabold">(Qtà: ${i.qty})</span> ${i.note ? '• <span class="text-slate-500">' + i.note + '</span>' : ''}</span>`;
-                listContainer.appendChild(div);
+
+            if (mode === 'create') {
+                hideAllSections();
+                document.getElementById('createSection').classList.remove('hidden');
+            }
+        }
+
+        function goToReviewScreen() {
+            updateLiveSession();
+            if (!currentSession.items || currentSession.items.length === 0) {
+                alert("Non hai selezionato alcun prodotto!");
+                return;
+            }
+
+            const container = document.getElementById('reviewItemsList');
+            container.innerHTML = '';
+
+            currentSession.items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center p-3 bg-white rounded-xl border border-amber-200 shadow-2xs';
+                /* Aumentata la dimensione font nel riepilogo */
+                div.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="font-extrabold text-slate-900 text-base md:text-lg">${item.name}</span>
+                        ${item.qty ? `<span class="bg-amber-100 text-amber-800 text-sm font-bold px-2 py-0.5 rounded-lg">Qtà: ${item.qty}</span>` : ''}
+                    </div>
+                    ${item.note ? `<span class="text-sm font-bold text-slate-500 italic">" ${item.note} "</span>` : ''}
+                `;
+                container.appendChild(div);
             });
+
+            hideAllSections();
+            document.getElementById('reviewSection').classList.remove('hidden');
         }
 
         function backToCreateFromReview() {
-            document.getElementById('reviewSection').classList.add('hidden');
+            hideAllSections();
             document.getElementById('createSection').classList.remove('hidden');
         }
 
         function confirmAndSaveShoppingList() {
             pushToFirebase();
-            document.getElementById('reviewSection').classList.add('hidden');
+            renderSavedItemsSummary();
+            hideAllSections();
             document.getElementById('postSaveSection').classList.remove('hidden');
-            
-            const summaryList = document.getElementById('savedItemsSummaryList');
-            summaryList.innerHTML = '';
-            currentSession.items.forEach(i => {
-                let div = document.createElement('div');
-                div.className = "bg-white p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 flex justify-between";
-                div.innerHTML = `<span>${i.name} (Qtà: ${i.qty})</span> <span class="text-slate-500">${i.note || ''}</span>`;
-                summaryList.appendChild(div);
+        }
+
+        function renderSavedItemsSummary() {
+            const container = document.getElementById('savedItemsSummaryList');
+            container.innerHTML = '';
+            if (!currentSession.items || currentSession.items.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-400 italic">Nessun prodotto in lista.</p>';
+                return;
+            }
+
+            currentSession.items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center p-2.5 bg-white rounded-xl border border-slate-200 text-sm';
+                /* Aumentata dimensione dei caratteri */
+                div.innerHTML = `
+                    <span class="font-extrabold text-slate-900 text-base md:text-lg">${item.name}</span>
+                    <div class="flex items-center gap-2 text-sm font-bold text-slate-600">
+                        ${item.qty ? `<span class="bg-slate-100 px-2 py-0.5 rounded-md">Qtà: ${item.qty}</span>` : ''}
+                        ${item.note ? `<span class="text-slate-400 font-normal italic">${item.note}</span>` : ''}
+                    </div>
+                `;
+                container.appendChild(div);
             });
         }
 
         function addExtraItemAfterSave() {
-            const name = document.getElementById('extraPostName').value.trim().toUpperCase();
-            const qty = document.getElementById('extraPostQty').value.trim() || "1";
-            const note = document.getElementById('extraPostNote').value.trim();
+            const nameInput = document.getElementById('extraPostName');
+            const qtyInput = document.getElementById('extraPostQty');
+            const noteInput = document.getElementById('extraPostNote');
 
-            if (!name) {
-                alert("Inserisci il nome del prodotto!");
-                return;
-            }
+            const name = nameInput.value.trim().toUpperCase();
+            if (!name) return;
 
-            currentSession.items.push({ name, qty, note, taken: false });
+            currentSession.items.push({
+                name: name,
+                category: 'dispensa',
+                qty: qtyInput.value.trim(),
+                note: noteInput.value.trim(),
+                done: false
+            });
+
+            nameInput.value = '';
+            qtyInput.value = '';
+            noteInput.value = '';
+
             pushToFirebase();
-
-            document.getElementById('extraPostName').value = '';
-            document.getElementById('extraPostQty').value = '';
-            document.getElementById('extraPostNote').value = '';
-
-            confirmAndSaveShoppingList();
+            renderSavedItemsSummary();
         }
 
         function goToSupermarketFromPostSave() {
-            document.getElementById('postSaveSection').classList.add('hidden');
+            hideAllSections();
+            document.getElementById('shopSection').classList.remove('hidden');
+            renderActiveShoppingList();
+        }
+
+        function goToSupermarketDirect() {
+            startMode('shop');
+            hideAllSections();
             document.getElementById('shopSection').classList.remove('hidden');
             renderActiveShoppingList();
         }
@@ -730,273 +742,296 @@
 
         function renderActiveShoppingList() {
             const container = document.getElementById('activeShoppingList');
-            if (!container) return;
             container.innerHTML = '';
 
-            if (currentSession.items.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 font-bold text-sm">Nessun prodotto in lista. Torna a compilare la spesa!</div>`;
-                updateProgress(0, 0);
+            if (!currentSession.items || currentSession.items.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-8 text-slate-400 font-bold">Nessun prodotto in lista da acquistare!</div>';
+                updateProgressBar(0, 0);
                 return;
             }
 
             let takenCount = 0;
+
             currentSession.items.forEach((item, idx) => {
-                if (item.taken) takenCount++;
+                if (item.done) takenCount++;
 
-                let div = document.createElement('div');
-                div.className = `p-3.5 rounded-2xl border-2 flex items-center justify-between transition shadow-xs ${item.taken ? 'bg-emerald-50/90 border-emerald-300 text-emerald-950 opacity-75 line-through' : 'bg-white border-slate-200 text-slate-900'}`;
-                
-                div.innerHTML = `
-                    <label class="flex items-center gap-3 cursor-pointer flex-grow min-w-0">
-                        <input type="checkbox" ${item.taken ? 'checked' : ''} onchange="toggleItemTaken(${idx})" class="w-5 h-5 rounded text-blue-600 focus:ring-blue-500 shrink-0">
-                        <div class="min-w-0">
-                            <span class="text-sm font-extrabold uppercase tracking-tight block truncate">${item.name}</span>
-                            <span class="text-xs font-bold text-orange-600 block">Qtà: ${item.qty} ${item.note ? '• ' + item.note : ''}</span>
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-2xl border-2 flex items-center justify-between transition ${item.done ? 'bg-emerald-50 border-emerald-300 opacity-60' : 'bg-white border-slate-200 shadow-xs'}`;
+
+                /* Aumentata notevolmente la dimensione del font e degli elementi touch in modalità spesa per velocizzare i click al supermercato */
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 min-w-0 flex-grow cursor-pointer" onclick="toggleItemDone(${idx})">
+                        <input type="checkbox" ${item.done ? 'checked' : ''} class="w-7 h-7 rounded-lg text-blue-600 focus:ring-blue-500 accent-blue-600 shrink-0 cursor-pointer">
+                        <div class="min-w-0 flex-grow">
+                            <span class="font-black ${item.done ? 'line-through text-slate-400' : 'text-slate-900'} text-lg md:text-xl block truncate">${item.name}</span>
+                            <div class="flex items-center gap-2 mt-0.5 text-sm md:text-base font-bold text-slate-500 flex-wrap">
+                                ${item.qty ? `<span class="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md">Qtà: ${item.qty}</span>` : ''}
+                                ${item.note ? `<span class="italic text-slate-400">${item.note}</span>` : ''}
+                            </div>
                         </div>
-                    </label>
+                    </div>
+                    <button onclick="removeItemFromActiveShop(${idx})" class="text-rose-400 hover:text-rose-600 p-2 rounded-xl text-lg hover:bg-rose-50 transition shrink-0 ml-2" title="Elimina">🗑️</button>
                 `;
-                container.appendChild(div);
+                container.appendChild(card);
             });
 
-            updateProgress(takenCount, currentSession.items.length);
+            updateProgressBar(takenCount, currentSession.items.length);
         }
 
-        function toggleItemTaken(idx) {
-            currentSession.items[idx].taken = !currentSession.items[idx].taken;
+        function toggleItemDone(idx) {
+            currentSession.items[idx].done = !currentSession.items[idx].done;
             pushToFirebase();
             renderActiveShoppingList();
         }
 
-        function updateProgress(taken, total) {
-            const text = document.getElementById('progressText');
+        function removeItemFromActiveShop(idx) {
+            currentSession.items.splice(idx, 1);
+            pushToFirebase();
+            renderActiveShoppingList();
+        }
+
+        function updateProgressBar(taken, total) {
             const bar = document.getElementById('progressBar');
-            if (text) text.innerText = `Prodotti presi: ${taken} / ${total}`;
-            const percent = total > 0 ? (taken / total) * 100 : 0;
-            if (bar) bar.style.width = `${percent}%`;
-        }
-
-        function promptCompleteShopping() {
-            document.getElementById('shopSection').classList.add('hidden');
-            document.getElementById('summaryModalSection').classList.remove('hidden');
-
-            const takenContainer = document.getElementById('summaryTakenList');
-            const missingContainer = document.getElementById('summaryMissingList');
-            takenContainer.innerHTML = '';
-            missingContainer.innerHTML = '';
-
-            let hasTaken = false;
-            let hasMissing = false;
-
-            currentSession.items.forEach(i => {
-                let div = document.createElement('div');
-                div.className = "bg-white p-2.5 rounded-xl border text-xs font-bold text-slate-800 shadow-xs flex justify-between";
-                div.innerHTML = `<span>${i.name} (Qtà: ${i.qty})</span> <span class="text-slate-500">${i.note || ''}</span>`;
-                
-                if (i.taken) {
-                    hasTaken = true;
-                    takenContainer.appendChild(div);
-                } else {
-                    hasMissing = true;
-                    missingContainer.appendChild(div);
-                }
-            });
-
-            if (!hasTaken) takenContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Nessun prodotto preso.</span>`;
-            if (!hasMissing) missingContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Nessun prodotto mancante.</span>`;
-        }
-
-        function backToShopFromSummary() {
-            document.getElementById('summaryModalSection').classList.add('hidden');
-            document.getElementById('shopSection').classList.remove('hidden');
-            renderActiveShoppingList();
-        }
-
-        function confirmAndFinalizeShopping() {
-            // FILTRAGGIO RIGOROSO: Nello storico vanno SOLTANTO i prodotti spuntati (taken: true)
-            const onlyTakenItems = currentSession.items.filter(i => i.taken);
-
-            if (onlyTakenItems.length > 0) {
-                history.unshift({
-                    date: currentSession.date,
-                    author: currentSession.author,
-                    items: onlyTakenItems,
-                    timestamp: Date.now()
-                });
-            }
-
-            // I prodotti NON presi restano salvati per la sessione successiva
-            currentSession.items = currentSession.items.filter(i => !i.taken);
-            pushToFirebase();
-
-            document.getElementById('summaryModalSection').classList.add('hidden');
-            goHome();
-            alert("Spesa completata! I soli prodotti presi sono stati registrati nello Storico cloud.");
+            const txt = document.getElementById('progressText');
+            txt.innerText = `Prodotti presi: ${taken} / ${total}`;
+            const pct = total === 0 ? 0 : Math.round((taken / total) * 100);
+            bar.style.width = `${pct}%`;
         }
 
         function clearEntireShopping() {
-            if (confirm("Vuoi svuotare interamente la spesa corrente?")) {
+            if (confirm("Sei sicuro di voler cancellare TUTTA la spesa in corso?")) {
                 currentSession.items = [];
                 pushToFirebase();
                 renderActiveShoppingList();
             }
         }
 
-        function openAddProductModal() {
-            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-            document.getElementById('addProductSection').classList.remove('hidden');
-        }
-
-        function saveNewCatalogProduct() {
-            const name = document.getElementById('newProdNameInput').value.trim().toUpperCase();
-            const category = document.getElementById('newProdCategorySelect').value;
-
-            if (!name) {
-                alert("Inserisci il nome del prodotto!");
+        function promptCompleteShopping() {
+            if (!currentSession.items || currentSession.items.length === 0) {
+                alert("La lista è vuota!");
                 return;
             }
 
-            if (!catalog[category].items.includes(name)) {
-                catalog[category].items.push(name);
-                pushToFirebase();
-                alert(`Prodotto "${name}" aggiunto con successo al reparto ${catalog[category].title}!`);
-                document.getElementById('newProdNameInput').value = '';
-                goHome();
+            const taken = currentSession.items.filter(i => i.done);
+            const missing = currentSession.items.filter(i => !i.done);
+
+            const takenContainer = document.getElementById('summaryTakenList');
+            const missingContainer = document.getElementById('summaryMissingList');
+
+            takenContainer.innerHTML = '';
+            missingContainer.innerHTML = '';
+
+            if (taken.length === 0) {
+                takenContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Nessun prodotto spuntato.</p>';
             } else {
-                alert("Il prodotto è già presente in questo reparto!");
-            }
-        }
-
-        function openManageProductsScreen() {
-            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-            document.getElementById('manageProductsSection').classList.remove('hidden');
-            
-            const container = document.getElementById('manageCatalogContainer');
-            container.innerHTML = '';
-
-            Object.keys(catalog).forEach(catKey => {
-                const cat = catalog[catKey];
-                let div = document.createElement('div');
-                div.className = `rounded-2xl border-2 ${cat.cardBg} p-4 shadow-sm flex flex-col`;
-                
-                let html = `
-                    <div class="px-3 py-2 rounded-xl ${cat.headerBg} font-extrabold text-xs uppercase tracking-wider mb-3 shadow-xs">
-                        ${cat.title}
-                    </div>
-                    <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
-                `;
-
-                cat.items.forEach((item, idx) => {
-                    html += `
-                        <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-xs flex justify-between items-center text-xs font-bold text-slate-800">
-                            <span class="truncate uppercase">${item}</span>
-                            <button onclick="deleteCatalogItem('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-extrabold px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 transition shrink-0">🗑️</button>
-                        </div>
-                    `;
+                taken.forEach(i => {
+                    takenContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-emerald-200 text-base md:text-lg font-extrabold text-slate-800">${i.name} ${i.qty ? `(${i.qty})` : ''}</div>`;
                 });
+            }
 
-                div.innerHTML = html + `</div>`;
-                container.appendChild(div);
-            });
+            if (missing.length === 0) {
+                missingContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Tutti i prodotti sono stati presi!</p>';
+            } else {
+                missing.forEach(i => {
+                    missingContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-amber-200 text-base md:text-lg font-extrabold text-slate-800">${i.name} ${i.qty ? `(${i.qty})` : ''}</div>`;
+                });
+            }
+
+            hideAllSections();
+            document.getElementById('summaryModalSection').classList.remove('hidden');
         }
 
-        function deleteCatalogItem(catKey, idx) {
-            if (confirm("Vuoi rimuovere questo prodotto dal catalogo?")) {
-                catalog[catKey].items.splice(idx, 1);
-                pushToFirebase();
-                openManageProductsScreen();
+        function backToShopFromSummary() {
+            hideAllSections();
+            document.getElementById('shopSection').classList.remove('hidden');
+        }
+
+        function confirmAndFinalizeShopping() {
+            const taken = currentSession.items.filter(i => i.done);
+            const missing = currentSession.items.filter(i => !i.done);
+
+            if (taken.length > 0) {
+                history.unshift({
+                    id: Date.now(),
+                    date: currentSession.date,
+                    author: currentSession.author,
+                    items: taken
+                });
             }
+
+            currentSession.items = missing;
+            pushToFirebase();
+
+            alert("Spesa completata ed archiviata con successo!");
+            goHome();
         }
 
         function showHistory() {
-            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            hideAllSections();
             document.getElementById('historySection').classList.remove('hidden');
             renderHistoryList();
         }
 
         function renderHistoryList() {
             const container = document.getElementById('historyContainer');
-            const statsDashboard = document.getElementById('statsDashboard');
-            if (!container || !statsDashboard) return;
-
+            const stats = document.getElementById('statsDashboard');
             container.innerHTML = '';
-            statsDashboard.innerHTML = '';
+            stats.innerHTML = '';
 
-            let totalOrders = history.length;
-            let totalItemsBought = history.reduce((acc, h) => acc + h.items.length, 0);
+            const totalSpese = history.length;
+            let totalArticoli = 0;
+            history.forEach(h => totalArticoli += h.items.length);
 
-            statsDashboard.innerHTML = `
-                <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 shadow-sm">
-                    <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Ordini Totali</span>
-                    <span class="text-2xl font-extrabold text-orange-400">${totalOrders}</span>
+            stats.innerHTML = `
+                <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-center">
+                    <span class="block text-xs font-bold text-slate-500 uppercase">Totale Spese</span>
+                    <span class="text-2xl font-black text-slate-900">${totalSpese}</span>
                 </div>
-                <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 shadow-sm">
-                    <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Prodotti Acquistati</span>
-                    <span class="text-2xl font-extrabold text-emerald-400">${totalItemsBought}</span>
+                <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-center">
+                    <span class="block text-xs font-bold text-slate-500 uppercase">Prodotti Acquistati</span>
+                    <span class="text-2xl font-black text-emerald-600">${totalArticoli}</span>
                 </div>
             `;
 
             if (history.length === 0) {
-                container.innerHTML = `<div class="text-center py-8 text-slate-400 font-bold text-sm">Nessun ordine nello storico.</div>`;
+                container.innerHTML = '<div class="text-center py-12 text-slate-400 font-bold">Nessuna spesa salvata nello storico.</div>';
                 return;
             }
 
-            history.forEach((h, hIdx) => {
-                let div = document.createElement('div');
-                div.className = "bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-slate-900";
-                
-                let itemsHtml = h.items.map(i => `<li class="text-xs font-bold text-emerald-700">${i.name} (Qtà: ${i.qty}) ${i.note ? '- ' + i.note : ''}</li>`).join('');
+            history.forEach(h => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-2xs';
 
-                div.innerHTML = `
-                    <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
-                        <span class="font-extrabold text-sm">📅 ${h.date} • <span class="text-amber-600">👤 ${h.author}</span></span>
-                        <button onclick="deleteHistoryItem(${hIdx})" class="text-rose-500 hover:text-rose-700 text-xs font-bold bg-rose-50 px-2.5 py-1 rounded-xl">Elimina Storico</button>
+                let itemsHtml = '';
+                h.items.forEach(i => {
+                    itemsHtml += `<span class="bg-white border border-slate-200 text-slate-800 text-sm md:text-base font-extrabold px-2.5 py-1 rounded-lg">${i.name} ${i.qty ? `(${i.qty})` : ''}</span> `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
+                        <div>
+                            <span class="font-extrabold text-slate-900 text-sm">${h.date}</span>
+                            <span class="text-xs text-slate-500 font-bold ml-2">👤 ${h.author}</span>
+                        </div>
+                        <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full">${h.items.length} prodotti</span>
                     </div>
-                    <ul class="list-disc pl-5 space-y-1">${itemsHtml}</ul>
+                    <div class="flex flex-wrap gap-1.5">
+                        ${itemsHtml}
+                    </div>
                 `;
-                container.appendChild(div);
+                container.appendChild(card);
             });
         }
 
-        function deleteHistoryItem(idx) {
-            if (confirm("Vuoi eliminare questo storico?")) {
-                history.splice(idx, 1);
-                pushToFirebase();
-                renderHistoryList();
-            }
-        }
-
         function exportHistoryExcel() {
-            if (history.length === 0) {
-                alert("Nessun dato nello storico da esportare!");
-                return;
-            }
-            let csvContent = "data:text/csv;charset=utf-8,Data,Autore,Prodotto,Quantita,Nota\n";
+            let csvContent = "data:text/csv;charset=utf-8,Data,Autore,Prodotto,Quantita,Note\n";
             history.forEach(h => {
                 h.items.forEach(i => {
-                    csvContent += `${h.date},${h.author},"${i.name}",${i.qty},"${i.note || ''}"\n`;
+                    csvContent += `"${h.date}","${h.author}","${i.name}","${i.qty || ''}","${i.note || ''}"\n`;
                 });
             });
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "storico_spesa_galleon.csv");
+            link.setAttribute("download", `Storico_Spesa_Galleon_${new Date().toISOString().split('T')[0]}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
         function exportHistoryJSON() {
-            if (history.length === 0) {
-                alert("Nessun dato nello storico da esportare!");
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `Storico_Spesa_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function openManageProductsScreen() {
+            hideAllSections();
+            document.getElementById('manageProductsSection').classList.remove('hidden');
+            renderManageCatalog();
+        }
+
+        function renderManageCatalog() {
+            const container = document.getElementById('manageCatalogContainer');
+            container.innerHTML = '';
+
+            Object.keys(catalog).forEach(catKey => {
+                const cat = catalog[catKey];
+                const card = document.createElement('div');
+                card.className = `${cat.cardBg} rounded-2xl border-2 shadow-xs overflow-hidden flex flex-col`;
+
+                let itemsHtml = '';
+                cat.items.forEach((item, idx) => {
+                    itemsHtml += `
+                        <div class="flex items-center justify-between p-2 bg-white/90 rounded-xl border border-slate-200/60 shadow-2xs">
+                            <span class="font-extrabold text-slate-900 text-base md:text-lg">${item}</span>
+                            <button onclick="removeProductFromCatalog('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-bold p-1 text-base">✕</button>
+                        </div>
+                    `;
+                });
+
+                /* Rimosso l'overflow-y-auto interno anche per la gestione del catalogo */
+                card.innerHTML = `
+                    <div class="${cat.headerBg} p-3 font-extrabold text-sm flex items-center justify-between">
+                        <span>${cat.title}</span>
+                        <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full">${cat.items.length}</span>
+                    </div>
+                    <div class="p-3 space-y-2 flex-grow">
+                        ${itemsHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function removeProductFromCatalog(catKey, idx) {
+            if (confirm(`Rimuovere "${catalog[catKey].items[idx]}" dal catalogo?`)) {
+                catalog[catKey].items.splice(idx, 1);
+                pushToFirebase();
+                renderManageCatalog();
+            }
+        }
+
+        function openAddProductModal() {
+            hideAllSections();
+            document.getElementById('addProductSection').classList.remove('hidden');
+        }
+
+        function saveNewCatalogProduct() {
+            const nameInput = document.getElementById('newProdNameInput');
+            const catSelect = document.getElementById('newProdCategorySelect');
+
+            const name = nameInput.value.trim().toUpperCase();
+            const catKey = catSelect.value;
+
+            if (!name) {
+                alert("Inserisci il nome del prodotto!");
                 return;
             }
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", "storico_spesa_galleon.json");
-            document.body.appendChild(dlAnchorElem);
-            dlAnchorElem.click();
-            dlAnchorElem.remove();
+
+            if (!catalog[catKey].items.includes(name)) {
+                catalog[catKey].items.push(name);
+                pushToFirebase();
+                alert(`Prodotto "${name}" aggiunto con successo!`);
+                nameInput.value = '';
+                goHome();
+            } else {
+                alert("Questo prodotto esiste già in catalogo!");
+            }
+        }
+
+        function resetSession() {
+            const newAuthor = prompt("Inserisci il nome di chi usa l'app:", currentSession.author);
+            if (newAuthor && newAuthor.trim() !== '') {
+                currentSession.author = newAuthor.trim();
+                document.getElementById('inputAuthor').value = currentSession.author;
+                document.getElementById('displayAuthor').innerText = currentSession.author;
+                pushToFirebase();
+            }
         }
     </script>
 </body>
