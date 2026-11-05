@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Sfondo Sfumato Moderno -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <!-- Sfumatura Arancione Brand -->
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sfondo Rettangolare Arrotondato per PWA -->
+  <rect width="512" height="512" rx="110" fill="url(#bgGrad)" />
+  <rect width="496" height="496" x="8" y="8" rx="102" fill="none" stroke="#334155" stroke-width="6" />
+
+  <!-- Carrello della Spesa -->
+  <g fill="none" stroke="url(#brandGrad)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" transform="translate(0, -25)">
+    <!-- Manico e struttura -->
+    <path d="M 100 130 L 150 130 L 195 300 L 390 300 L 430 170 L 180 170" />
+    <!-- Ruote -->
+    <circle cx="225" cy="360" r="15" fill="#f97316" stroke="none" />
+    <circle cx="360" cy="360" r="15" fill="#f59e0b" stroke="none" />
+  </g>
+
+  <!-- Fetta di Pizza -->
+  <g transform="translate(230, 115) rotate(10) scale(1.05)">
+    <!-- Crosta Pizza -->
+    <path d="M 10 30 Q 60 10 110 30 L 60 130 Z" fill="#ea580c" />
+    <!-- Formaggio -->
+    <path d="M 18 36 Q 60 20 102 36 L 60 120 Z" fill="#fbbf24" />
+    <!-- Condimento -->
+    <circle cx="50" cy="50" r="8" fill="#dc2626" />
+    <circle cx="75" cy="65" r="7" fill="#dc2626" />
+    <circle cx="60" cy="88" r="6" fill="#dc2626" />
+  </g>
+
+  <!-- Scritta THE GALLEON PIZZERIA -->
+  <text x="256" y="425" text-anchor="middle" fill="#ffffff" font-family="&#39;Plus Jakarta Sans&#39;, system-ui, sans-serif" font-weight="900" font-size="34" letter-spacing="2">
+    THE GALLEON
+  </text>
+  <text x="256" y="455" text-anchor="middle" fill="#f97316" font-family="&#39;Plus Jakarta Sans&#39;, system-ui, sans-serif" font-weight="800" font-size="20" letter-spacing="6">
+    PIZZERIA
+  </text>
+</svg>
