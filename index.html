@@ -148,7 +148,7 @@
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200 flex-wrap gap-3">
                 <div>
                     <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Spesa</h2>
-                    <p class="text-slate-500 text-xs md:text-sm">Spunta i prodotti e scrivi quantità o note (es. cassa, bancale).</p>
+                    <p class="text-slate-500 text-xs md:text-sm">Spunta i prodotti e scrivi quantità o note nei campi sottostanti.</p>
                 </div>
                 <div class="flex gap-2">
                     <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Pulisci Tutto</button>
@@ -198,14 +198,12 @@
                 </div>
                 <div>
                     <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Reparto / Categoria</label>
-                    <select id="newProdCategorySelect" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
-                        <option value="ortofrutta">🍏 Ortofrutta e Freschi</option>
-                        <option value="macelleria">🥩 Macelleria e Pescheria</option>
-                        <option value="latticini">🧀 Latticini, Salumi e Uova</option>
-                        <option value="dispensa">🥫 Dispensa e Scatolame</option>
-                        <option value="bevande">🍷 Bevande e Alcolici</option>
-                        <option value="pulizia">🧹 Pulizia e Detergenti</option>
+                    <select id="newProdCategorySelect" onchange="checkNewCategoryInput(this)" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs mb-2">
+                        <!-- Popolato dinamicamente -->
                     </select>
+                    <div id="newCategoryContainer" class="hidden mt-2">
+                        <input type="text" id="newCategoryNameInput" placeholder="Nome nuovo reparto (es. FORNO)" class="w-full p-3.5 border-2 border-orange-300 rounded-2xl text-sm bg-orange-50/50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
+                    </div>
                 </div>
                 <button onclick="saveNewCatalogProduct()" class="btn-pro w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-orange-500/20">
                     💾 Salva nel Catalogo
@@ -456,6 +454,7 @@
             
             renderAuthorButtons();
             initCatalogCategories();
+            populateCategorySelect();
 
             rootRef.on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -468,6 +467,7 @@
                     if (data.catalog) {
                         catalog = data.catalog;
                         initCatalogCategories();
+                        populateCategorySelect();
                     }
                     if (data.history) {
                         history = data.history;
@@ -502,7 +502,7 @@
                 if(!chk.classList.contains('shop-chk')) chk.checked = false;
             });
             document.querySelectorAll('input[type="text"]').forEach(txt => {
-                if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate')) txt.value = '';
+                if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate') && !txt.id.includes('newCategoryNameInput')) txt.value = '';
             });
 
             if (currentSession.items && currentSession.items.length > 0) {
@@ -574,12 +574,17 @@
                 let itemsHtml = '';
                 cat.items.forEach((item, idx) => {
                     const globalId = `${catKey}-${idx}`;
+                    /* Layout ottimizzato: nome prodotto largo e ben visibile, campi quantità e note sotto per evitare compressioni */
                     itemsHtml += `
-                        <div class="flex items-center gap-2 p-2 bg-white/90 rounded-xl border border-slate-200/60 shadow-2xs">
-                            <input type="checkbox" id="cat-check-${globalId}" onchange="updateLiveSession()" class="w-6 h-6 rounded-lg text-orange-600 focus:ring-orange-500 cursor-pointer accent-orange-600 shrink-0">
-                            <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-base md:text-lg cursor-pointer leading-tight min-w-0 break-words">${item}</label>
-                            <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSession()" placeholder="Qtà" class="w-16 p-2 text-base md:text-lg border border-slate-300 rounded-lg text-center font-bold bg-white text-slate-900 focus:outline-none focus:border-orange-500 shrink-0">
-                            <input type="text" id="cat-note-${globalId}" oninput="updateLiveSession()" placeholder="Note" class="w-24 md:w-28 p-2 text-base md:text-lg border border-slate-300 rounded-lg text-center font-bold bg-white text-slate-900 focus:outline-none focus:border-orange-500 shrink-0">
+                        <div class="p-3 bg-white/95 rounded-xl border border-slate-200/80 shadow-2xs space-y-2">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" id="cat-check-${globalId}" onchange="updateLiveSession()" class="w-6 h-6 rounded-lg text-orange-600 focus:ring-orange-500 cursor-pointer accent-orange-600 shrink-0">
+                                <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-lg md:text-xl cursor-pointer leading-snug break-words">${item}</label>
+                            </div>
+                            <div class="flex items-center gap-2 pl-9">
+                                <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSession()" placeholder="Qtà" class="w-20 p-1.5 text-sm md:text-base border border-slate-300 rounded-lg text-center font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
+                                <input type="text" id="cat-note-${globalId}" oninput="updateLiveSession()" placeholder="Note (es. cassa, bancale)..." class="flex-grow p-1.5 text-sm md:text-base border border-slate-300 rounded-lg font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
+                            </div>
                         </div>
                     `;
                 });
@@ -589,7 +594,7 @@
                         <span>${cat.title}</span>
                         <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full">${cat.items.length}</span>
                     </div>
-                    <div class="p-3 space-y-2 flex-grow">
+                    <div class="p-3 space-y-2.5 flex-grow">
                         ${itemsHtml}
                     </div>
                 `;
@@ -597,6 +602,31 @@
             });
 
             applySessionToDOM();
+        }
+
+        function populateCategorySelect() {
+            const select = document.getElementById('newProdCategorySelect');
+            if (!select) return;
+            select.innerHTML = '';
+            Object.keys(catalog).forEach(catKey => {
+                const opt = document.createElement('option');
+                opt.value = catKey;
+                opt.innerText = catalog[catKey].title;
+                select.appendChild(opt);
+            });
+            const newOpt = document.createElement('option');
+            newOpt.value = 'new_category_option';
+            newOpt.innerText = '➕ Aggiungi Nuovo Reparto...';
+            select.appendChild(newOpt);
+        }
+
+        function checkNewCategoryInput(select) {
+            const container = document.getElementById('newCategoryContainer');
+            if (select.value === 'new_category_option') {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
         }
 
         function updateLiveSession() {
@@ -681,13 +711,13 @@
 
             currentSession.items.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'flex justify-between items-center p-3 bg-white rounded-xl border border-amber-200 shadow-2xs gap-3';
+                div.className = 'p-3 bg-white rounded-xl border border-amber-200 shadow-2xs space-y-1';
                 div.innerHTML = `
-                    <div class="flex items-center gap-2 min-w-0 flex-grow">
-                        <span class="font-extrabold text-slate-900 text-base md:text-lg break-words">${item.name}</span>
-                        ${item.qty ? `<span class="bg-amber-100 text-amber-800 text-sm font-bold px-2 py-0.5 rounded-lg shrink-0">Qtà: ${item.qty}</span>` : ''}
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-extrabold text-slate-900 text-lg md:text-xl break-words">${item.name}</span>
+                        ${item.qty ? `<span class="bg-amber-100 text-amber-800 text-sm font-bold px-2.5 py-0.5 rounded-lg shrink-0">Qtà: ${item.qty}</span>` : ''}
                     </div>
-                    ${item.note ? `<span class="text-sm font-bold text-slate-500 italic text-right max-w-[40%] truncate">"${item.note}"</span>` : ''}
+                    ${item.note ? `<div class="text-xs md:text-sm font-bold text-slate-500 italic">Note: ${item.note}</div>` : ''}
                 `;
                 container.appendChild(div);
             });
@@ -718,13 +748,13 @@
 
             currentSession.items.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'flex justify-between items-center p-2.5 bg-white rounded-xl border border-slate-200 text-sm gap-2';
+                div.className = 'p-3 bg-white rounded-xl border border-slate-200 space-y-1';
                 div.innerHTML = `
-                    <span class="font-extrabold text-slate-900 text-base md:text-lg min-w-0 break-words">${item.name}</span>
-                    <div class="flex items-center gap-2 text-sm font-bold text-slate-600 shrink-0">
-                        ${item.qty ? `<span class="bg-slate-100 px-2 py-0.5 rounded-md">Qtà: ${item.qty}</span>` : ''}
-                        ${item.note ? `<span class="text-slate-400 font-normal italic max-w-[120px] truncate">${item.note}</span>` : ''}
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-extrabold text-slate-900 text-base md:text-lg break-words">${item.name}</span>
+                        ${item.qty ? `<span class="bg-slate-100 text-slate-800 text-xs font-bold px-2 py-0.5 rounded-md shrink-0">Qtà: ${item.qty}</span>` : ''}
                     </div>
+                    ${item.note ? `<div class="text-xs text-slate-400 italic">Note: ${item.note}</div>` : ''}
                 `;
                 container.appendChild(div);
             });
@@ -740,7 +770,7 @@
             currentSession.items.forEach(i => {
                 text += `• *${i.name}*`;
                 if (i.qty) text += ` (Qtà: ${i.qty})`;
-                if (i.note) text += ` - Note: _${i.note}_`;
+                if (i.note) text += `\n  └ Note: _${i.note}_`;
                 text += `\n`;
             });
 
@@ -810,13 +840,13 @@
                 card.className = `p-4 rounded-2xl border-2 flex items-center justify-between transition ${item.done ? 'bg-emerald-50 border-emerald-300 opacity-60' : 'bg-white border-slate-200 shadow-xs'} gap-3`;
 
                 card.innerHTML = `
-                    <div class="flex items-center gap-3 min-w-0 flex-grow cursor-pointer" onclick="toggleItemDone(${idx})">
-                        <input type="checkbox" ${item.done ? 'checked' : ''} class="shop-chk w-7 h-7 rounded-lg text-blue-600 focus:ring-blue-500 accent-blue-600 shrink-0 cursor-pointer">
-                        <div class="min-w-0 flex-grow">
-                            <span class="font-black ${item.done ? 'line-through text-slate-400' : 'text-slate-900'} text-lg md:text-xl block break-words">${item.name}</span>
-                            <div class="flex items-center gap-2 mt-0.5 text-sm md:text-base font-bold text-slate-500 flex-wrap">
-                                ${item.qty ? `<span class="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md shrink-0">Qtà: ${item.qty}</span>` : ''}
-                                ${item.note ? `<span class="italic text-slate-400 break-words">${item.note}</span>` : ''}
+                    <div class="flex items-start gap-3 min-w-0 flex-grow cursor-pointer" onclick="toggleItemDone(${idx})">
+                        <input type="checkbox" ${item.done ? 'checked' : ''} class="shop-chk w-7 h-7 rounded-lg text-blue-600 focus:ring-blue-500 accent-blue-600 shrink-0 cursor-pointer mt-1">
+                        <div class="min-w-0 flex-grow space-y-1">
+                            <span class="font-black ${item.done ? 'line-through text-slate-400' : 'text-slate-900'} text-lg md:text-xl block break-words leading-snug">${item.name}</span>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                ${item.qty ? `<span class="bg-slate-100 text-slate-800 text-xs md:text-sm font-bold px-2 py-0.5 rounded-md shrink-0">Qtà: ${item.qty}</span>` : ''}
+                                ${item.note ? `<span class="text-xs md:text-sm italic text-slate-500 font-bold break-words">Note: ${item.note}</span>` : ''}
                             </div>
                         </div>
                     </div>
@@ -875,7 +905,7 @@
                 takenContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Nessun prodotto spuntato.</p>';
             } else {
                 taken.forEach(i => {
-                    takenContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-emerald-200 text-base md:text-lg font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(${i.qty})` : ''}</div>`;
+                    takenContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-emerald-200 text-sm md:text-base font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(Qtà: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
                 });
             }
 
@@ -883,7 +913,7 @@
                 missingContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Tutti i prodotti sono stati presi!</p>';
             } else {
                 missing.forEach(i => {
-                    missingContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-amber-200 text-base md:text-lg font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(${i.qty})` : ''}</div>`;
+                    missingContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-amber-200 text-sm md:text-base font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(Qtà: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
                 });
             }
 
@@ -954,7 +984,7 @@
 
                 let itemsHtml = '';
                 h.items.forEach(i => {
-                    itemsHtml += `<span class="bg-white border border-slate-200 text-slate-800 text-sm md:text-base font-extrabold px-2.5 py-1 rounded-lg">${i.name} ${i.qty ? `(${i.qty})` : ''}</span> `;
+                    itemsHtml += `<span class="bg-white border border-slate-200 text-slate-800 text-xs md:text-sm font-extrabold px-2.5 py-1 rounded-lg">${i.name} ${i.qty ? `(${i.qty})` : ''} ${i.note ? `[${i.note}]` : ''}</span> `;
                 });
 
                 card.innerHTML = `
@@ -1067,18 +1097,48 @@
         function openAddProductModal() {
             hideAllSections();
             document.getElementById('addProductSection').classList.remove('hidden');
+            populateCategorySelect();
+            document.getElementById('newCategoryContainer').classList.add('hidden');
         }
 
         function saveNewCatalogProduct() {
             const nameInput = document.getElementById('newProdNameInput');
             const catSelect = document.getElementById('newProdCategorySelect');
+            const newCatInput = document.getElementById('newCategoryNameInput');
 
             const name = nameInput.value.trim().toUpperCase();
-            const catKey = catSelect.value;
+            let catKey = catSelect.value;
 
             if (!name) {
                 alert("Inserisci il nome del prodotto!");
                 return;
+            }
+
+            // Gestione creazione nuova categoria al volo
+            if (catKey === 'new_category_option') {
+                const newCatName = newCatInput.value.trim().toUpperCase();
+                if (!newCatName) {
+                    alert("Inserisci il nome del nuovo reparto!");
+                    return;
+                }
+                // Genera una chiave pulita dal nome (es. "FORNO" -> "forno")
+                catKey = newCatName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                if (!catalog[catKey]) {
+                    // Colori casuali/standard per nuove categorie
+                    const colors = [
+                        { headerBg: "bg-teal-700 text-white", cardBg: "bg-teal-50/80 border-teal-300" },
+                        { headerBg: "bg-orange-700 text-white", cardBg: "bg-orange-50/80 border-orange-300" },
+                        { headerBg: "bg-pink-700 text-white", cardBg: "bg-pink-50/80 border-pink-300" }
+                    ];
+                    const chosenColor = colors[Object.keys(catalog).length % colors.length];
+
+                    catalog[catKey] = {
+                        title: "🏷️ " + newCatName,
+                        headerBg: chosenColor.headerBg,
+                        cardBg: chosenColor.cardBg,
+                        items: []
+                    };
+                }
             }
 
             if (!catalog[catKey].items.includes(name)) {
@@ -1086,9 +1146,10 @@
                 pushToFirebase();
                 alert(`Prodotto "${name}" aggiunto con successo!`);
                 nameInput.value = '';
+                newCatInput.value = '';
                 goHome();
             } else {
-                alert("Questo prodotto esiste già in catalogo!");
+                alert("Questo prodotto esiste già in questo reparto!");
             }
         }
 
