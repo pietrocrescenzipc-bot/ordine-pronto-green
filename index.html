@@ -51,7 +51,7 @@
                 </div>
                 <div class="min-w-0">
                     <h1 class="text-sm md:text-base font-extrabold tracking-tight text-white leading-none truncate">The Galleon</h1>
-                    <span id="headerSubtitle" class="text-[10px] font-bold uppercase tracking-widest text-orange-400 truncate block">Gestione Spesa Semplice</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-400 truncate block">Gestione Spesa Semplice</span>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                 <span id="displayDate" class="text-slate-300 hidden sm:inline"></span> 
                 <span class="text-slate-600 hidden sm:inline">•</span> 
                 <span class="text-amber-400 flex items-center gap-1">👤 <span id="displayAuthor">Orsola</span></span>
-                <button onclick="resetSession()" id="btnChangeAuthor" class="ml-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded-xl text-[11px] font-extrabold transition">Cambia</button>
+                <button onclick="resetSession()" class="ml-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded-xl text-[11px] font-extrabold transition">Cambia</button>
             </div>
         </div>
     </header>
@@ -78,22 +78,22 @@
         <div class="flex justify-between items-center pb-5 border-b border-slate-800 mb-6">
             <div class="flex items-center gap-2.5">
                 <span class="text-xl">🧭</span>
-                <span id="menuTitle" class="font-extrabold text-lg text-white">Menu Rapido</span>
+                <span class="font-extrabold text-lg text-white">Menu Rapido</span>
             </div>
             <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-slate-400 hover:text-white transition">✕</button>
         </div>
 
         <nav class="space-y-2.5 flex-grow">
-            <button onclick="toggleSidebar(); goHome();" id="menuHome" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
                 🏠 Home Principale
             </button>
-            <button onclick="toggleSidebar(); openAddProductModal();" id="menuAddProd" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
                 ➕ Aggiungi Nuovo Prodotto
             </button>
-            <button onclick="toggleSidebar(); openManageProductsScreen();" id="menuManage" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
                 🗑️ Gestisci Catalogo Prodotti
             </button>
-            <button onclick="toggleSidebar(); showHistory();" id="menuHistory" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
                 📊 Storico Spese Passate
             </button>
         </nav>
@@ -111,42 +111,33 @@
                 <div class="inline-flex p-4 rounded-2xl bg-orange-50 text-orange-600 text-4xl shadow-inner mb-3">
                     🛒
                 </div>
-                <h2 id="txtWhatToDo" class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Cosa vuoi fare oggi?</h2>
-                <p id="txtSelectName" class="text-slate-500 text-sm mt-1.5">Seleziona il tuo nome e scegli un'operazione.</p>
-            </div>
-
-            <!-- Selettore Lingua Interfaccia -->
-            <div class="max-w-2xl mx-auto mb-8 bg-amber-50/90 p-4 rounded-2xl border-2 border-amber-300 flex items-center justify-between shadow-xs">
-                <span class="font-extrabold text-amber-950 text-xs md:text-sm uppercase tracking-wider">🌐 Lingua App / ভাষা নির্বাচন করুন:</span>
-                <select id="appLangSelect" onchange="changeAppLanguage(this.value)" class="p-2.5 border-2 border-amber-400 rounded-xl text-sm font-extrabold bg-white text-slate-900 focus:outline-none shadow-xs cursor-pointer">
-                    <option value="it">🇮🇹 Italiano</option>
-                    <option value="bn">🇧🇩 বাংলা (Bengalese)</option>
-                </select>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Cosa vuoi fare oggi?</h2>
+                <p class="text-slate-500 text-sm mt-1.5">Seleziona il tuo nome e scegli un'operazione.</p>
             </div>
             
             <div class="grid md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto bg-slate-50 p-5 md:p-6 rounded-3xl border border-slate-200/80 shadow-inner">
                 <div>
-                    <label id="lblDate" class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">📅 Data di oggi</label>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">📅 Data di oggi</label>
                     <input type="date" id="inputDate" class="w-full p-3.5 border-2 border-slate-200 rounded-2xl text-base font-bold bg-white text-slate-900 focus:border-orange-500 focus:outline-none text-center shadow-xs">
                 </div>
                 <div>
-                    <label id="lblWhoAreYou" class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Chi sei? (Tocca il nome)</label>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Chi sei? (Tocca il nome)</label>
                     <div class="grid grid-cols-3 gap-2 mb-2.5" id="authorButtons"></div>
                     <input type="text" id="inputAuthor" placeholder="O scrivi il nome..." class="w-full p-3 border-2 border-slate-200 rounded-2xl text-sm bg-white text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-6">
-                <button onclick="startMode('create')" id="btnCompile" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
+                <button onclick="startMode('create')" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
                     📝 COMPILA LA SPESA
                 </button>
-                <button onclick="goToSupermarketDirect()" id="btnSupermarket" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
+                <button onclick="goToSupermarketDirect()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
                     🛍️ VAI AL SUPERMERCATO
                 </button>
             </div>
 
             <div class="mt-8 text-center">
-                <button onclick="showHistory()" id="btnHistory" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl border border-slate-300 inline-block text-xs uppercase tracking-wider shadow-xs">
+                <button onclick="showHistory()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl border border-slate-300 inline-block text-xs uppercase tracking-wider shadow-xs">
                     📊 Visualizza Storico Spese Passate
                 </button>
             </div>
@@ -156,22 +147,22 @@
         <section id="createSection" class="hidden pro-card rounded-3xl p-4 md:p-8 mt-4 w-full relative">
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200 flex-wrap gap-3">
                 <div>
-                    <h2 id="createTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Spesa</h2>
-                    <p id="createDesc" class="text-slate-500 text-xs md:text-sm">Spunta i prodotti e scrivi quantità o note nei campi sottostanti.</p>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Spesa</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Spunta i prodotti e scrivi quantità o note nei campi sottostanti.</p>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="resetCatalogSelection()" id="btnClearAll" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Pulisci Tutto</button>
-                    <button onclick="goHome()" id="btnBackHome1" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
+                    <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Pulisci Tutto</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
 
             <div class="sticky bottom-2 z-20 pt-2 bg-white/90 backdrop-blur-md rounded-2xl pb-1 flex gap-3">
-                <button onclick="goHome()" id="btnBackCreate" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-5 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
-                    ⬅️ <span id="txtBack">Indietro</span>
+                <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-5 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
+                    ⬅️ Indietro
                 </button>
-                <button onclick="goToReviewScreen()" id="btnReview" class="btn-pro flex-grow bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-3 px-5 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
+                <button onclick="goToReviewScreen()" class="btn-pro flex-grow bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-3 px-5 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
                     🔍 CONTROLLA RIEPILOGO 🚀
                 </button>
             </div>
@@ -181,14 +172,14 @@
         <section id="manageProductsSection" class="hidden pro-card rounded-3xl p-4 md:p-8 mt-4 w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
                 <div>
-                    <h2 id="manageTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
-                    <p id="manageDesc" class="text-slate-500 text-sm">Elimina prodotti non necessari o visualizza i reparti.</p>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
+                    <p class="text-slate-500 text-sm">Elimina prodotti non necessari o visualizza i reparti.</p>
                 </div>
-                <button onclick="goHome()" id="btnBackManage" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
+                <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full mb-6" id="manageCatalogContainer"></div>
             <div>
-                <button onclick="goHome()" id="btnBackHomeManage" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
+                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Indietro alla Home
                 </button>
             </div>
@@ -197,28 +188,28 @@
         <!-- AGGIUNGI PRODOTTO -->
         <section id="addProductSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 max-w-xl mx-auto w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
-                <h2 id="addProdTitle" class="text-xl font-extrabold text-slate-900 tracking-tight">➕ Nuovo Prodotto in Catalogo</h2>
-                <button onclick="goHome()" id="btnBackAdd" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
+                <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">➕ Nuovo Prodotto in Catalogo</h2>
+                <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
             </div>
             <div class="space-y-5 mb-6">
                 <div>
-                    <label id="lblProdName" class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Nome Prodotto</label>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Nome Prodotto</label>
                     <input type="text" id="newProdNameInput" placeholder="Es. RUCOLA FRESCA" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
                 </div>
                 <div>
-                    <label id="lblProdCat" class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Reparto / Categoria</label>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Reparto / Categoria</label>
                     <select id="newProdCategorySelect" onchange="checkNewCategoryInput(this)" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs mb-2">
                     </select>
                     <div id="newCategoryContainer" class="hidden mt-2">
                         <input type="text" id="newCategoryNameInput" placeholder="Nome nuovo reparto (es. FORNO)" class="w-full p-3.5 border-2 border-orange-300 rounded-2xl text-sm bg-orange-50/50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
                     </div>
                 </div>
-                <button onclick="saveNewCatalogProduct()" id="btnSaveProd" class="btn-pro w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-extrabold p-3.5 rounded-2xl text-sm shadow-lg shadow-orange-500/20">
+                <button onclick="saveNewCatalogProduct()" class="btn-pro w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-extrabold p-3.5 rounded-2xl text-sm shadow-lg shadow-orange-500/20">
                     💾 Salva nel Catalogo
                 </button>
             </div>
             <div>
-                <button onclick="goHome()" id="btnBackHomeAdd" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
+                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Indietro alla Home
                 </button>
             </div>
@@ -228,8 +219,8 @@
         <section id="reviewSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-amber-100 text-amber-800 text-3xl mb-2">📋</div>
-                <h2 id="reviewTitle" class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
-                <p id="reviewDesc" class="text-slate-500 text-sm mt-1">Verifica la lista prima di confermare e registrarla.</p>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
+                <p class="text-slate-500 text-sm mt-1">Verifica la lista prima di confermare e registrarla.</p>
             </div>
 
             <div class="mb-6">
@@ -237,11 +228,11 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-3">
-                <button onclick="backToCreateFromReview()" id="btnBackReview" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-5 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
-                    ⬅️ <span id="txtBackMod">Indietro / Modifica</span>
+                <button onclick="backToCreateFromReview()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-5 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
+                    ⬅️ Indietro / Modifica
                 </button>
-                <button onclick="confirmAndSaveShoppingList()" id="btnConfirmSave" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-3 px-5 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
-                    ✅ <span id="txtConfirmReg">CONFERMA E REGISTRA ORDINE</span>
+                <button onclick="confirmAndSaveShoppingList()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-3 px-5 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
+                    ✅ CONFERMA E REGISTRA ORDINE
                 </button>
             </div>
         </section>
@@ -250,15 +241,15 @@
         <section id="postSaveSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
-                <h2 id="postSaveTitle" class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
-                <p id="postSaveDesc" class="text-slate-500 text-sm mt-1">Invia la lista ordinata su WhatsApp (il messaggio arriverà sempre in italiano) o vai al supermercato.</p>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
+                <p class="text-slate-500 text-sm mt-1">Invia la lista ordinata su WhatsApp o vai al supermercato.</p>
             </div>
 
             <div class="bg-emerald-50/90 p-5 rounded-2xl border-2 border-emerald-300 mb-6 shadow-inner">
-                <h3 id="waHeaderTitle" class="font-extrabold text-emerald-950 mb-3 text-sm uppercase tracking-wider text-center">📲 Invio WhatsApp Ordine</h3>
+                <h3 class="font-extrabold text-emerald-950 mb-3 text-sm uppercase tracking-wider text-center">📲 Invio WhatsApp Ordine</h3>
                 
                 <div class="mb-3">
-                    <label id="waContactsLabel" class="block text-slate-700 font-bold mb-1.5 text-xs uppercase tracking-wider text-center">Rubrica Rapida (Tocca per selezionare):</label>
+                    <label class="block text-slate-700 font-bold mb-1.5 text-xs uppercase tracking-wider text-center">Rubrica Rapida (Tocca per selezionare):</label>
                     <div class="flex flex-wrap justify-center gap-2" id="whatsappContactsContainer"></div>
                 </div>
 
@@ -268,32 +259,32 @@
                 </div>
 
                 <div class="text-center">
-                    <button onclick="sendWhatsAppList()" id="btnSendWa" class="btn-pro w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-8 py-3.5 rounded-xl text-sm md:text-base shadow-lg shadow-emerald-600/20 inline-flex items-center justify-center gap-2.5">
+                    <button onclick="sendWhatsAppList()" class="btn-pro w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-8 py-3.5 rounded-xl text-sm md:text-base shadow-lg shadow-emerald-600/20 inline-flex items-center justify-center gap-2.5">
                         💬 INVIA LISTA SU WHATSAPP
                     </button>
                 </div>
             </div>
 
             <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs w-full">
-                <h3 id="addExtraTitle" class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiungi un prodotto al volo:</h3>
+                <h3 class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiungi un prodotto al volo:</h3>
                 <div class="flex flex-wrap lg:flex-nowrap gap-3 items-center">
                     <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm font-bold text-slate-900 focus:outline-none shadow-xs">
                     <input type="text" id="extraPostQty" placeholder="Qtà" class="w-20 p-3 border-2 border-teal-200 rounded-xl text-sm text-center font-bold text-slate-900 focus:outline-none shadow-xs">
                     <input type="text" id="extraPostNote" placeholder="Nota" class="w-28 p-3 border-2 border-teal-200 rounded-xl text-sm text-center font-bold text-slate-900 focus:outline-none shadow-xs">
-                    <button onclick="addExtraItemAfterSave()" id="btnAddExtra" class="btn-pro bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-xs shadow-md whitespace-nowrap">➕ Aggiungi</button>
+                    <button onclick="addExtraItemAfterSave()" class="btn-pro bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-xs shadow-md whitespace-nowrap">➕ Aggiungi</button>
                 </div>
             </div>
 
             <div class="mb-6">
-                <h4 id="summaryListTitle" class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo prodotti in lista:</h4>
+                <h4 class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo prodotti in lista:</h4>
                 <div id="savedItemsSummaryList" class="bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner w-full"></div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-3">
-                <button onclick="goToSupermarketFromPostSave()" id="btnGoShopPost" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold py-3 px-4 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
+                <button onclick="goToSupermarketFromPostSave()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold py-3 px-4 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
                     🛍️ VAI AL SUPERMERCATO 🛒
                 </button>
-                <button onclick="completeShoppingCycle()" id="btnEndHomePost" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold py-3 px-4 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
+                <button onclick="completeShoppingCycle()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold py-3 px-4 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
                     🏠 Termina e Torna alla Home
                 </button>
             </div>
@@ -302,10 +293,10 @@
         <!-- VAI AL SUPERMERCATO -->
         <section id="shopSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
-                <h2 id="shopModeTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
+                <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
                 <div class="flex gap-2">
-                    <button onclick="clearEntireShopping()" id="btnClearShop" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-300 flex items-center gap-1">🗑️ Svuota Tutta la Spesa</button>
-                    <button onclick="goHome()" id="btnBackShop" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
+                    <button onclick="clearEntireShopping()" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-300 flex items-center gap-1">🗑️ Svuota Tutta la Spesa</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
                 </div>
             </div>
 
@@ -319,10 +310,10 @@
             <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full"></div>
 
             <div class="space-y-3">
-                <button onclick="promptCompleteShopping()" id="btnFinishShop" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-blue-600/20">
+                <button onclick="promptCompleteShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-blue-600/20">
                     🎉 TERMINA SPESA E ARCHIVIA!
                 </button>
-                <button onclick="goHome()" id="btnBackHomeShop" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
+                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Indietro alla Home
                 </button>
             </div>
@@ -332,26 +323,26 @@
         <section id="summaryModalSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-indigo-100 text-indigo-800 text-3xl mb-2">📊</div>
-                <h2 id="finalSummaryTitle" class="text-2xl font-extrabold text-slate-900 tracking-tight">Riepilogo Spesa Effettuata</h2>
-                <p id="finalSummaryDesc" class="text-slate-500 text-sm mt-1">Ecco cosa è stato preso e cosa è rimasto in sospeso.</p>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Riepilogo Spesa Effettuata</h2>
+                <p class="text-slate-500 text-sm mt-1">Ecco cosa è stato preso e cosa è rimasto in sospeso.</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4 mb-6">
                 <div class="bg-emerald-50 border-2 border-emerald-200 p-4 rounded-2xl shadow-inner">
-                    <h3 id="takenTitle" class="font-extrabold text-emerald-950 text-sm mb-3 uppercase tracking-wider">✅ Prodotti Presi (Vanno nello Storico)</h3>
+                    <h3 class="font-extrabold text-emerald-950 text-sm mb-3 uppercase tracking-wider">✅ Prodotti Presi (Vanno nello Storico)</h3>
                     <div id="summaryTakenList" class="space-y-2 pr-1"></div>
                 </div>
                 <div class="bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl shadow-inner">
-                    <h3 id="missingTitle" class="font-extrabold text-amber-950 text-sm mb-3 uppercase tracking-wider">❌ Prodotti Non Trovati (Rimasti in Memoria)</h3>
+                    <h3 class="font-extrabold text-amber-950 text-sm mb-3 uppercase tracking-wider">❌ Prodotti Non Trovati (Rimasti in Memoria)</h3>
                     <div id="summaryMissingList" class="space-y-2 pr-1"></div>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-3">
-                <button onclick="backToShopFromSummary()" id="btnBackToShopSum" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-4 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
+                <button onclick="backToShopFromSummary()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-4 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Torna al Supermercato
                 </button>
-                <button onclick="confirmAndFinalizeShopping()" id="btnConfirmArch" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-3 px-4 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
+                <button onclick="confirmAndFinalizeShopping()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-3 px-4 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
                     ✔️ Conferma Archiviazione
                 </button>
             </div>
@@ -361,19 +352,19 @@
         <section id="historySection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
                 <div>
-                    <h2 id="historyTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico Spese</h2>
-                    <p id="historyDesc" class="text-slate-500 text-xs md:text-sm">Riepilogo ordini effettuati in passato.</p>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico Spese</h2>
+                    <p class="text-slate-500 text-xs md:text-sm">Riepilogo ordini effettuati in passato.</p>
                 </div>
                 <div class="flex gap-2 flex-wrap">
-                    <button onclick="exportHistoryExcel()" id="btnExcel" class="btn-pro bg-emerald-600 text-white px-3 py-2 rounded-xl font-extrabold text-xs shadow-xs">📊 Excel</button>
-                    <button onclick="exportHistoryJSON()" id="btnJson" class="btn-pro bg-slate-800 text-white px-3 py-2 rounded-xl font-extrabold text-xs shadow-xs">📥 JSON</button>
-                    <button onclick="window.print()" id="btnPrint" class="btn-pro bg-indigo-600 text-white px-3 py-2 rounded-xl font-extrabold text-xs shadow-xs">🖨️ Stampa</button>
+                    <button onclick="exportHistoryExcel()" class="btn-pro bg-emerald-600 text-white px-3 py-2 rounded-xl font-extrabold text-xs shadow-xs">📊 Excel</button>
+                    <button onclick="exportHistoryJSON()" class="btn-pro bg-slate-800 text-white px-3 py-2 rounded-xl font-extrabold text-xs shadow-xs">📥 JSON</button>
+                    <button onclick="window.print()" class="btn-pro bg-indigo-600 text-white px-3 py-2 rounded-xl font-extrabold text-xs shadow-xs">🖨️ Stampa</button>
                     <button onclick="goHome()" class="btn-pro bg-slate-200 text-slate-700 px-3 py-2 rounded-bold text-xs shadow-xs">⬅️</button>
                 </div>
             </div>
 
             <div class="flex justify-end mb-4 gap-2">
-                <button onclick="clearEntireHistory()" id="btnClearHist" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-4 py-2 rounded-xl font-bold text-xs border border-rose-300">🗑️ Svuota Intero Storico</button>
+                <button onclick="clearEntireHistory()" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-4 py-2 rounded-xl font-bold text-xs border border-rose-300">🗑️ Svuota Intero Storico</button>
             </div>
 
             <div id="statsDashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
@@ -381,7 +372,7 @@
             <div class="space-y-4 pr-2 w-full mb-6" id="historyContainer"></div>
 
             <div>
-                <button onclick="goHome()" id="btnBackHomeHist" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
+                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Indietro alla Home
                 </button>
             </div>
@@ -389,7 +380,7 @@
 
     </main>
 
-    <!-- LOGICA E TRADUZIONE COMPLETA -->
+    <!-- LOGICA APPLICATIVA IN ITALIANO -->
     <script>
         const firebaseConfig = {
             databaseURL: "https://galleon-spesa-default-rtdb.europe-west1.firebasedatabase.app",
@@ -405,57 +396,39 @@
         let catalog = {
             ortofrutta: {
                 title: "🍏 Ortofrutta e Freschi",
-                titleBn: "🍏 ফলমূল এবং তাজা খাবার (Ortofrutta)",
                 headerBg: "bg-emerald-700 text-white",
                 cardBg: "bg-emerald-50/80 border-emerald-300",
-                textCol: "text-emerald-950",
-                items: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE"],
-                itemsBn: ["লেটুস শাক (Lattuaga)", "বেগুন (Melanzane)", "চিচিঙ্গা/কুমড়া (Zucchere)", "টমেটো (Pomodori)", "মাশরুম (Funghi)", "ক্যাপসিকাম (Peperoni)", "পেঁয়াজ (Cipolle)", "ছোট টমেটো (Pom.Perini)", "রুকোলা শাক (Rucola)", "এন্ডিভ শাক (Riccia)", "রেডিওচিও শাক (Radicchio)", "আলু (Patate)", "ধনেপাতা (Prezzemolo)", "গাজর (Carote)", "রসুন (Aglio)", "শসা (Cetrioli)", "লেবু (Limoni)", "আনারস (Ananas)", "আপেল (Mele)", "নাশপাতি (Pere)", "পেস্তা বাদাম (Pistacchi)", "কিউই ফল (Kiwi)", "পাউরুটি (Pane)"]
+                items: ["LATTUAGA", "MELANZANE", "ZUCCHERE", "POMODORI", "FUNGHI", "PEPERONI", "CIPOLLE", "POM.PERINI", "RUCOLA", "RICCIA", "RADICCHIO", "PATATE", "PREZZEMOLO", "CAROTE", "AGLIO", "CETRIOLI", "LIMONI", "ANANAS", "MELE", "PERE", "PISTACCHI", "KIWI", "PANE"]
             },
             macelleria: {
                 title: "🥩 Macelleria e Pescheria",
-                titleBn: "🥩 মাংস এবং মাছ (Macelleria)",
                 headerBg: "bg-rose-700 text-white",
                 cardBg: "bg-rose-50/80 border-rose-300",
-                textCol: "text-rose-950",
-                items: ["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"],
-                itemsBn: ["হ্যামবার্গার মাংস (C.Hamburger)", "কিয়ানিনা গরুর মাংস (Chianina)", "টিন টুনা মাছ (Tonno)", "সামন মাছ (Salmone)", "সামন মাছের টুকরো (Tranci Salmone)", "কাবাব শিক (Spiedini)"]
+                items: ["C.HAMBURGER", "CHIANINA", "TONNO", "SALMONE", "TRANCI SALMONE", "SPIEDINI"]
             },
             latticini: {
                 title: "🧀 Latticini, Salumi e Uova",
-                titleBn: "🧀 দুগ্ধজাত খাবার ও ডিম (Latticini)",
                 headerBg: "bg-sky-700 text-white",
                 cardBg: "bg-sky-50/80 border-sky-300",
-                textCol: "text-sky-950",
-                items: ["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"],
-                itemsBn: ["মোজারেলা পনির (Mozzarelle)", "ল্যাকটোজ মুক্ত পনির (Mozz.Senza Lattosio)", "ছোট পনির (Bocconcini)", "স্ট্রাক্কিনো পনির (Stracchino)", "এমেন্টাল পনির (Emmenthal)", "স্লাইস পনির (Sottilette)", "চেডার পনির (Cheddar)", "দই (Yogurt)", "ফিলাডেলফিয়া পনির (Philadelphia)", "মাখন (Burro)", "দুধ (Latte)", "স্প্রে ক্রিম (Panna Spray)", "তাজা ক্রিম (Panna Fresca)", "ডিম (Uova)"]
+                items: ["MOZZARELLE", "MOZZ.SENZA LATTOSIO", "BOCCONCINI", "STRACCHINO", "EMMENTHAL", "SOTTILETTE", "CEDDAR", "YOGURT", "PHILADELPHIA", "BURRO", "LATTE", "PANNA SPRAY", "PANNA FRESCA", "UOVA"]
             },
             dispensa: {
                 title: "🥫 Dispensa e Scatolame",
-                titleBn: "🥫 প্যান্ট্রি এবং ক্যানড ফুড (Dispensa)",
                 headerBg: "bg-amber-700 text-white",
                 cardBg: "bg-amber-50/80 border-amber-300",
-                textCol: "text-amber-950",
-                items: ["SALE", "PEPE", "PISELLI", "NOCI", "LIMMY", "CONTEN.PANNA COTTA", "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "MARMELLATA", "FRUTTI BOSCO", "CAFFE'", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "TABASCO", "ROTOLONI", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SPUGNE VASSOI", "PELLICOLA", "ORDINARE DOLCE", "RITIRARE DOLCE"],
-                itemsBn: ["লবণ (Sale)", "গোলমরিচ (Pepe)", "মটরশুটি (Piselli)", "আখরোট বাদাম (Noci)", "লেবুর রস (Limmy)", "পানা কোটা পাত্র (Conten.Panna Cotta)", "পেস্তো সস (Pesto)", "ভুট্টা (Mais)", "আর্টিচোক (Carciofi)", "ক্যাপারস (Capperi)", "বাঁধাকপি আচার (Crauti)", "ছোলা (Ceci)", "সিরকা/ভিনেগার (Aceto)", "ঝাল তেল (Olio Piccante)", "চিনি (Zucchero)", "আইসিং সুগার (Zucchero A Velo)", "ডার্ক চকলেট (Cioccolato Fond)", "বিস্কুট ক্রাঞ্চ (Croccante)", "শুকনো বিস্কুট (Biscotti Secchi)", "সাভোয়ার্দি বিস্কুট (Savoiardi)", "ভ্যানিলা পাউডার (Vanillina)", "জ্যাম (Marmellata)", "বনের ফল (Frutti Bosco)", "কফি (Caffè)", "পাউরুটির ইস্ট (Lievito Panini)", "পিৎজা মসলা (Pizzaiolo)", "কেকের ময়দা (Farina Per Torte)", "টাবাস্কো সস (Tabasco)", "রোল টিস্যু (Rotoloni)", "রঙিন টিস্যু (Tov.Colorati)", "টুথপিক (Stecchini)", "কাচের/প্লাস্টিক গ্লাস (Bicchieri)", "ট্রে ধোয়ার স্পঞ্জ (Spugne Vassoi)", "প্লাস্টিক র্যাপ (Pellicola)", "মিষ্টি অর্ডার দিন (Ordinare Dolce)", "মিষ্টি সংগ্রহ করুন (Ritirare Dolce)"]
+                items: ["SALE", "PEPE", "PISELLI", "NOCI", "LIMMY", "CONTEN.PANNA COTTA", "PESTO", "MAIS", "CARCIOFI", "CAPPERI", "CRAUTI", "CECI", "ACETO", "OLIO PICCANTE", "ZUCCHERO", "ZUCCHERO A VELO", "CIOCCOLATO FOND", "CROCCANTE", "BISCOTTI SECCHI", "SAVOIARDI", "VANILLINA", "MARMELLATA", "FRUTTI BOSCO", "CAFFE'", "LIEVITO PANINI", "PIZZAIOLO", "FARINA PER TORTE", "TABASCO", "ROTOLONI", "TOV.COLORATI", "STECCHINI", "BICCHIERI", "SPUGNE VASSOI", "PELLICOLA", "ORDINARE DOLCE", "RITIRARE DOLCE"]
             },
             bevande: {
                 title: "🍷 Bevande e Alcolici",
-                titleBn: "🍷 পানীয় ও ড্রিংকস (Bevande)",
                 headerBg: "bg-indigo-700 text-white",
                 cardBg: "bg-indigo-50/80 border-indigo-300",
-                textCol: "text-indigo-950",
-                items: ["COCA COLA", "APEROL"],
-                itemsBn: ["কোকা কোলা (Coca Cola)", "অ্যাপেরোল (Aperol)"]
+                items: ["COCA COLA", "APEROL"]
             },
             pulizia: {
                 title: "🧹 Pulizia e Detergenti",
-                titleBn: "🧹 পরিষ্কার পরিচ্ছন্নতা (Pulizia)",
                 headerBg: "bg-purple-700 text-white",
                 cardBg: "bg-purple-50/80 border-purple-300",
-                textCol: "text-purple-950",
-                items: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "MICROFIBRA"],
-                itemsBn: ["বাসন ধোয়ার লিকুইড (Detersivo Piatti)", "বাসন ধোয়ার স্পঞ্জ (Spugne Piatti)", "ব্লিচ/ক্যানডেজিনা (Candeggina)", "হ্যান্ড ওয়াশ (Sapone Mani)", "মাইক্রোফাইবার কাপড় (Microfibra)"]
+                items: ["DETERSIVO PIATTI", "SPUGNE PIATTI", "CANDEGGINA", "SAPONE MANI", "MICROFIBRA"]
             }
         };
 
@@ -471,8 +444,6 @@
             items: [] 
         };
 
-        // FORZATURA ASSOLUTA: all'avvio la lingua è sempre l'italiano ('it')
-        let currentLang = 'it';
         let history = [];
         let isSyncing = false;
 
@@ -484,14 +455,10 @@
             }
             document.getElementById('displayDate').innerText = currentSession.date;
             
-            const langSelect = document.getElementById('appLangSelect');
-            if (langSelect) langSelect.value = currentLang;
-
             renderAuthorButtons();
             renderWhatsAppContacts();
             initCatalogCategories();
             populateCategorySelect();
-            applyLanguage();
 
             rootRef.on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -525,180 +492,6 @@
                 catalog: catalog,
                 history: history
             });
-        }
-
-        function changeAppLanguage(lang) {
-            currentLang = lang;
-            applyLanguage();
-            initCatalogCategories();
-            populateCategorySelect();
-        }
-
-        function applyLanguage() {
-            const t = {
-                it: {
-                    subtitle: "Gestione Spesa Semplice",
-                    btnChangeAuthor: "Cambia",
-                    whatToDo: "Cosa vuoi fare oggi?",
-                    selectName: "Seleziona il tuo nome e scegli un'operazione.",
-                    lblDate: "📅 Data di oggi",
-                    lblWho: "👤 Chi sei? (Tocca il nome)",
-                    btnCompile: "📝 COMPILA LA SPESA",
-                    btnSupermarket: "🛍️ VAI AL SUPERMERCATO",
-                    btnHistory: "📊 Visualizza Storico Spese Passate",
-                    menuTitle: "Menu Rapido",
-                    menuHome: "🏠 Home Principale",
-                    menuAddProd: "➕ Aggiungi Nuovo Prodotto",
-                    menuManage: "🗑️ Gestisci Catalogo Prodotti",
-                    menuHistory: "📊 Storico Spese Passate",
-                    createTitle: "Compilazione Spesa",
-                    createDesc: "Spunta i prodotti e scrivi quantità o note nei campi sottostanti.",
-                    btnClearAll: "🗑️ Pulisci Tutto",
-                    txtBack: "Indietro",
-                    txtBackMod: "Indietro / Modifica",
-                    txtConfirmReg: "CONFERMA E REGISTRA ORDINE",
-                    manageTitle: "Gestione Catalogo",
-                    manageDesc: "Elimina prodotti non necessari o visualizza i reparti.",
-                    addProdTitle: "➕ Nuovo Prodotto in Catalogo",
-                    lblProdName: "Nome Prodotto",
-                    lblProdCat: "Reparto / Categoria",
-                    btnSaveProd: "💾 Salva nel Catalogo",
-                    reviewTitle: "Controllo Finale Ordine",
-                    reviewDesc: "Verifica la lista prima di confermare e registrarla.",
-                    postSaveTitle: "Ordine Salvato con Successo!",
-                    postSaveDesc: "Invia la lista ordinata su WhatsApp (il messaggio arriverà sempre in italiano) o vai al supermercato.",
-                    waHeaderTitle: "📲 Invio WhatsApp Ordine",
-                    waContactsLabel: "Rubrica Rapida (Tocca per selezionare):",
-                    btnSendWa: "💬 INVIA LISTA SU WHATSAPP",
-                    addExtraTitle: "➕ Aggiungi un prodotto al volo:",
-                    summaryListTitle: "Riepilogo prodotti in lista:",
-                    btnGoShopPost: "🛍️ VAI AL SUPERMERCATO 🛒",
-                    btnEndHomePost: "🏠 Termina e Torna alla Home",
-                    shopModeTitle: "🛍️ Modalità Supermercato",
-                    btnClearShop: "🗑️ Svuota Tutta la Spesa",
-                    btnFinishShop: "🎉 TERMINA SPESA E ARCHIVIA!",
-                    finalSummaryTitle: "Riepilogo Spesa Effettuata",
-                    finalSummaryDesc: "Ecco cosa è stato preso e cosa è rimasto in sospeso.",
-                    takenTitle: "✅ Prodotti Presi (Vanno nello Storico)",
-                    missingTitle: "❌ Prodotti Non Trovati (Rimasti in Memoria)",
-                    historyTitle: "📊 Storico Spese",
-                    historyDesc: "Riepilogo ordini effettuati in passato.",
-                    btnClearHist: "🗑️ Svuota Intero Storico",
-                    btnExcel: "📊 Excel",
-                    btnJson: "📥 JSON",
-                    btnPrint: "🖨️ Stampa"
-                },
-                bn: {
-                    subtitle: "সহজ বাজার ব্যবস্থাপনা",
-                    btnChangeAuthor: "পরিবর্তন",
-                    whatToDo: "আজ আপনি কী করতে চান?",
-                    selectName: "আপনার নাম নির্বাচন করুন এবং একটি অপশন বেছে নিন।",
-                    lblDate: "📅 আজকের তারিখ",
-                    lblWho: "👤 আপনি কে? (নামে ক্লিক করুন)",
-                    btnCompile: "📝 বাজার তালিকা তৈরি করুন",
-                    btnSupermarket: "🛍️ সুপারমার্কেটে যান",
-                    btnHistory: "📊 আগের বাজারের ইতিহাস দেখুন",
-                    menuTitle: "দ্রুত মেনু",
-                    menuHome: "🏠 মূল পেজ",
-                    menuAddProd: "➕ নতুন পণ্য যোগ করুন",
-                    menuManage: "🗑️ ক্যাটালগ সংশোধন করুন",
-                    menuHistory: "📊 বাজারের ইতিহাস",
-                    createTitle: "বাজারের তালিকা তৈরি",
-                    createDesc: "পণ্য সিলেক্ট করুন এবং পরিমাণ বা মন্তব্য লিখুন।",
-                    btnClearAll: "🗑️ সব রিসেট করুন",
-                    txtBack: "পেছনে যান",
-                    txtBackMod: "পেছনে / সংশোধন",
-                    txtConfirmReg: "কনফার্ম ও সেভ করুন",
-                    manageTitle: "ক্যাটালগ পরিচালনা",
-                    manageDesc: "অপ্রয়োজনীয় পণ্য মুছুন বা বিভাগ দেখুন।",
-                    addProdTitle: "➕ ক্যাটালগে নতুন পণ্য",
-                    lblProdName: "পণ্যের নাম",
-                    lblProdCat: "বিভাগ / ক্যাটাগরি",
-                    btnSaveProd: "💾 ক্যাটালগে সেভ করুন",
-                    reviewTitle: "চূড়ান্ত লিস্ট চেক",
-                    reviewDesc: "কনফার্ম করার আগে তালিকাটি ভালোভাবে দেখে নিন।",
-                    postSaveTitle: "অর্ডার সফলভাবে সেভ হয়েছে!",
-                    postSaveDesc: "হোয়াটসঅ্যাপে লিস্ট পাঠান (মেসেজটি ইতালীয় ভাষায় যাবে) অথবা সুপারমার্কেটে যান।",
-                    waHeaderTitle: "📲 হোয়াটসঅ্যাপে পাঠান",
-                    waContactsLabel: "দ্রুত নম্বর (ক্লিক করে সিলেক্ট করুন):",
-                    btnSendWa: "💬 হোয়াটসঅ্যাপে পাঠান",
-                    addExtraTitle: "➕ অতিরিক্ত পণ্য যোগ করুন:",
-                    summaryListTitle: "তালিকার পণ্যসমূহের তালিকা:",
-                    btnGoShopPost: "🛍️ সুপারমার্কেটে যান 🛒",
-                    btnEndHomePost: "🏠 শেষ করে হোমে যান",
-                    shopModeTitle: "🛍️ সুপারমার্কেট মোড",
-                    btnClearShop: "🗑️ পুরো লিস্ট খালি করুন",
-                    btnFinishShop: "🎉 বাজার শেষ ও সেভ করুন!",
-                    finalSummaryTitle: "সম্পন্ন বাজারের সারাংশ",
-                    finalSummaryDesc: "কোনাগুলো কেনা হয়েছে এবং কোনটি বাকি আছে দেখুন।",
-                    takenTitle: "✅ কেনা পণ্য (ইতিহাসে জমা হবে)",
-                    missingTitle: "❌ পাওয়া যায়নি (মেমোরিতে থাকবে)",
-                    historyTitle: "📊 বাজারের ইতিহাস",
-                    historyDesc: "আগের করা বাজারের তালিকা।",
-                    btnClearHist: "🗑️ পুরো ইতিহাস মুছুন",
-                    btnExcel: "📊 এক্সেল",
-                    btnJson: "📥 জেসন",
-                    btnPrint: "🖨️ প্রিন্ট"
-                }
-            };
-
-            const l = t[currentLang] || t['it'];
-            document.getElementById('headerSubtitle').innerText = l.subtitle;
-            document.getElementById('btnChangeAuthor').innerText = l.btnChangeAuthor;
-            document.getElementById('txtWhatToDo').innerText = l.whatToDo;
-            document.getElementById('txtSelectName').innerText = l.selectName;
-            document.getElementById('lblDate').innerText = l.lblDate;
-            document.getElementById('lblWhoAreYou').innerText = l.lblWho;
-            document.getElementById('btnCompile').innerText = l.btnCompile;
-            document.getElementById('btnSupermarket').innerText = l.btnSupermarket;
-            document.getElementById('btnHistory').innerText = l.btnHistory;
-            
-            document.getElementById('menuTitle').innerText = l.menuTitle;
-            document.getElementById('menuHome').innerText = l.menuHome;
-            document.getElementById('menuAddProd').innerText = l.menuAddProd;
-            document.getElementById('menuManage').innerText = l.menuManage;
-            document.getElementById('menuHistory').innerText = l.menuHistory;
-
-            document.getElementById('createTitle').innerText = l.createTitle;
-            document.getElementById('createDesc').innerText = l.createDesc;
-            document.getElementById('btnClearAll').innerText = l.btnClearAll;
-            document.getElementById('txtBack').innerText = l.txtBack;
-            document.getElementById('txtBackMod').innerText = l.txtBackMod;
-            document.getElementById('txtConfirmReg').innerText = l.txtConfirmReg;
-
-            document.getElementById('manageTitle').innerText = l.manageTitle;
-            document.getElementById('manageDesc').innerText = l.manageDesc;
-            document.getElementById('addProdTitle').innerText = l.addProdTitle;
-            document.getElementById('lblProdName').innerText = l.lblProdName;
-            document.getElementById('lblProdCat').innerText = l.lblProdCat;
-            document.getElementById('btnSaveProd').innerText = l.btnSaveProd;
-
-            document.getElementById('reviewTitle').innerText = l.reviewTitle;
-            document.getElementById('reviewDesc').innerText = l.reviewDesc;
-            document.getElementById('postSaveTitle').innerText = l.postSaveTitle;
-            document.getElementById('postSaveDesc').innerText = l.postSaveDesc;
-            document.getElementById('waHeaderTitle').innerText = l.waHeaderTitle;
-            document.getElementById('waContactsLabel').innerText = l.waContactsLabel;
-            document.getElementById('btnSendWa').innerText = l.btnSendWa;
-            document.getElementById('addExtraTitle').innerText = l.addExtraTitle;
-            document.getElementById('summaryListTitle').innerText = l.summaryListTitle;
-            document.getElementById('btnGoShopPost').innerText = l.btnGoShopPost;
-            document.getElementById('btnEndHomePost').innerText = l.btnEndHomePost;
-
-            document.getElementById('shopModeTitle').innerText = l.shopModeTitle;
-            document.getElementById('btnClearShop').innerText = l.btnClearShop;
-            document.getElementById('btnFinishShop').innerText = l.btnFinishShop;
-            document.getElementById('finalSummaryTitle').innerText = l.finalSummaryTitle;
-            document.getElementById('finalSummaryDesc').innerText = l.finalSummaryDesc;
-            document.getElementById('takenTitle').innerText = l.takenTitle;
-            document.getElementById('missingTitle').innerText = l.missingTitle;
-
-            document.getElementById('historyTitle').innerText = l.historyTitle;
-            document.getElementById('historyDesc').innerText = l.historyDesc;
-            document.getElementById('btnClearHist').innerText = l.btnClearHist;
-            document.getElementById('btnExcel').innerText = l.btnExcel;
-            document.getElementById('btnJson').innerText = l.btnJson;
-            document.getElementById('btnPrint').innerText = l.btnPrint;
         }
 
         function applySessionToDOM() {
@@ -798,33 +591,26 @@
                 const card = document.createElement('div');
                 card.className = `${cat.cardBg} rounded-2xl border-2 shadow-xs overflow-hidden flex flex-col`;
 
-                const itemsToDisplay = (currentLang === 'bn' && cat.itemsBn) ? cat.itemsBn : cat.items;
-                const qtyPlaceholder = currentLang === 'bn' ? 'পরিমাণ' : 'Qtà';
-                const notePlaceholder = currentLang === 'bn' ? 'নোট/মন্তব্য...' : 'Note (es. cassa, bancale)...';
-
                 let itemsHtml = '';
                 cat.items.forEach((item, idx) => {
                     const globalId = `${catKey}-${idx}`;
-                    const displayName = itemsToDisplay[idx] || item;
                     itemsHtml += `
                         <div class="p-3 bg-white/95 rounded-xl border border-slate-200/80 shadow-2xs space-y-2">
                             <div class="flex items-center gap-3">
                                 <input type="checkbox" id="cat-check-${globalId}" onchange="updateLiveSession()" class="w-6 h-6 rounded-lg text-orange-600 focus:ring-orange-500 cursor-pointer accent-orange-600 shrink-0">
-                                <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-base md:text-lg cursor-pointer leading-snug break-words">${displayName}</label>
+                                <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-base md:text-lg cursor-pointer leading-snug break-words">${item}</label>
                             </div>
                             <div class="flex items-center gap-2 pl-9">
-                                <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSession()" placeholder="${qtyPlaceholder}" class="w-24 p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg text-center font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
-                                <input type="text" id="cat-note-${globalId}" oninput="updateLiveSession()" placeholder="${notePlaceholder}" class="flex-grow p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
+                                <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSession()" placeholder="Qtà" class="w-24 p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg text-center font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
+                                <input type="text" id="cat-note-${globalId}" oninput="updateLiveSession()" placeholder="Note (es. cassa, bancale)..." class="flex-grow p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
                             </div>
                         </div>
                     `;
                 });
 
-                const displayTitle = (currentLang === 'bn' && cat.titleBn) ? cat.titleBn : cat.title;
-
                 card.innerHTML = `
                     <div class="${cat.headerBg} p-3 font-extrabold text-sm flex items-center justify-between">
-                        <span>${displayTitle}</span>
+                        <span>${cat.title}</span>
                         <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full">${cat.items.length}</span>
                     </div>
                     <div class="p-3 space-y-2.5 flex-grow">
@@ -844,12 +630,12 @@
             Object.keys(catalog).forEach(catKey => {
                 const opt = document.createElement('option');
                 opt.value = catKey;
-                opt.innerText = (currentLang === 'bn' && catalog[catKey].titleBn) ? catalog[catKey].titleBn : catalog[catKey].title;
+                opt.innerText = catalog[catKey].title;
                 select.appendChild(opt);
             });
             const newOpt = document.createElement('option');
             newOpt.value = 'new_category_option';
-            newOpt.innerText = currentLang === 'bn' ? '➕ নতুন বিভাগ যোগ করুন...' : '➕ Aggiungi Nuovo Reparto...';
+            newOpt.innerText = '➕ Aggiungi Nuovo Reparto...';
             select.appendChild(newOpt);
         }
 
@@ -897,7 +683,7 @@
         }
 
         function resetCatalogSelection() {
-            if (confirm(currentLang === 'bn' ? "আপনি কি পুরো তালিকা মুছে ফেলতে চান?" : "Vuoi azzerare tutta la selezione corrente?")) {
+            if (confirm("Vuoi azzerare tutta la selezione corrente?")) {
                 currentSession.items = [];
                 applySessionToDOM();
                 pushToFirebase();
@@ -918,7 +704,7 @@
             const author = document.getElementById('inputAuthor').value.trim();
 
             if (!author) {
-                alert(currentLang === 'bn' ? "অনুগ্রহ করে আপনার নাম নির্বাচন বা লিখুন!" : "Per favore seleziona o inserisci il tuo nome!");
+                alert("Per favore seleziona o inserisci il tuo nome!");
                 return;
             }
 
@@ -935,7 +721,7 @@
         function goToReviewScreen() {
             updateLiveSession();
             if (!currentSession.items || currentSession.items.length === 0) {
-                alert(currentLang === 'bn' ? "আপনি কোনো পণ্য নির্বাচন করেননি!" : "Non hai selezionato alcun prodotto!");
+                alert("Non hai selezionato alcun prodotto!");
                 return;
             }
 
@@ -943,24 +729,14 @@
             container.innerHTML = '';
 
             currentSession.items.forEach(item => {
-                let displayName = item.name;
-                if (currentLang === 'bn') {
-                    Object.keys(catalog).forEach(catKey => {
-                        const idx = catalog[catKey].items.indexOf(item.name);
-                        if (idx !== -1 && catalog[catKey].itemsBn && catalog[catKey].itemsBn[idx]) {
-                            displayName = catalog[catKey].itemsBn[idx];
-                        }
-                    });
-                }
-
                 const div = document.createElement('div');
                 div.className = 'p-3 bg-white rounded-xl border border-amber-200 shadow-2xs space-y-1';
                 div.innerHTML = `
                     <div class="flex items-center justify-between gap-2">
-                        <span class="font-extrabold text-slate-900 text-base md:text-lg break-words">${displayName}</span>
-                        ${item.qty ? `<span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded-lg shrink-0">${currentLang === 'bn' ? 'পরিমাণ' : 'Qtà'}: ${item.qty}</span>` : ''}
+                        <span class="font-extrabold text-slate-900 text-base md:text-lg break-words">${item.name}</span>
+                        ${item.qty ? `<span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded-lg shrink-0">Qtà: ${item.qty}</span>` : ''}
                     </div>
-                    ${item.note ? `<div class="text-xs md:text-sm font-bold text-slate-500 italic">${currentLang === 'bn' ? 'নোট' : 'Note'}: ${item.note}</div>` : ''}
+                    ${item.note ? `<div class="text-xs md:text-sm font-bold text-slate-500 italic">Note: ${item.note}</div>` : ''}
                 `;
                 container.appendChild(div);
             });
@@ -985,35 +761,24 @@
             const container = document.getElementById('savedItemsSummaryList');
             container.innerHTML = '';
             if (!currentSession.items || currentSession.items.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 italic">${currentLang === 'bn' ? 'তালিকা খালি।' : 'Nessun prodotto in lista.'}</p>`;
+                container.innerHTML = '<p class="text-xs text-slate-400 italic">Nessun prodotto in lista.</p>';
                 return;
             }
 
             currentSession.items.forEach(item => {
-                let displayName = item.name;
-                if (currentLang === 'bn') {
-                    Object.keys(catalog).forEach(catKey => {
-                        const idx = catalog[catKey].items.indexOf(item.name);
-                        if (idx !== -1 && catalog[catKey].itemsBn && catalog[catKey].itemsBn[idx]) {
-                            displayName = catalog[catKey].itemsBn[idx];
-                        }
-                    });
-                }
-
                 const div = document.createElement('div');
                 div.className = 'p-3 bg-white rounded-xl border border-slate-200 space-y-1';
                 div.innerHTML = `
                     <div class="flex items-center justify-between gap-2">
-                        <span class="font-extrabold text-slate-900 text-base md:text-lg break-words">${displayName}</span>
-                        ${item.qty ? `<span class="bg-slate-100 text-slate-800 text-xs font-bold px-2 py-0.5 rounded-md shrink-0">${currentLang === 'bn' ? 'পরিমাণ' : 'Qtà'}: ${item.qty}</span>` : ''}
+                        <span class="font-extrabold text-slate-900 text-base md:text-lg break-words">${item.name}</span>
+                        ${item.qty ? `<span class="bg-slate-100 text-slate-800 text-xs font-bold px-2 py-0.5 rounded-md shrink-0">Qtà: ${item.qty}</span>` : ''}
                     </div>
-                    ${item.note ? `<div class="text-xs text-slate-400 italic">${currentLang === 'bn' ? 'নোট' : 'Note'}: ${item.note}</div>` : ''}
+                    ${item.note ? `<div class="text-xs text-slate-400 italic">Note: ${item.note}</div>` : ''}
                 `;
                 container.appendChild(div);
             });
         }
 
-        /* Messaggio WhatsApp sempre in ITALIANO pulito e ordinato */
         function sendWhatsAppList() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La lista della spesa è vuota!");
@@ -1109,7 +874,7 @@
             container.innerHTML = '';
 
             if (!currentSession.items || currentSession.items.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 font-bold">${currentLang === 'bn' ? 'কেনাকাটার জন্য কোনো পণ্য নেই!' : 'Nessun prodotto in lista da acquistare!'}</div>`;
+                container.innerHTML = '<div class="col-span-full text-center py-8 text-slate-400 font-bold">Nessun prodotto in lista da acquistare!</div>';
                 updateProgressBar(0, 0);
                 return;
             }
@@ -1119,16 +884,6 @@
             currentSession.items.forEach((item, idx) => {
                 if (item.done) takenCount++;
 
-                let displayName = item.name;
-                if (currentLang === 'bn') {
-                    Object.keys(catalog).forEach(catKey => {
-                        const itemIdx = catalog[catKey].items.indexOf(item.name);
-                        if (itemIdx !== -1 && catalog[catKey].itemsBn && catalog[catKey].itemsBn[itemIdx]) {
-                            displayName = catalog[catKey].itemsBn[itemIdx];
-                        }
-                    });
-                }
-
                 const card = document.createElement('div');
                 card.className = `p-4 rounded-2xl border-2 flex items-center justify-between transition ${item.done ? 'bg-emerald-50 border-emerald-300 opacity-60' : 'bg-white border-slate-200 shadow-xs'} gap-3`;
 
@@ -1136,10 +891,10 @@
                     <div class="flex items-start gap-3 min-w-0 flex-grow cursor-pointer" onclick="toggleItemDone(${idx})">
                         <input type="checkbox" ${item.done ? 'checked' : ''} class="shop-chk w-7 h-7 rounded-lg text-blue-600 focus:ring-blue-500 accent-blue-600 shrink-0 cursor-pointer mt-1">
                         <div class="min-w-0 flex-grow space-y-1">
-                            <span class="font-black ${item.done ? 'line-through text-slate-400' : 'text-slate-900'} text-base md:text-lg block break-words leading-snug">${displayName}</span>
+                            <span class="font-black ${item.done ? 'line-through text-slate-400' : 'text-slate-900'} text-base md:text-lg block break-words leading-snug">${item.name}</span>
                             <div class="flex items-center gap-2 flex-wrap">
-                                ${item.qty ? `<span class="bg-slate-100 text-slate-800 text-xs font-bold px-2 py-0.5 rounded-md shrink-0">${currentLang === 'bn' ? 'পরিমাণ' : 'Qtà'}: ${item.qty}</span>` : ''}
-                                ${item.note ? `<span class="text-xs italic text-slate-500 font-bold break-words">${currentLang === 'bn' ? 'নোট' : 'Note'}: ${item.note}</span>` : ''}
+                                ${item.qty ? `<span class="bg-slate-100 text-slate-800 text-xs font-bold px-2 py-0.5 rounded-md shrink-0">Qtà: ${item.qty}</span>` : ''}
+                                ${item.note ? `<span class="text-xs italic text-slate-500 font-bold break-words">Note: ${item.note}</span>` : ''}
                             </div>
                         </div>
                     </div>
@@ -1166,13 +921,13 @@
         function updateProgressBar(taken, total) {
             const bar = document.getElementById('progressBar');
             const txt = document.getElementById('progressText');
-            txt.innerText = currentLang === 'bn' ? `পণ্য কেনা হয়েছে: ${taken} / ${total}` : `Prodotti presi: ${taken} / ${total}`;
+            txt.innerText = `Prodotti presi: ${taken} / ${total}`;
             const pct = total === 0 ? 0 : Math.round((taken / total) * 100);
             bar.style.width = `${pct}%`;
         }
 
         function clearEntireShopping() {
-            if (confirm(currentLang === 'bn' ? "আপনি কি পুরো বাজার তালিকা খালি করতে চান?" : "Sei sicuro di voler cancellare TUTTA la spesa in corso?")) {
+            if (confirm("Sei sicuro di voler cancellare TUTTA la spesa in corso?")) {
                 currentSession.items = [];
                 pushToFirebase();
                 renderActiveShoppingList();
@@ -1181,7 +936,7 @@
 
         function promptCompleteShopping() {
             if (!currentSession.items || currentSession.items.length === 0) {
-                alert(currentLang === 'bn' ? "তালিকা খালি!" : "La lista è vuota!");
+                alert("La lista è vuota!");
                 return;
             }
 
@@ -1195,36 +950,18 @@
             missingContainer.innerHTML = '';
 
             if (taken.length === 0) {
-                takenContainer.innerHTML = `<p class="text-xs text-slate-400 italic">${currentLang === 'bn' ? 'কোনো পণ্য সিলেক্ট করা হয়নি।' : 'Nessun prodotto spuntato.'}</p>`;
+                takenContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Nessun prodotto spuntato.</p>';
             } else {
                 taken.forEach(i => {
-                    let displayName = i.name;
-                    if (currentLang === 'bn') {
-                        Object.keys(catalog).forEach(catKey => {
-                            const idx = catalog[catKey].items.indexOf(i.name);
-                            if (idx !== -1 && catalog[catKey].itemsBn && catalog[catKey].itemsBn[idx]) {
-                                displayName = catalog[catKey].itemsBn[idx];
-                            }
-                        });
-                    }
-                    takenContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-emerald-200 text-xs md:text-sm font-extrabold text-slate-800 break-words">${displayName} ${i.qty ? `(${currentLang === 'bn' ? 'পরিমাণ' : 'Qtà'}: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
+                    takenContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-emerald-200 text-xs md:text-sm font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(Qtà: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
                 });
             }
 
             if (missing.length === 0) {
-                missingContainer.innerHTML = `<p class="text-xs text-slate-400 italic">${currentLang === 'bn' ? 'সব পণ্য কেনা সম্পন্ন হয়েছে!' : 'Tutti i prodotti sono stati presi!'}</p>`;
+                missingContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Tutti i prodotti sono stati presi!</p>';
             } else {
                 missing.forEach(i => {
-                    let displayName = i.name;
-                    if (currentLang === 'bn') {
-                        Object.keys(catalog).forEach(catKey => {
-                            const idx = catalog[catKey].items.indexOf(i.name);
-                            if (idx !== -1 && catalog[catKey].itemsBn && catalog[catKey].itemsBn[idx]) {
-                                displayName = catalog[catKey].itemsBn[idx];
-                            }
-                        });
-                    }
-                    missingContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-amber-200 text-xs md:text-sm font-extrabold text-slate-800 break-words">${displayName} ${i.qty ? `(${currentLang === 'bn' ? 'পরিমাণ' : 'Qtà'}: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
+                    missingContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-amber-200 text-xs md:text-sm font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(Qtà: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
                 });
             }
 
@@ -1253,7 +990,7 @@
             currentSession.items = missing;
             pushToFirebase();
 
-            alert(currentLang === 'bn' ? "বাজারের তালিকা সফলভাবে সেভ হয়েছে!" : "Spesa completata ed archiviata con successo!");
+            alert("Spesa completata ed archiviata con successo!");
             goHome();
         }
 
@@ -1275,17 +1012,17 @@
 
             stats.innerHTML = `
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-center">
-                    <span class="block text-xs font-bold text-slate-500 uppercase">${currentLang === 'bn' ? 'মোট বাজার' : 'Totale Spese'}</span>
+                    <span class="block text-xs font-bold text-slate-500 uppercase">Totale Spese</span>
                     <span class="text-2xl font-black text-slate-900">${totalSpese}</span>
                 </div>
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-center">
-                    <span class="block text-xs font-bold text-slate-500 uppercase">${currentLang === 'bn' ? 'ক্রয়কৃত পণ্য' : 'Prodotti Acquistati'}</span>
+                    <span class="block text-xs font-bold text-slate-500 uppercase">Prodotti Acquistati</span>
                     <span class="text-2xl font-black text-emerald-600">${totalArticoli}</span>
                 </div>
             `;
 
             if (history.length === 0) {
-                container.innerHTML = `<div class="text-center py-12 text-slate-400 font-bold">${currentLang === 'bn' ? 'ইতিহাসে কোনো তথ্য পাওয়া যায়নি।' : 'Nessuna spesa salvata nello storico.'}</div>`;
+                container.innerHTML = '<div class="text-center py-12 text-slate-400 font-bold">Nessuna spesa salvata nello storico.</div>';
                 return;
             }
 
@@ -1295,16 +1032,7 @@
 
                 let itemsHtml = '';
                 h.items.forEach(i => {
-                    let displayName = i.name;
-                    if (currentLang === 'bn') {
-                        Object.keys(catalog).forEach(catKey => {
-                            const idx = catalog[catKey].items.indexOf(i.name);
-                            if (idx !== -1 && catalog[catKey].itemsBn && catalog[catKey].itemsBn[idx]) {
-                                displayName = catalog[catKey].itemsBn[idx];
-                            }
-                        });
-                    }
-                    itemsHtml += `<span class="bg-white border border-slate-200 text-slate-800 text-xs md:text-sm font-extrabold px-2.5 py-1 rounded-lg">${displayName} ${i.qty ? `(${i.qty})` : ''} ${i.note ? `[${i.note}]` : ''}</span> `;
+                    itemsHtml += `<span class="bg-white border border-slate-200 text-slate-800 text-xs md:text-sm font-extrabold px-2.5 py-1 rounded-lg">${i.name} ${i.qty ? `(${i.qty})` : ''} ${i.note ? `[${i.note}]` : ''}</span> `;
                 });
 
                 card.innerHTML = `
@@ -1314,8 +1042,8 @@
                             <span class="text-xs text-slate-500 font-bold ml-2">👤 ${h.author}</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full">${h.items.length} ${currentLang === 'bn' ? 'টি পণ্য' : 'prodotti'}</span>
-                            <button onclick="removeHistoryItem(${hIdx})" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-600 px-2.5 py-1 rounded-xl text-xs font-extrabold border border-rose-200">🗑️ ${currentLang === 'bn' ? 'মুছুন' : 'Elimina Spesa'}</button>
+                            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full">${h.items.length} prodotti</span>
+                            <button onclick="removeHistoryItem(${hIdx})" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-600 px-2.5 py-1 rounded-xl text-xs font-extrabold border border-rose-200">🗑️ Elimina Spesa</button>
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-1.5">
@@ -1327,7 +1055,7 @@
         }
 
         function removeHistoryItem(idx) {
-            if (confirm(currentLang === 'bn' ? "আপনি কি এটি ইতিহাস থেকে মুছতে চান?" : "Vuoi eliminare questa spesa dallo storico?")) {
+            if (confirm("Vuoi eliminare questa spesa dallo storico?")) {
                 history.splice(idx, 1);
                 pushToFirebase();
                 renderHistoryList();
@@ -1335,7 +1063,7 @@
         }
 
         function clearEntireHistory() {
-            if (confirm(currentLang === 'bn' ? "আপনি কি পুরো ইতিহাস মুছে ফেলতে চান?" : "Sei sicuro di voler svuotare completamente lo storico di tutte le spese?")) {
+            if (confirm("Sei sicuro di voler svuotare completamente lo storico di tutte le spese?")) {
                 history = [];
                 pushToFirebase();
                 renderHistoryList();
@@ -1383,24 +1111,19 @@
                 const card = document.createElement('div');
                 card.className = `${cat.cardBg} rounded-2xl border-2 shadow-xs overflow-hidden flex flex-col`;
 
-                const itemsToDisplay = (currentLang === 'bn' && cat.itemsBn) ? cat.itemsBn : cat.items;
-
                 let itemsHtml = '';
                 cat.items.forEach((item, idx) => {
-                    const displayName = itemsToDisplay[idx] || item;
                     itemsHtml += `
                         <div class="flex items-center justify-between p-2 bg-white/90 rounded-xl border border-slate-200/60 shadow-2xs gap-2">
-                            <span class="font-extrabold text-slate-900 text-sm md:text-base min-w-0 break-words">${displayName}</span>
+                            <span class="font-extrabold text-slate-900 text-sm md:text-base min-w-0 break-words">${item}</span>
                             <button onclick="removeProductFromCatalog('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-bold p-1 text-base shrink-0">✕</button>
                         </div>
                     `;
                 });
 
-                const displayTitle = (currentLang === 'bn' && cat.titleBn) ? cat.titleBn : cat.title;
-
                 card.innerHTML = `
                     <div class="${cat.headerBg} p-3 font-extrabold text-sm flex items-center justify-between">
-                        <span>${displayTitle}</span>
+                        <span>${cat.title}</span>
                         <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full">${cat.items.length}</span>
                     </div>
                     <div class="p-3 space-y-2 flex-grow">
@@ -1414,7 +1137,6 @@
         function removeProductFromCatalog(catKey, idx) {
             if (confirm(`Rimuovere "${catalog[catKey].items[idx]}" dal catalogo?`)) {
                 catalog[catKey].items.splice(idx, 1);
-                if (catalog[catKey].itemsBn) catalog[catKey].itemsBn.splice(idx, 1);
                 pushToFirebase();
                 renderManageCatalog();
             }
@@ -1436,14 +1158,14 @@
             let catKey = catSelect.value;
 
             if (!name) {
-                alert(currentLang === 'bn' ? "পণ্যের নাম লিখুন!" : "Inserisci il nome del prodotto!");
+                alert("Inserisci il nome del prodotto!");
                 return;
             }
 
             if (catKey === 'new_category_option') {
                 const newCatName = newCatInput.value.trim().toUpperCase();
                 if (!newCatName) {
-                    alert(currentLang === 'bn' ? "নতুন বিভাগের নাম লিখুন!" : "Inserisci il nome del nuovo reparto!");
+                    alert("Inserisci il nome del nuovo reparto!");
                     return;
                 }
                 catKey = newCatName.toLowerCase().replace(/[^a-z0-9]/g, '_');
@@ -1457,26 +1179,22 @@
 
                     catalog[catKey] = {
                         title: "🏷️ " + newCatName,
-                        titleBn: "🏷️ " + newCatName,
                         headerBg: chosenColor.headerBg,
                         cardBg: chosenColor.cardBg,
-                        items: [],
-                        itemsBn: []
+                        items: []
                     };
                 }
             }
 
             if (!catalog[catKey].items.includes(name)) {
                 catalog[catKey].items.push(name);
-                if (!catalog[catKey].itemsBn) catalog[catKey].itemsBn = [];
-                catalog[catKey].itemsBn.push(name);
                 pushToFirebase();
-                alert(currentLang === 'bn' ? `পণ্য "${name}" সফলভাবে যোগ করা হয়েছে!` : `Prodotto "${name}" aggiunto con successo!`);
+                alert(`Prodotto "${name}" aggiunto con successo!`);
                 nameInput.value = '';
                 newCatInput.value = '';
                 goHome();
             } else {
-                alert(currentLang === 'bn' ? "এই পণ্যটি ইতিমধ্যেই ক্যাটালগে আছে!" : "Questo prodotto esiste già in questo reparto!");
+                alert("Questo prodotto esiste già in questo reparto!");
             }
         }
 
