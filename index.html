@@ -78,22 +78,22 @@
         <div class="flex justify-between items-center pb-5 border-b border-slate-800 mb-6">
             <div class="flex items-center gap-2.5">
                 <span class="text-xl">🧭</span>
-                <span class="font-extrabold text-lg text-white">Menu Rapido</span>
+                <span id="menuTitle" class="font-extrabold text-lg text-white">Menu Rapido</span>
             </div>
             <button onclick="toggleSidebar()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-slate-400 hover:text-white transition">✕</button>
         </div>
 
         <nav class="space-y-2.5 flex-grow">
-            <button onclick="toggleSidebar(); goHome();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+            <button onclick="toggleSidebar(); goHome();" id="menuHome" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
                 🏠 Home Principale
             </button>
-            <button onclick="toggleSidebar(); openAddProductModal();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+            <button onclick="toggleSidebar(); openAddProductModal();" id="menuAddProd" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
                 ➕ Aggiungi Nuovo Prodotto
             </button>
-            <button onclick="toggleSidebar(); openManageProductsScreen();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+            <button onclick="toggleSidebar(); openManageProductsScreen();" id="menuManage" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
                 🗑️ Gestisci Catalogo Prodotti
             </button>
-            <button onclick="toggleSidebar(); showHistory();" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
+            <button onclick="toggleSidebar(); showHistory();" id="menuHistory" class="w-full text-left px-4 py-3.5 rounded-2xl font-bold text-slate-200 hover:bg-slate-800 transition flex items-center gap-3.5 border border-slate-800">
                 📊 Storico Spese Passate
             </button>
         </nav>
@@ -156,23 +156,24 @@
         <section id="createSection" class="hidden pro-card rounded-3xl p-4 md:p-8 mt-4 w-full relative">
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200 flex-wrap gap-3">
                 <div>
-                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Spesa</h2>
-                    <p class="text-slate-500 text-xs md:text-sm">Spunta i prodotti e scrivi quantità o note nei campi sottostanti.</p>
+                    <h2 id="createTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Spesa</h2>
+                    <p id="createDesc" class="text-slate-500 text-xs md:text-sm">Spunta i prodotti e scrivi quantità o note nei campi sottostanti.</p>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Pulisci Tutto</button>
-                    <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
+                    <button onclick="resetCatalogSelection()" id="btnClearAll" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Pulisci Tutto</button>
+                    <button onclick="goHome()" id="btnBackHome1" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 p-2.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full" id="catalogCategoriesContainer"></div>
 
-            <div class="sticky bottom-2 z-20 pt-2 bg-white/80 backdrop-blur-md rounded-2xl pb-1 flex gap-3">
-                <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 px-6 rounded-2xl text-sm shadow-md flex items-center justify-center gap-2">
-                    ⬅️ Indietro
+            <!-- Pulsanti compatti (altezza ridotta alla metà) -->
+            <div class="sticky bottom-2 z-20 pt-2 bg-white/90 backdrop-blur-md rounded-2xl pb-1 flex gap-3">
+                <button onclick="goHome()" id="btnBackCreate" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-5 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
+                    ⬅️ <span id="txtBack">Indietro</span>
                 </button>
-                <button onclick="goToReviewScreen()" class="btn-pro flex-grow bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 md:p-5 rounded-2xl text-base md:text-lg shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2">
-                    🔍 AVANTI: CONTROLLA RIEPILOGO 🚀
+                <button onclick="goToReviewScreen()" id="btnReview" class="btn-pro flex-grow bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-3 px-5 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
+                    🔍 CONTROLLA RIEPILOGO 🚀
                 </button>
             </div>
         </section>
@@ -181,14 +182,14 @@
         <section id="manageProductsSection" class="hidden pro-card rounded-3xl p-4 md:p-8 mt-4 w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
                 <div>
-                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
-                    <p class="text-slate-500 text-sm">Elimina prodotti non necessari o visualizza i reparti.</p>
+                    <h2 id="manageTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Gestione Catalogo</h2>
+                    <p id="manageDesc" class="text-slate-500 text-sm">Elimina prodotti non necessari o visualizza i reparti.</p>
                 </div>
-                <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
+                <button onclick="goHome()" id="btnBackManage" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full mb-6" id="manageCatalogContainer"></div>
             <div>
-                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                <button onclick="goHome()" id="btnBackHomeManage" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Indietro alla Home
                 </button>
             </div>
@@ -197,28 +198,28 @@
         <!-- AGGIUNGI PRODOTTO -->
         <section id="addProductSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 max-w-xl mx-auto w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
-                <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">➕ Nuovo Prodotto in Catalogo</h2>
-                <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
+                <h2 id="addProdTitle" class="text-xl font-extrabold text-slate-900 tracking-tight">➕ Nuovo Prodotto in Catalogo</h2>
+                <button onclick="goHome()" id="btnBackAdd" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
             </div>
             <div class="space-y-5 mb-6">
                 <div>
-                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Nome Prodotto</label>
+                    <label id="lblProdName" class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Nome Prodotto</label>
                     <input type="text" id="newProdNameInput" placeholder="Es. RUCOLA FRESCA" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
                 </div>
                 <div>
-                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Reparto / Categoria</label>
+                    <label id="lblProdCat" class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">Reparto / Categoria</label>
                     <select id="newProdCategorySelect" onchange="checkNewCategoryInput(this)" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-sm bg-slate-50 text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs mb-2">
                     </select>
                     <div id="newCategoryContainer" class="hidden mt-2">
                         <input type="text" id="newCategoryNameInput" placeholder="Nome nuovo reparto (es. FORNO)" class="w-full p-3.5 border-2 border-orange-300 rounded-2xl text-sm bg-orange-50/50 text-slate-900 focus:border-orange-500 focus:outline-none font-extrabold uppercase shadow-xs">
                     </div>
                 </div>
-                <button onclick="saveNewCatalogProduct()" class="btn-pro w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-lg shadow-orange-500/20">
+                <button onclick="saveNewCatalogProduct()" id="btnSaveProd" class="btn-pro w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-extrabold p-3.5 rounded-2xl text-sm shadow-lg shadow-orange-500/20">
                     💾 Salva nel Catalogo
                 </button>
             </div>
             <div>
-                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                <button onclick="goHome()" id="btnBackHomeAdd" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Indietro alla Home
                 </button>
             </div>
@@ -228,20 +229,21 @@
         <section id="reviewSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-amber-100 text-amber-800 text-3xl mb-2">📋</div>
-                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
-                <p class="text-slate-500 text-sm mt-1">Verifica la lista prima di confermare e registrarla.</p>
+                <h2 id="reviewTitle" class="text-2xl font-extrabold text-slate-900 tracking-tight">Controllo Finale Ordine</h2>
+                <p id="reviewDesc" class="text-slate-500 text-sm mt-1">Verifica la lista prima di confermare e registrarla.</p>
             </div>
 
             <div class="mb-6">
                 <div id="reviewItemsList" class="bg-amber-50/50 p-4 rounded-2xl border-2 border-amber-200 space-y-2.5 shadow-inner w-full"></div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4">
-                <button onclick="backToCreateFromReview()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
-                    ⬅️ Indietro / Modifica
+            <!-- Pulsanti compatti -->
+            <div class="grid md:grid-cols-2 gap-3">
+                <button onclick="backToCreateFromReview()" id="btnBackReview" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-5 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
+                    ⬅️ <span id="txtBackMod">Indietro / Modifica</span>
                 </button>
-                <button onclick="confirmAndSaveShoppingList()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
-                    ✅ CONFERMA E REGISTRA ORDINE
+                <button onclick="confirmAndSaveShoppingList()" id="btnConfirmSave" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-3 px-5 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
+                    ✅ <span id="txtConfirmReg">CONFERMA E REGISTRA ORDINE</span>
                 </button>
             </div>
         </section>
@@ -250,53 +252,51 @@
         <section id="postSaveSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
-                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
-                <p class="text-slate-500 text-sm mt-1">Invia la lista ordinata su WhatsApp (il messaggio arriverà sempre in italiano) o vai al supermercato.</p>
+                <h2 id="postSaveTitle" class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
+                <p id="postSaveDesc" class="text-slate-500 text-sm mt-1">Invia la lista ordinata su WhatsApp (il messaggio arriverà sempre in italiano) o vai al supermercato.</p>
             </div>
 
             <!-- Riquadro WhatsApp con Rubrica rapida -->
             <div class="bg-emerald-50/90 p-5 rounded-2xl border-2 border-emerald-300 mb-6 shadow-inner">
-                <h3 class="font-extrabold text-emerald-950 mb-3 text-sm uppercase tracking-wider text-center">📲 Invio WhatsApp Ordine</h3>
+                <h3 id="waHeaderTitle" class="font-extrabold text-emerald-950 mb-3 text-sm uppercase tracking-wider text-center">📲 Invio WhatsApp Ordine</h3>
                 
-                <!-- Rubrica Rapida (Cliccabile) -->
                 <div class="mb-3">
-                    <label class="block text-slate-700 font-bold mb-1.5 text-xs uppercase tracking-wider text-center">Rubrica Rapida (Tocca per selezionare):</label>
+                    <label id="waContactsLabel" class="block text-slate-700 font-bold mb-1.5 text-xs uppercase tracking-wider text-center">Rubrica Rapida (Tocca per selezionare):</label>
                     <div class="flex flex-wrap justify-center gap-2" id="whatsappContactsContainer"></div>
                 </div>
 
-                <!-- Campo Numero -->
                 <div class="flex flex-wrap sm:flex-nowrap justify-center items-center gap-2 max-w-md mx-auto mb-4">
                     <span class="text-base font-extrabold text-slate-700 bg-white border-2 border-emerald-200 px-3 py-2.5 rounded-xl">+39</span>
                     <input type="tel" id="whatsappPhoneInput" placeholder="Inserisci numero..." class="w-full sm:w-auto flex-grow p-2.5 border-2 border-emerald-200 rounded-xl text-base font-extrabold text-slate-900 bg-white text-center focus:outline-none focus:border-emerald-500 shadow-xs">
                 </div>
 
                 <div class="text-center">
-                    <button onclick="sendWhatsAppList()" class="btn-pro w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-8 py-4 rounded-2xl text-base md:text-lg shadow-lg shadow-emerald-600/20 inline-flex items-center justify-center gap-2.5">
+                    <button onclick="sendWhatsAppList()" id="btnSendWa" class="btn-pro w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-8 py-3.5 rounded-xl text-sm md:text-base shadow-lg shadow-emerald-600/20 inline-flex items-center justify-center gap-2.5">
                         💬 INVIA LISTA SU WHATSAPP
                     </button>
                 </div>
             </div>
 
             <div class="bg-teal-50/80 p-4 rounded-2xl border-2 border-teal-200 mb-6 shadow-xs w-full">
-                <h3 class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiungi un prodotto al volo:</h3>
+                <h3 id="addExtraTitle" class="font-extrabold text-teal-950 mb-3 text-xs uppercase tracking-wider">➕ Aggiungi un prodotto al volo:</h3>
                 <div class="flex flex-wrap lg:flex-nowrap gap-3 items-center">
-                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-lg font-bold text-slate-900 focus:outline-none shadow-xs">
-                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-24 p-3 border-2 border-teal-200 rounded-xl text-lg text-center font-bold text-slate-900 focus:outline-none shadow-xs">
-                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-32 p-3 border-2 border-teal-200 rounded-xl text-lg text-center font-bold text-slate-900 focus:outline-none shadow-xs">
-                    <button onclick="addExtraItemAfterSave()" class="btn-pro bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-sm shadow-md whitespace-nowrap">➕ Aggiungi</button>
+                    <input type="text" id="extraPostName" placeholder="Nome prodotto..." class="flex-grow p-3 border-2 border-teal-200 rounded-xl text-sm font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostQty" placeholder="Qtà" class="w-20 p-3 border-2 border-teal-200 rounded-xl text-sm text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <input type="text" id="extraPostNote" placeholder="Nota" class="w-28 p-3 border-2 border-teal-200 rounded-xl text-sm text-center font-bold text-slate-900 focus:outline-none shadow-xs">
+                    <button onclick="addExtraItemAfterSave()" id="btnAddExtra" class="btn-pro bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-extrabold text-xs shadow-md whitespace-nowrap">➕ Aggiungi</button>
                 </div>
             </div>
 
             <div class="mb-6">
-                <h4 class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo prodotti in lista:</h4>
+                <h4 id="summaryListTitle" class="font-bold text-slate-700 mb-2.5 text-xs uppercase tracking-wider">Riepilogo prodotti in lista:</h4>
                 <div id="savedItemsSummaryList" class="bg-slate-50 p-3.5 rounded-2xl border-2 border-slate-200 space-y-2.5 shadow-inner w-full"></div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4">
-                <button onclick="goToSupermarketFromPostSave()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4.5 rounded-2xl text-base md:text-lg shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2">
+            <div class="grid md:grid-cols-2 gap-3">
+                <button onclick="goToSupermarketFromPostSave()" id="btnGoShopPost" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold py-3 px-4 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
                     🛍️ VAI AL SUPERMERCATO 🛒
                 </button>
-                <button onclick="completeShoppingCycle()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                <button onclick="completeShoppingCycle()" id="btnEndHomePost" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold py-3 px-4 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
                     🏠 Termina e Torna alla Home
                 </button>
             </div>
@@ -305,10 +305,10 @@
         <!-- VAI AL SUPERMERCATO -->
         <section id="shopSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
-                <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
+                <h2 id="shopModeTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">🛍️ Modalità Supermercato</h2>
                 <div class="flex gap-2">
-                    <button onclick="clearEntireShopping()" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-300 flex items-center gap-1">🗑️ Svuota Tutta la Spesa</button>
-                    <button onclick="goHome()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
+                    <button onclick="clearEntireShopping()" id="btnClearShop" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-300 flex items-center gap-1">🗑️ Svuota Tutta la Spesa</button>
+                    <button onclick="goHome()" id="btnBackShop" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-xl font-extrabold text-xs border border-slate-300 shadow-xs flex items-center gap-1">⬅️ Indietro</button>
                 </div>
             </div>
 
@@ -322,10 +322,10 @@
             <div id="activeShoppingList" class="grid md:grid-cols-2 gap-3.5 mb-6 p-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner w-full"></div>
 
             <div class="space-y-3">
-                <button onclick="promptCompleteShopping()" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-lg shadow-xl shadow-blue-600/20">
+                <button onclick="promptCompleteShopping()" id="btnFinishShop" class="btn-pro w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-blue-600/20">
                     🎉 TERMINA SPESA E ARCHIVIA!
                 </button>
-                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                <button onclick="goHome()" id="btnBackHomeShop" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Indietro alla Home
                 </button>
             </div>
@@ -335,26 +335,26 @@
         <section id="summaryModalSection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-indigo-100 text-indigo-800 text-3xl mb-2">📊</div>
-                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Riepilogo Spesa Effettuata</h2>
-                <p class="text-slate-500 text-sm mt-1">Ecco cosa è stato preso e cosa è rimasto in sospeso.</p>
+                <h2 id="finalSummaryTitle" class="text-2xl font-extrabold text-slate-900 tracking-tight">Riepilogo Spesa Effettuata</h2>
+                <p id="finalSummaryDesc" class="text-slate-500 text-sm mt-1">Ecco cosa è stato preso e cosa è rimasto in sospeso.</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4 mb-6">
                 <div class="bg-emerald-50 border-2 border-emerald-200 p-4 rounded-2xl shadow-inner">
-                    <h3 class="font-extrabold text-emerald-950 text-sm mb-3 uppercase tracking-wider">✅ Prodotti Presi (Vanno nello Storico)</h3>
+                    <h3 id="takenTitle" class="font-extrabold text-emerald-950 text-sm mb-3 uppercase tracking-wider">✅ Prodotti Presi (Vanno nello Storico)</h3>
                     <div id="summaryTakenList" class="space-y-2 pr-1"></div>
                 </div>
                 <div class="bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl shadow-inner">
-                    <h3 class="font-extrabold text-amber-950 text-sm mb-3 uppercase tracking-wider">❌ Prodotti Non Trovati (Rimasti in Memoria)</h3>
+                    <h3 id="missingTitle" class="font-extrabold text-amber-950 text-sm mb-3 uppercase tracking-wider">❌ Prodotti Non Trovati (Rimasti in Memoria)</h3>
                     <div id="summaryMissingList" class="space-y-2 pr-1"></div>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4">
-                <button onclick="backToShopFromSummary()" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+            <div class="grid md:grid-cols-2 gap-3">
+                <button onclick="backToShopFromSummary()" id="btnBackToShopSum" class="btn-pro bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-4 rounded-xl text-xs md:text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Torna al Supermercato
                 </button>
-                <button onclick="confirmAndFinalizeShopping()" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-4 rounded-2xl text-base shadow-xl shadow-emerald-600/20">
+                <button onclick="confirmAndFinalizeShopping()" id="btnConfirmArch" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-3 px-4 rounded-xl text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
                     ✔️ Conferma Archiviazione
                 </button>
             </div>
@@ -364,25 +364,19 @@
         <section id="historySection" class="hidden pro-card rounded-3xl p-6 md:p-8 mt-4 w-full">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 flex-wrap gap-3">
                 <div>
-                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico Spese</h2>
-                    <p class="text-slate-500 text-xs md:text-sm">Riepilogo ordini effettuati in passato.</p>
+                    <h2 id="historyTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">📊 Storico Spese</h2>
+                    <p id="historyDesc" class="text-slate-500 text-xs md:text-sm">Riepilogo ordini effettuati in passato.</p>
                 </div>
                 <div class="flex gap-2 flex-wrap">
-                    <button onclick="exportHistoryExcel()" class="btn-pro bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
-                        📊 Esporta Excel
-                    </button>
-                    <button onclick="exportHistoryJSON()" class="btn-pro bg-slate-800 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
-                        📥 Esporta JSON
-                    </button>
-                    <button onclick="window.print()" class="btn-pro bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-xs flex items-center gap-1.5">
-                        🖨️ Stampa Report
-                    </button>
-                    <button onclick="goHome()" class="btn-pro bg-slate-200 text-slate-700 px-4 py-2.5 rounded-bold text-xs shadow-xs">⬅️ Indietro</button>
+                    <button onclick="exportHistoryExcel()" id="btnExcel" class="btn-pro bg-emerald-600 text-white px-3 py-2 rounded-xl font-extrabold text-xs shadow-xs">📊 Excel</button>
+                    <button onclick="exportHistoryJSON()" id="btnJson" class="btn-pro bg-slate-800 text-white px-3 py-2 rounded-xl font-extrabold text-xs shadow-xs">📥 JSON</button>
+                    <button onclick="window.print()" id="btnPrint" class="btn-pro bg-indigo-600 text-white px-3 py-2 rounded-xl font-extrabold text-xs shadow-xs">🖨️ Stampa</button>
+                    <button onclick="goHome()" class="btn-pro bg-slate-200 text-slate-700 px-3 py-2 rounded-bold text-xs shadow-xs">⬅️</button>
                 </div>
             </div>
 
             <div class="flex justify-end mb-4 gap-2">
-                <button onclick="clearEntireHistory()" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-4 py-2 rounded-xl font-bold text-xs border border-rose-300">🗑️ Svuota Intero Storico</button>
+                <button onclick="clearEntireHistory()" id="btnClearHist" class="btn-pro bg-rose-100 hover:bg-rose-200 text-rose-700 px-4 py-2 rounded-xl font-bold text-xs border border-rose-300">🗑️ Svuota Intero Storico</button>
             </div>
 
             <div id="statsDashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
@@ -390,7 +384,7 @@
             <div class="space-y-4 pr-2 w-full mb-6" id="historyContainer"></div>
 
             <div>
-                <button onclick="goHome()" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-4 rounded-2xl text-base shadow-xs flex items-center justify-center gap-2">
+                <button onclick="goHome()" id="btnBackHomeHist" class="btn-pro w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold p-3 rounded-2xl text-sm shadow-xs flex items-center justify-center gap-2">
                     ⬅️ Indietro alla Home
                 </button>
             </div>
@@ -398,7 +392,7 @@
 
     </main>
 
-    <!-- LOGICA E SINCRONIZZAZIONE PERMANENTE REALTIME DATABASE -->
+    <!-- LOGICA E TRADUZIONE COMPLETA -->
     <script>
         const firebaseConfig = {
             databaseURL: "https://galleon-spesa-default-rtdb.europe-west1.firebasedatabase.app",
@@ -463,7 +457,6 @@
         };
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
-        
         const whatsappContacts = [
             { name: "Pietro", phone: "3391318613" },
             { name: "Antonio", phone: "3465034838" }
@@ -488,9 +481,7 @@
             document.getElementById('displayDate').innerText = currentSession.date;
             
             const langSelect = document.getElementById('appLangSelect');
-            if (langSelect) {
-                langSelect.value = currentLang;
-            }
+            if (langSelect) langSelect.value = currentLang;
 
             renderAuthorButtons();
             renderWhatsAppContacts();
@@ -549,7 +540,48 @@
                     lblWho: "👤 Chi sei? (Tocca il nome)",
                     btnCompile: "📝 COMPILA LA SPESA",
                     btnSupermarket: "🛍️ VAI AL SUPERMERCATO",
-                    btnHistory: "📊 Visualizza Storico Spese Passate"
+                    btnHistory: "📊 Visualizza Storico Spese Passate",
+                    menuTitle: "Menu Rapido",
+                    menuHome: "🏠 Home Principale",
+                    menuAddProd: "➕ Aggiungi Nuovo Prodotto",
+                    menuManage: "🗑️ Gestisci Catalogo Prodotti",
+                    menuHistory: "📊 Storico Spese Passate",
+                    createTitle: "Compilazione Spesa",
+                    createDesc: "Spunta i prodotti e scrivi quantità o note nei campi sottostanti.",
+                    btnClearAll: "🗑️ Pulisci Tutto",
+                    txtBack: "Indietro",
+                    txtBackMod: "Indietro / Modifica",
+                    txtConfirmReg: "CONFERMA E REGISTRA ORDINE",
+                    manageTitle: "Gestione Catalogo",
+                    manageDesc: "Elimina prodotti non necessari o visualizza i reparti.",
+                    addProdTitle: "➕ Nuovo Prodotto in Catalogo",
+                    lblProdName: "Nome Prodotto",
+                    lblProdCat: "Reparto / Categoria",
+                    btnSaveProd: "💾 Salva nel Catalogo",
+                    reviewTitle: "Controllo Finale Ordine",
+                    reviewDesc: "Verifica la lista prima di confermare e registrarla.",
+                    postSaveTitle: "Ordine Salvato con Successo!",
+                    postSaveDesc: "Invia la lista ordinata su WhatsApp (il messaggio arriverà sempre in italiano) o vai al supermercato.",
+                    waHeaderTitle: "📲 Invio WhatsApp Ordine",
+                    waContactsLabel: "Rubrica Rapida (Tocca per selezionare):",
+                    btnSendWa: "💬 INVIA LISTA SU WHATSAPP",
+                    addExtraTitle: "➕ Aggiungi un prodotto al volo:",
+                    summaryListTitle: "Riepilogo prodotti in lista:",
+                    btnGoShopPost: "🛍️ VAI AL SUPERMERCATO 🛒",
+                    btnEndHomePost: "🏠 Termina e Torna alla Home",
+                    shopModeTitle: "🛍️ Modalità Supermercato",
+                    btnClearShop: "🗑️ Svuota Tutta la Spesa",
+                    btnFinishShop: "🎉 TERMINA SPESA E ARCHIVIA!",
+                    finalSummaryTitle: "Riepilogo Spesa Effettuata",
+                    finalSummaryDesc: "Ecco cosa è stato preso e cosa è rimasto in sospeso.",
+                    takenTitle: "✅ Prodotti Presi (Vanno nello Storico)",
+                    missingTitle: "❌ Prodotti Non Trovati (Rimasti in Memoria)",
+                    historyTitle: "📊 Storico Spese",
+                    historyDesc: "Riepilogo ordini effettuati in passato.",
+                    btnClearHist: "🗑️ Svuota Intero Storico",
+                    btnExcel: "📊 Excel",
+                    btnJson: "📥 JSON",
+                    btnPrint: "🖨️ Stampa"
                 },
                 bn: {
                     subtitle: "সহজ কেনাকাটা ব্যবস্থাপনা",
@@ -559,19 +591,107 @@
                     lblWho: "👤 আপনি কে? (নামে স্পর্শ করুন)",
                     btnCompile: "📝 কেনাকাটা তৈরি করুন",
                     btnSupermarket: "🛍️ সুপারমার্কেটে যান",
-                    btnHistory: "📊 অতীতের কেনাকাটার ইতিহাস দেখুন"
+                    btnHistory: "📊 অতীতের কেনাকাটার ইতিহাস দেখুন",
+                    menuTitle: "দ্রুত মেনু",
+                    menuHome: "🏠 প্রধান হোম",
+                    menuAddProd: "➕ নতুন পণ্য যোগ করুন",
+                    menuManage: "🗑️ ক্যাটালগ পরিচালনা",
+                    menuHistory: "📊 কেনাকাটার ইতিহাস",
+                    createTitle: "কেনাকাটা তৈরি",
+                    createDesc: "পণ্য নির্বাচন করুন এবং পরিমাণ বা নোট লিখুন।",
+                    btnClearAll: "🗑️ সব মুছুন",
+                    txtBack: "পেছনে",
+                    txtBackMod: "পেছনে / সম্পাদনা",
+                    txtConfirmReg: "নিশ্চিত করুন এবং অর্ডার সংরক্ষণ করুন",
+                    manageTitle: "ক্যাটালগ পরিচালনা",
+                    manageDesc: "অপ্রয়োজনীয় পণ্য মুছুন বা বিভাগ দেখুন।",
+                    addProdTitle: "➕ ক্যাটালগে নতুন পণ্য",
+                    lblProdName: "পণ্যের নাম",
+                    lblProdCat: "বিভাগ / ক্যাটাগরি",
+                    btnSaveProd: "💾 ক্যাটালগে সংরক্ষণ করুন",
+                    reviewTitle: "চূড়ান্ত অর্ডার চেক",
+                    reviewDesc: "নিশ্চিত ও সংরক্ষণ করার আগে তালিকাটি যাচাই করুন।",
+                    postSaveTitle: "অর্ডার সফলভাবে সংরক্ষিত!",
+                    postSaveDesc: "হোয়াটসঅ্যাপে অর্ডার পাঠান (বার্তাটি সবসময় ইতালীয় ভাষায় পৌঁছাবে) অথবা সুপারমার্কেটে যান।",
+                    waHeaderTitle: "📲 হোয়াটসঅ্যাপে অর্ডার পাঠান",
+                    waContactsLabel: "দ্রুত কন্টাক্ট (নির্বাচন করতে স্পর্শ করুন):",
+                    btnSendWa: "💬 হোয়াটসঅ্যাপে তালিকা পাঠান",
+                    addExtraTitle: "➕ অবিলম্বে একটি পণ্য যোগ করুন:",
+                    summaryListTitle: "তালিকার পণ্যসমূহের সারাংশ:",
+                    btnGoShopPost: "🛍️ সুপারমার্কেটে যান 🛒",
+                    btnEndHomePost: "🏠 শেষ করুন এবং হোমে ফিরুন",
+                    shopModeTitle: "🛍️ সুপারমার্কেট মোড",
+                    btnClearShop: "🗑️ পুরো কেনাকাটা খালি করুন",
+                    btnFinishShop: "🎉 কেনাকাটা শেষ করুন এবং সংরক্ষণ করুন!",
+                    finalSummaryTitle: "সম্পন্ন কেনাকাটার সারাংশ",
+                    finalSummaryDesc: "কোন পণ্যগুলো কেনা হয়েছে এবং কোনটি বাকি আছে তা দেখুন।",
+                    takenTitle: "✅ কেনা পণ্য (ইতিহাসে জমা হবে)",
+                    missingTitle: "❌ পাওয়া যায়নি (স্মৃতিতে সংরক্ষিত)",
+                    historyTitle: "📊 কেনাকাটার ইতিহাস",
+                    historyDesc: "অতীতের অর্ডারের সারাংশ।",
+                    btnClearHist: "🗑️ পুরো ইতিহাস খালি করুন",
+                    btnExcel: "📊 এক্সেল",
+                    btnJson: "📥 জেজন",
+                    btnPrint: "🖨️ প্রিন্ট"
                 }
             };
 
-            const langData = t[currentLang] || t['it'];
-            document.getElementById('headerSubtitle').innerText = langData.subtitle;
-            document.getElementById('txtWhatToDo').innerText = langData.whatToDo;
-            document.getElementById('txtSelectName').innerText = langData.selectName;
-            document.getElementById('lblDate').innerText = langData.lblDate;
-            document.getElementById('lblWhoAreYou').innerText = langData.lblWho;
-            document.getElementById('btnCompile').innerText = langData.btnCompile;
-            document.getElementById('btnSupermarket').innerText = langData.btnSupermarket;
-            document.getElementById('btnHistory').innerText = langData.btnHistory;
+            const l = t[currentLang] || t['it'];
+            document.getElementById('headerSubtitle').innerText = l.subtitle;
+            document.getElementById('txtWhatToDo').innerText = l.whatToDo;
+            document.getElementById('txtSelectName').innerText = l.selectName;
+            document.getElementById('lblDate').innerText = l.lblDate;
+            document.getElementById('lblWhoAreYou').innerText = l.lblWho;
+            document.getElementById('btnCompile').innerText = l.btnCompile;
+            document.getElementById('btnSupermarket').innerText = l.btnSupermarket;
+            document.getElementById('btnHistory').innerText = l.btnHistory;
+            
+            document.getElementById('menuTitle').innerText = l.menuTitle;
+            document.getElementById('menuHome').innerText = l.menuHome;
+            document.getElementById('menuAddProd').innerText = l.menuAddProd;
+            document.getElementById('menuManage').innerText = l.menuManage;
+            document.getElementById('menuHistory').innerText = l.menuHistory;
+
+            document.getElementById('createTitle').innerText = l.createTitle;
+            document.getElementById('createDesc').innerText = l.createDesc;
+            document.getElementById('btnClearAll').innerText = l.btnClearAll;
+            document.getElementById('txtBack').innerText = l.txtBack;
+            document.getElementById('txtBackMod').innerText = l.txtBackMod;
+            document.getElementById('txtConfirmReg').innerText = l.txtConfirmReg;
+
+            document.getElementById('manageTitle').innerText = l.manageTitle;
+            document.getElementById('manageDesc').innerText = l.manageDesc;
+            document.getElementById('addProdTitle').innerText = l.addProdTitle;
+            document.getElementById('lblProdName').innerText = l.lblProdName;
+            document.getElementById('lblProdCat').innerText = l.lblProdCat;
+            document.getElementById('btnSaveProd').innerText = l.btnSaveProd;
+
+            document.getElementById('reviewTitle').innerText = l.reviewTitle;
+            document.getElementById('reviewDesc').innerText = l.reviewDesc;
+            document.getElementById('postSaveTitle').innerText = l.postSaveTitle;
+            document.getElementById('postSaveDesc').innerText = l.postSaveDesc;
+            document.getElementById('waHeaderTitle').innerText = l.waHeaderTitle;
+            document.getElementById('waContactsLabel').innerText = l.waContactsLabel;
+            document.getElementById('btnSendWa').innerText = l.btnSendWa;
+            document.getElementById('addExtraTitle').innerText = l.addExtraTitle;
+            document.getElementById('summaryListTitle').innerText = l.summaryListTitle;
+            document.getElementById('btnGoShopPost').innerText = l.btnGoShopPost;
+            document.getElementById('btnEndHomePost').innerText = l.btnEndHomePost;
+
+            document.getElementById('shopModeTitle').innerText = l.shopModeTitle;
+            document.getElementById('btnClearShop').innerText = l.btnClearShop;
+            document.getElementById('btnFinishShop').innerText = l.btnFinishShop;
+            document.getElementById('finalSummaryTitle').innerText = l.finalSummaryTitle;
+            document.getElementById('finalSummaryDesc').innerText = l.finalSummaryDesc;
+            document.getElementById('takenTitle').innerText = l.takenTitle;
+            document.getElementById('missingTitle').innerText = l.missingTitle;
+
+            document.getElementById('historyTitle').innerText = l.historyTitle;
+            document.getElementById('historyDesc').innerText = l.historyDesc;
+            document.getElementById('btnClearHist').innerText = l.btnClearHist;
+            document.getElementById('btnExcel').innerText = l.btnExcel;
+            document.getElementById('btnJson').innerText = l.btnJson;
+            document.getElementById('btnPrint').innerText = l.btnPrint;
         }
 
         function applySessionToDOM() {
@@ -674,7 +794,6 @@
                 let itemsHtml = '';
                 cat.items.forEach((item, idx) => {
                     const globalId = `${catKey}-${idx}`;
-                    /* Risolto il bug di chiusura della tastiera con input gestiti in modo nativo e senza re-rendering globale dei campi durante la digitazione */
                     itemsHtml += `
                         <div class="p-3 bg-white/95 rounded-xl border border-slate-200/80 shadow-2xs space-y-2">
                             <div class="flex items-center gap-3">
@@ -862,7 +981,7 @@
             });
         }
 
-        /* Messaggio WhatsApp sempre in ITALIANO, pulito, ordinato e senza emoticon eccessive */
+        /* Messaggio WhatsApp sempre in ITALIANO */
         function sendWhatsAppList() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La lista della spesa è vuota!");
@@ -891,7 +1010,6 @@
 
             Object.keys(grouped).forEach(catKey => {
                 const catObj = catalog[catKey];
-                // Pulisce il titolo del reparto rimuovendo eventuali emoji per renderlo pulito in italiano
                 let rawTitle = catObj ? catObj.title : "ALTRI PRODOTTI";
                 let cleanTitle = rawTitle.replace(/[^a-zA-ZÀ-ÿ\s]/g, '').trim();
                 text += `[ ${cleanTitle.toUpperCase()} ]\n`;
