@@ -51,7 +51,7 @@
                 </div>
                 <div class="min-w-0">
                     <h1 class="text-sm md:text-base font-extrabold tracking-tight text-white leading-none truncate">The Galleon</h1>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-400 truncate block">Gestione Spesa Semplice</span>
+                    <span id="headerSubtitle" class="text-[10px] font-bold uppercase tracking-widest text-orange-400 truncate block">Gestione Spesa Semplice</span>
                 </div>
             </div>
         </div>
@@ -111,33 +111,42 @@
                 <div class="inline-flex p-4 rounded-2xl bg-orange-50 text-orange-600 text-4xl shadow-inner mb-3">
                     🛒
                 </div>
-                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Cosa vuoi fare oggi?</h2>
-                <p class="text-slate-500 text-sm mt-1.5">Seleziona il tuo nome e scegli un'operazione.</p>
+                <h2 id="txtWhatToDo" class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Cosa vuoi fare oggi?</h2>
+                <p id="txtSelectName" class="text-slate-500 text-sm mt-1.5">Seleziona il tuo nome e scegli un'operazione.</p>
             </div>
             
             <div class="grid md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto bg-slate-50 p-5 md:p-6 rounded-3xl border border-slate-200/80 shadow-inner">
                 <div>
-                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">📅 Data di oggi</label>
+                    <label id="lblDate" class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">📅 Data di oggi</label>
                     <input type="date" id="inputDate" class="w-full p-3.5 border-2 border-slate-200 rounded-2xl text-base font-bold bg-white text-slate-900 focus:border-orange-500 focus:outline-none text-center shadow-xs">
                 </div>
                 <div>
-                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Chi sei? (Tocca il nome)</label>
+                    <label id="lblWhoAreYou" class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wider">👤 Chi sei? (Tocca il nome)</label>
                     <div class="grid grid-cols-3 gap-2 mb-2.5" id="authorButtons"></div>
                     <input type="text" id="inputAuthor" placeholder="O scrivi il nome..." class="w-full p-3 border-2 border-slate-200 rounded-2xl text-sm bg-white text-slate-900 focus:border-orange-500 focus:outline-none font-bold shadow-xs">
                 </div>
             </div>
 
+            <!-- Selettore Lingua Interfaccia -->
+            <div class="max-w-2xl mx-auto mb-8 bg-amber-50/80 p-4 rounded-2xl border-2 border-amber-200 flex items-center justify-between shadow-xs">
+                <span class="font-extrabold text-amber-950 text-xs uppercase tracking-wider">🌐 Lingua App / ভাষা:</span>
+                <select id="appLangSelect" onchange="changeAppLanguage(this.value)" class="p-2.5 border-2 border-amber-300 rounded-xl text-sm font-bold bg-white text-slate-900 focus:outline-none shadow-xs">
+                    <option value="it">🇮🇹 Italiano</option>
+                    <option value="bn">🇧🇩 বাংলা (Bengalese)</option>
+                </select>
+            </div>
+
             <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-6">
-                <button onclick="startMode('create')" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
+                <button onclick="startMode('create')" id="btnCompile" class="btn-pro bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20">
                     📝 COMPILA LA SPESA
                 </button>
-                <button onclick="goToSupermarketDirect()" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
+                <button onclick="goToSupermarketDirect()" id="btnSupermarket" class="btn-pro bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold p-5 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
                     🛍️ VAI AL SUPERMERCATO
                 </button>
             </div>
 
             <div class="mt-8 text-center">
-                <button onclick="showHistory()" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl border border-slate-300 inline-block text-xs uppercase tracking-wider shadow-xs">
+                <button onclick="showHistory()" id="btnHistory" class="btn-pro bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl border border-slate-300 inline-block text-xs uppercase tracking-wider shadow-xs">
                     📊 Visualizza Storico Spese Passate
                 </button>
             </div>
@@ -242,28 +251,17 @@
             <div class="text-center mb-6">
                 <div class="inline-flex p-3 rounded-2xl bg-emerald-100 text-emerald-800 text-3xl mb-2">🎉</div>
                 <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Ordine Salvato con Successo!</h2>
-                <p class="text-slate-500 text-sm mt-1">Invia la lista ordinata su WhatsApp o vai al supermercato.</p>
+                <p class="text-slate-500 text-sm mt-1">Invia la lista ordinata su WhatsApp (il messaggio arriverà sempre in italiano) o vai al supermercato.</p>
             </div>
 
-            <!-- Riquadro WhatsApp con Rubrica rapida e Selettore Lingua -->
+            <!-- Riquadro WhatsApp con Rubrica rapida -->
             <div class="bg-emerald-50/90 p-5 rounded-2xl border-2 border-emerald-300 mb-6 shadow-inner">
-                <h3 class="font-extrabold text-emerald-950 mb-3 text-sm uppercase tracking-wider text-center">📲 Invio WhatsApp Ordinato</h3>
+                <h3 class="font-extrabold text-emerald-950 mb-3 text-sm uppercase tracking-wider text-center">📲 Invio WhatsApp Ordine</h3>
                 
-                <!-- Selezione Lingua -->
-                <div class="mb-4 max-w-xs mx-auto">
-                    <label class="block text-slate-700 font-bold mb-1 text-xs uppercase tracking-wider text-center">🌐 Lingua Messaggio:</label>
-                    <select id="whatsappLangSelect" class="w-full p-2 border-2 border-emerald-300 rounded-xl text-sm font-bold bg-white text-slate-900 focus:outline-none text-center shadow-xs">
-                        <option value="it">🇮🇹 Italiano</option>
-                        <option value="bn">🇧🇩 বাংলা (Bengalese)</option>
-                    </select>
-                </div>
-
                 <!-- Rubrica Rapida (Cliccabile) -->
                 <div class="mb-3">
                     <label class="block text-slate-700 font-bold mb-1.5 text-xs uppercase tracking-wider text-center">Rubrica Rapida (Tocca per selezionare):</label>
-                    <div class="flex flex-wrap justify-center gap-2" id="whatsappContactsContainer">
-                        <!-- Generato dinamicamente via JS -->
-                    </div>
+                    <div class="flex flex-wrap justify-center gap-2" id="whatsappContactsContainer"></div>
                 </div>
 
                 <!-- Campo Numero -->
@@ -466,7 +464,6 @@
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
         
-        // Rubrica rapida WhatsApp preimpostata
         const whatsappContacts = [
             { name: "Pietro", phone: "3391318613" },
             { name: "Antonio", phone: "3465034838" }
@@ -478,6 +475,7 @@
             items: [] 
         };
 
+        let currentLang = localStorage.getItem('galleon_lang_v10') || 'it';
         let history = [];
         let isSyncing = false;
 
@@ -489,10 +487,16 @@
             }
             document.getElementById('displayDate').innerText = currentSession.date;
             
+            const langSelect = document.getElementById('appLangSelect');
+            if (langSelect) {
+                langSelect.value = currentLang;
+            }
+
             renderAuthorButtons();
             renderWhatsAppContacts();
             initCatalogCategories();
             populateCategorySelect();
+            applyLanguage();
 
             rootRef.on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -526,6 +530,48 @@
                 catalog: catalog,
                 history: history
             });
+        }
+
+        function changeAppLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('galleon_lang_v10', lang);
+            applyLanguage();
+            initCatalogCategories();
+        }
+
+        function applyLanguage() {
+            const t = {
+                it: {
+                    subtitle: "Gestione Spesa Semplice",
+                    whatToDo: "Cosa vuoi fare oggi?",
+                    selectName: "Seleziona il tuo nome e scegli un'operazione.",
+                    lblDate: "📅 Data di oggi",
+                    lblWho: "👤 Chi sei? (Tocca il nome)",
+                    btnCompile: "📝 COMPILA LA SPESA",
+                    btnSupermarket: "🛍️ VAI AL SUPERMERCATO",
+                    btnHistory: "📊 Visualizza Storico Spese Passate"
+                },
+                bn: {
+                    subtitle: "সহজ কেনাকাটা ব্যবস্থাপনা",
+                    whatToDo: "আজ আপনি কী করতে চান?",
+                    selectName: "আপনার নাম নির্বাচন করুন এবং একটি বিকল্প বেছে নিন।",
+                    lblDate: "📅 আজকের তারিখ",
+                    lblWho: "👤 আপনি কে? (নামে স্পর্শ করুন)",
+                    btnCompile: "📝 কেনাকাটা তৈরি করুন",
+                    btnSupermarket: "🛍️ সুপারমার্কেটে যান",
+                    btnHistory: "📊 অতীতের কেনাকাটার ইতিহাস দেখুন"
+                }
+            };
+
+            const langData = t[currentLang] || t['it'];
+            document.getElementById('headerSubtitle').innerText = langData.subtitle;
+            document.getElementById('txtWhatToDo').innerText = langData.whatToDo;
+            document.getElementById('txtSelectName').innerText = langData.selectName;
+            document.getElementById('lblDate').innerText = langData.lblDate;
+            document.getElementById('lblWhoAreYou').innerText = langData.lblWho;
+            document.getElementById('btnCompile').innerText = langData.btnCompile;
+            document.getElementById('btnSupermarket').innerText = langData.btnSupermarket;
+            document.getElementById('btnHistory').innerText = langData.btnHistory;
         }
 
         function applySessionToDOM() {
@@ -628,7 +674,7 @@
                 let itemsHtml = '';
                 cat.items.forEach((item, idx) => {
                     const globalId = `${catKey}-${idx}`;
-                    /* Input con eventi puliti che prevengono la chiusura della tastiera */
+                    /* Risolto il bug di chiusura della tastiera con input gestiti in modo nativo e senza re-rendering globale dei campi durante la digitazione */
                     itemsHtml += `
                         <div class="p-3 bg-white/95 rounded-xl border border-slate-200/80 shadow-2xs space-y-2">
                             <div class="flex items-center gap-3">
@@ -643,9 +689,11 @@
                     `;
                 });
 
+                const displayTitle = (currentLang === 'bn' && cat.titleBn) ? cat.titleBn : cat.title;
+
                 card.innerHTML = `
                     <div class="${cat.headerBg} p-3 font-extrabold text-sm flex items-center justify-between">
-                        <span>${cat.title}</span>
+                        <span>${displayTitle}</span>
                         <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full">${cat.items.length}</span>
                     </div>
                     <div class="p-3 space-y-2.5 flex-grow">
@@ -814,7 +862,7 @@
             });
         }
 
-        /* Messaggio WhatsApp pulito, ordinato, senza troppe emoticon e con supporto multilingua (Italiano / Bengalese) */
+        /* Messaggio WhatsApp sempre in ITALIANO, pulito, ordinato e senza emoticon eccessive */
         function sendWhatsAppList() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La lista della spesa è vuota!");
@@ -829,9 +877,6 @@
                 return;
             }
 
-            const langSelect = document.getElementById('whatsappLangSelect');
-            const lang = langSelect ? langSelect.value : 'it';
-
             const grouped = {};
             currentSession.items.forEach(item => {
                 const catKey = item.category || 'dispensa';
@@ -839,35 +884,29 @@
                 grouped[catKey].push(item);
             });
 
-            let text = "";
-            if (lang === 'bn') {
-                text += `*দ্য গ্যালিয়ন - শপিং লিস্ট*\n`;
-                text += `*তারিখ:* ${currentSession.date}\n`;
-                text += `*তৈরি করেছেন:* ${currentSession.author}\n`;
-                text += `───────────────────────\n\n`;
-            } else {
-                text += `*THE GALLEON - LISTA DELLA SPESA*\n`;
-                text += `*Data:* ${currentSession.date}\n`;
-                text += `*Compilato da:* ${currentSession.author}\n`;
-                text += `───────────────────────\n\n`;
-            }
+            let text = `THE GALLEON - LISTA DELLA SPESA\n`;
+            text += `Data: ${currentSession.date}\n`;
+            text += `Compilato da: ${currentSession.author}\n`;
+            text += `------------------------------------\n\n`;
 
             Object.keys(grouped).forEach(catKey => {
                 const catObj = catalog[catKey];
-                const catTitle = (lang === 'bn' && catObj && catObj.titleBn) ? catObj.titleBn : (catObj ? catObj.title : "ALTRI PRODOTTI");
-                text += `*${catTitle.toUpperCase()}*\n`;
+                // Pulisce il titolo del reparto rimuovendo eventuali emoji per renderlo pulito in italiano
+                let rawTitle = catObj ? catObj.title : "ALTRI PRODOTTI";
+                let cleanTitle = rawTitle.replace(/[^a-zA-ZÀ-ÿ\s]/g, '').trim();
+                text += `[ ${cleanTitle.toUpperCase()} ]\n`;
 
                 grouped[catKey].forEach(i => {
-                    text += `  • *${i.name}*`;
+                    text += `  - ${i.name}`;
                     if (i.qty) text += ` (Qtà: ${i.qty})`;
-                    if (i.note) text += `\n    [Note: _${i.note}_]`;
+                    if (i.note) text += ` [Nota: ${i.note}]`;
                     text += `\n`;
                 });
                 text += `\n`;
             });
 
-            text += `───────────────────────\n`;
-            text += lang === 'bn' ? `*মোট পণ্য:* ${currentSession.items.length}` : `*Totale Prodotti:* ${currentSession.items.length}`;
+            text += `------------------------------------\n`;
+            text += `Totale Prodotti: ${currentSession.items.length}`;
 
             const encodedText = encodeURIComponent(text);
             const whatsappUrl = `https://wa.me/39${phone}?text=${encodedText}`;
