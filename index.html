@@ -248,10 +248,27 @@
             <div class="bg-emerald-50/90 p-5 rounded-2xl border-2 border-emerald-300 mb-6 shadow-inner">
                 <h3 class="font-extrabold text-emerald-950 mb-3 text-sm uppercase tracking-wider text-center">📲 Invio WhatsApp Ordine</h3>
                 
-                <div class="mb-3">
-                    <label class="block text-slate-700 font-bold mb-1.5 text-xs uppercase tracking-wider text-center">Rubrica Rapida (Tocca per selezionare):</label>
-                    <div class="flex flex-wrap justify-center gap-2" id="whatsappContactsContainer"></div>
+                <div class="mb-3 flex justify-between items-center flex-wrap gap-2">
+                    <label class="block text-slate-700 font-bold text-xs uppercase tracking-wider">Rubrica Rapida (Tocca per selezionare):</label>
+                    <button onclick="toggleNewContactForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1.5 rounded-xl text-xs font-extrabold transition shadow-xs flex items-center gap-1">
+                        ➕ Nuova Registrazione Contatto
+                    </button>
                 </div>
+
+                <!-- Modulo Nuova Registrazione Contatto (Inizialmente Nascosto) -->
+                <div id="newContactFormContainer" class="hidden mb-4 p-4 bg-white rounded-2xl border-2 border-emerald-400 space-y-3 shadow-md">
+                    <h4 class="font-extrabold text-emerald-950 text-xs uppercase tracking-wider">Registra Nuovo Contatto WhatsApp</h4>
+                    <div class="grid sm:grid-cols-2 gap-2">
+                        <input type="text" id="newContactNameInput" placeholder="Nome (es. Mario)" class="p-2.5 border-2 border-slate-200 rounded-xl text-xs font-bold text-slate-900 bg-slate-50 focus:outline-none focus:border-emerald-500">
+                        <input type="tel" id="newContactPhoneInput" placeholder="Numero (es. 3391234567)" class="p-2.5 border-2 border-slate-200 rounded-xl text-xs font-bold text-slate-900 bg-slate-50 focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button onclick="toggleNewContactForm()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs">Annulla</button>
+                        <button onclick="saveNewContact()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs shadow-xs">Salva Contatto</button>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-2 mb-4" id="whatsappContactsContainer"></div>
 
                 <div class="flex flex-wrap sm:flex-nowrap justify-center items-center gap-2 max-w-md mx-auto mb-4">
                     <span class="text-base font-extrabold text-slate-700 bg-white border-2 border-emerald-200 px-3 py-2.5 rounded-xl">+39</span>
@@ -380,7 +397,7 @@
 
     </main>
 
-    <!-- LOGICA APPLICATIVA IN ITALIANO (OTTIMIZZATA PER TASTIERA MOBILE) -->
+    <!-- LOGICA APPLICATIVA IN ITALIANO -->
     <script>
         const firebaseConfig = {
             databaseURL: "https://galleon-spesa-default-rtdb.europe-west1.firebasedatabase.app",
@@ -433,7 +450,9 @@
         };
 
         const authors = ["Orsola", "Nazir", "Maimona", "Maria", "Alessia"];
-        const whatsappContacts = [
+        
+        // Rubrica WhatsApp salvata in localStorage per permettere l'aggiunta dinamica
+        let whatsappContacts = JSON.parse(localStorage.getItem('galleon_wa_contacts_v10')) || [
             { name: "Pietro", phone: "3391318613" },
             { name: "Antonio", phone: "3465034838" }
         ];
@@ -498,7 +517,7 @@
                 }).catch(() => {
                     isSyncing = false;
                 });
-            }, 600); // Ritardo ottimizzato per permettere alla tastiera di rimanere aperta senza interferenze
+            }, 600);
         }
 
         function applySessionToDOM() {
@@ -513,7 +532,7 @@
                 if(!chk.classList.contains('shop-chk')) chk.checked = false;
             });
             document.querySelectorAll('input[type="text"]').forEach(txt => {
-                if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate') && !txt.id.includes('newCategoryNameInput') && !txt.id.includes('whatsappPhoneInput')) {
+                if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate') && !txt.id.includes('newCategoryNameInput') && !txt.id.includes('whatsappPhoneInput') && !txt.id.includes('newContact')) {
                     if (document.activeElement !== txt) txt.value = '';
                 }
             });
@@ -574,19 +593,68 @@
             });
         }
 
+        function toggleNewContactForm() {
+            const form = document.getElementById('newContactFormContainer');
+            form.classList.toggle('hidden');
+        }
+
+        function saveNewContact() {
+            const nameInput = document.getElementById('newContactNameInput');
+            const phoneInput = document.getElementById('newContactPhoneInput');
+
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim().replace(/\s+/g, '').replace(/[^0-9]/g, '');
+
+            if (!name || !phone) {
+                alert("Inserisci sia il nome che un numero di telefono valido!");
+                return;
+            }
+
+            whatsappContacts.push({ name: name, phone: phone });
+            localStorage.setItem('galleon_wa_contacts_v10', JSON.stringify(whatsappContacts));
+
+            nameInput.value = '';
+            phoneInput.value = '';
+            toggleNewContactForm();
+            renderWhatsAppContacts();
+            alert(`Contatto "${name}" aggiunto alla rubrica rapida!`);
+        }
+
+        function removeWhatsAppContact(index) {
+            if (confirm(`Vuoi rimuovere ${whatsappContacts[index].name} dalla rubrica rapida?`)) {
+                whatsappContacts.splice(index, 1);
+                localStorage.setItem('galleon_wa_contacts_v10', JSON.stringify(whatsappContacts));
+                renderWhatsAppContacts();
+            }
+        }
+
         function renderWhatsAppContacts() {
             const container = document.getElementById('whatsappContactsContainer');
             if (!container) return;
             container.innerHTML = '';
-            whatsappContacts.forEach(contact => {
+            
+            whatsappContacts.forEach((contact, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'inline-flex items-center bg-white border-2 border-emerald-300 rounded-xl overflow-hidden shadow-xs';
+                
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = 'btn-pro px-3 py-1.5 bg-white border-2 border-emerald-300 rounded-xl font-bold text-xs text-emerald-900 hover:bg-emerald-600 hover:text-white transition shadow-xs flex items-center gap-1.5';
+                btn.className = 'px-3 py-1.5 font-bold text-xs text-emerald-900 hover:bg-emerald-600 hover:text-white transition flex items-center gap-1.5';
                 btn.innerHTML = `👤 ${contact.name} <span class="text-[10px] opacity-75">(${contact.phone})</span>`;
                 btn.onclick = () => {
                     document.getElementById('whatsappPhoneInput').value = contact.phone;
                 };
-                container.appendChild(btn);
+
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.className = 'px-2 py-1.5 text-rose-500 hover:bg-rose-50 transition text-xs font-bold border-l border-emerald-200';
+                delBtn.innerHTML = '✕';
+                delBtn.title = "Elimina contatto";
+                delBtn.onclick = () => removeWhatsAppContact(index);
+
+                wrapper.appendChild(btn);
+                wrapper.appendChild(delBtn);
+                container.appendChild(wrapper);
             });
         }
 
@@ -792,6 +860,7 @@
             });
         }
 
+        /* MESSAGGIO WHATSAPP CON FORMATTAZIONE AVANZATA (COME RICHIESTO) */
         function sendWhatsAppList() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La lista della spesa è vuota!");
@@ -813,28 +882,32 @@
                 grouped[catKey].push(item);
             });
 
-            let text = `THE GALLEON - LISTA DELLA SPESA\n`;
-            text += `Data: ${currentSession.date}\n`;
-            text += `Compilato da: ${currentSession.author}\n`;
+            // Intestazione in grassetto
+            let text = `*THE GALLEON - LISTA DELLA SPESA*\n`;
+            text += `*Data:* ${currentSession.date}\n`;
+            text += `*Compilato da:* ${currentSession.author}\n`;
             text += `------------------------------------\n\n`;
 
             Object.keys(grouped).forEach(catKey => {
                 const catObj = catalog[catKey];
                 let rawTitle = catObj ? catObj.title : "ALTRI PRODOTTI";
                 let cleanTitle = rawTitle.replace(/[^a-zA-ZÀ-ÿ\s]/g, '').trim();
-                text += `[ ${cleanTitle.toUpperCase()} ]\n`;
+                
+                // Categoria con font monospazio (senza parentesi quadre)
+                text += `\`\`\`${cleanTitle.toUpperCase()}\`\`\`\n`;
 
                 grouped[catKey].forEach(i => {
-                    text += `  - ${i.name}`;
-                    if (i.qty) text += ` (Qtà: ${i.qty})`;
-                    if (i.note) text += ` [Nota: ${i.note}]`;
+                    // Nome prodotto in grassetto (senza parentesi)
+                    text += `• *${i.name}*`;
+                    if (i.qty) text += ` - Qtà: ${i.qty}`;
+                    if (i.note) text += ` - Nota: ${i.note}`;
                     text += `\n`;
                 });
                 text += `\n`;
             });
 
             text += `------------------------------------\n`;
-            text += `Totale Prodotti: ${currentSession.items.length}`;
+            text += `*Totale Prodotti:* ${currentSession.items.length}`;
 
             const encodedText = encodeURIComponent(text);
             const whatsappUrl = `https://wa.me/39${phone}?text=${encodedText}`;
