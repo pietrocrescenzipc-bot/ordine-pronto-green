@@ -33,6 +33,11 @@
         #sideMenu {
             transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        input:disabled {
+            background-color: #f1f5f9 !important;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-orange-500 selection:text-white w-full max-w-[100vw]">
@@ -148,7 +153,7 @@
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200 flex-wrap gap-3">
                 <div>
                     <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Compilazione Spesa</h2>
-                    <p class="text-slate-500 text-xs md:text-sm">Spunta i prodotti e scrivi quantità o note nei campi sottostanti.</p>
+                    <p class="text-slate-500 text-xs md:text-sm">Spunta i prodotti per abilitare i campi quantità e note.</p>
                 </div>
                 <div class="flex gap-2">
                     <button onclick="resetCatalogSelection()" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-rose-200">🗑️ Pulisci Tutto</button>
@@ -528,7 +533,14 @@
             }
 
             document.querySelectorAll('input[type="checkbox"]').forEach(chk => {
-                if(!chk.classList.contains('shop-chk')) chk.checked = false;
+                if(!chk.classList.contains('shop-chk')) {
+                    chk.checked = false;
+                    const globalId = chk.id.replace('cat-check-', '');
+                    const qty = document.getElementById(`cat-qty-${globalId}`);
+                    const note = document.getElementById(`cat-note-${globalId}`);
+                    if (qty) qty.disabled = true;
+                    if (note) note.disabled = true;
+                }
             });
             document.querySelectorAll('input[type="text"]').forEach(txt => {
                 if (!txt.id.includes('inputAuthor') && !txt.id.includes('inputDate') && !txt.id.includes('newCategoryNameInput') && !txt.id.includes('whatsappPhoneInput') && !txt.id.includes('newContact')) {
@@ -546,8 +558,14 @@
                                 const qty = document.getElementById(`cat-qty-${globalId}`);
                                 const note = document.getElementById(`cat-note-${globalId}`);
                                 if (chk) chk.checked = true;
-                                if (qty && document.activeElement !== qty) qty.value = i.qty || '';
-                                if (note && document.activeElement !== note) note.value = i.note || '';
+                                if (qty) {
+                                    qty.disabled = false;
+                                    if (document.activeElement !== qty) qty.value = i.qty || '';
+                                }
+                                if (note) {
+                                    note.disabled = false;
+                                    if (document.activeElement !== note) note.value = i.note || '';
+                                }
                             }
                         });
                     });
@@ -671,25 +689,25 @@
                 cat.items.forEach((item, idx) => {
                     const globalId = `${catKey}-${idx}`;
                     itemsHtml += `
-                        <div class="p-3 bg-white/95 rounded-xl border border-slate-200/80 shadow-2xs space-y-2">
-                            <div class="flex items-center gap-3">
-                                <input type="checkbox" id="cat-check-${globalId}" onchange="updateLiveSession()" class="w-6 h-6 rounded-lg text-orange-600 focus:ring-orange-500 cursor-pointer accent-orange-600 shrink-0">
-                                <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-base md:text-lg cursor-pointer leading-snug break-words">${item}</label>
+                        <div class="p-3.5 bg-white/95 rounded-xl border border-slate-200/90 shadow-2xs space-y-3">
+                            <div class="flex items-center gap-3.5">
+                                <input type="checkbox" id="cat-check-${globalId}" onchange="handleProductCheckboxChange('${globalId}')" class="w-7 h-7 rounded-lg text-orange-600 focus:ring-orange-500 cursor-pointer accent-orange-600 shrink-0">
+                                <label for="cat-check-${globalId}" class="flex-grow font-extrabold text-slate-900 text-lg md:text-xl cursor-pointer leading-tight break-words">${item}</label>
                             </div>
-                            <div class="flex items-center gap-2 pl-9">
-                                <input type="text" id="cat-qty-${globalId}" oninput="updateLiveSessionSilent()" placeholder="Qtà" class="w-24 p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg text-center font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
-                                <input type="text" id="cat-note-${globalId}" oninput="updateLiveSessionSilent()" placeholder="Note (es. cassa, bancale)..." class="flex-grow p-1.5 text-xs md:text-sm border border-slate-300 rounded-lg font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500">
+                            <div class="flex items-center gap-2 pl-10">
+                                <input type="text" id="cat-qty-${globalId}" disabled oninput="updateLiveSessionSilent()" placeholder="Qtà" class="w-24 p-2 text-sm md:text-base border-2 border-slate-300 rounded-xl text-center font-extrabold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500 shadow-2xs">
+                                <input type="text" id="cat-note-${globalId}" disabled oninput="updateLiveSessionSilent()" placeholder="Note (es. cassa, bancale)..." class="flex-grow p-2 text-sm md:text-base border-2 border-slate-300 rounded-xl font-bold bg-slate-50 text-slate-900 focus:outline-none focus:border-orange-500 shadow-2xs">
                             </div>
                         </div>
                     `;
                 });
 
                 card.innerHTML = `
-                    <div class="${cat.headerBg} p-3 font-extrabold text-sm flex items-center justify-between">
+                    <div class="${cat.headerBg} p-3.5 font-extrabold text-base flex items-center justify-between shadow-xs">
                         <span>${cat.title}</span>
-                        <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full">${cat.items.length}</span>
+                        <span class="text-xs bg-white/20 px-2.5 py-0.5 rounded-full">${cat.items.length}</span>
                     </div>
-                    <div class="p-3 space-y-2.5 flex-grow">
+                    <div class="p-3 space-y-3 flex-grow">
                         ${itemsHtml}
                     </div>
                 `;
@@ -697,6 +715,25 @@
             });
 
             applySessionToDOM();
+        }
+
+        function handleProductCheckboxChange(globalId) {
+            const chk = document.getElementById(`cat-check-${globalId}`);
+            const qty = document.getElementById(`cat-qty-${globalId}`);
+            const note = document.getElementById(`cat-note-${globalId}`);
+
+            if (chk.checked) {
+                qty.disabled = false;
+                note.disabled = false;
+                qty.focus();
+            } else {
+                qty.value = '';
+                note.value = '';
+                qty.disabled = true;
+                note.disabled = true;
+            }
+
+            updateLiveSessionSilent();
         }
 
         function populateCategorySelect() {
@@ -810,13 +847,13 @@
 
             currentSession.items.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'p-3 bg-white rounded-xl border border-amber-200 shadow-2xs space-y-1';
+                div.className = 'p-3.5 bg-white rounded-xl border border-amber-200 shadow-2xs space-y-1';
                 div.innerHTML = `
                     <div class="flex items-center justify-between gap-2">
-                        <span class="font-extrabold text-slate-900 text-base md:text-lg break-words">${item.name}</span>
-                        ${item.qty ? `<span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded-lg shrink-0">Qtà: ${item.qty}</span>` : ''}
+                        <span class="font-extrabold text-slate-900 text-lg break-words">${item.name}</span>
+                        ${item.qty ? `<span class="bg-amber-100 text-amber-900 text-xs font-bold px-2.5 py-1 rounded-lg shrink-0">Qtà: ${item.qty}</span>` : ''}
                     </div>
-                    ${item.note ? `<div class="text-xs md:text-sm font-bold text-slate-500 italic">Note: ${item.note}</div>` : ''}
+                    ${item.note ? `<div class="text-sm font-bold text-slate-600 italic">Note: ${item.note}</div>` : ''}
                 `;
                 container.appendChild(div);
             });
@@ -847,19 +884,18 @@
 
             currentSession.items.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'p-3 bg-white rounded-xl border border-slate-200 space-y-1';
+                div.className = 'p-3.5 bg-white rounded-xl border border-slate-200 space-y-1';
                 div.innerHTML = `
                     <div class="flex items-center justify-between gap-2">
-                        <span class="font-extrabold text-slate-900 text-base md:text-lg break-words">${item.name}</span>
-                        ${item.qty ? `<span class="bg-slate-100 text-slate-800 text-xs font-bold px-2 py-0.5 rounded-md shrink-0">Qtà: ${item.qty}</span>` : ''}
+                        <span class="font-extrabold text-slate-900 text-lg break-words">${item.name}</span>
+                        ${item.qty ? `<span class="bg-slate-100 text-slate-800 text-xs font-bold px-2.5 py-1 rounded-md shrink-0">Qtà: ${item.qty}</span>` : ''}
                     </div>
-                    ${item.note ? `<div class="text-xs text-slate-400 italic">Note: ${item.note}</div>` : ''}
+                    ${item.note ? `<div class="text-sm text-slate-500 italic">Note: ${item.note}</div>` : ''}
                 `;
                 container.appendChild(div);
             });
         }
 
-        /* FORMATTAZIONE WHATSAPP AGGIORNATA: PRODOTTO IN GRASSETTO E QUANTITÀ/NOTA A CAPO CON VIRGOLA */
         function sendWhatsAppList() {
             if (!currentSession.items || currentSession.items.length === 0) {
                 alert("La lista della spesa è vuota!");
@@ -976,7 +1012,7 @@
                     <div class="flex items-start gap-3 min-w-0 flex-grow cursor-pointer" onclick="toggleItemDone(${idx})">
                         <input type="checkbox" ${item.done ? 'checked' : ''} class="shop-chk w-7 h-7 rounded-lg text-blue-600 focus:ring-blue-500 accent-blue-600 shrink-0 cursor-pointer mt-1">
                         <div class="min-w-0 flex-grow space-y-1">
-                            <span class="font-black ${item.done ? 'line-through text-slate-400' : 'text-slate-900'} text-base md:text-lg block break-words leading-snug">${item.name}</span>
+                            <span class="font-black ${item.done ? 'line-through text-slate-400' : 'text-slate-900'} text-lg block break-words leading-snug">${item.name}</span>
                             <div class="flex items-center gap-2 flex-wrap">
                                 ${item.qty ? `<span class="bg-slate-100 text-slate-800 text-xs font-bold px-2 py-0.5 rounded-md shrink-0">Qtà: ${item.qty}</span>` : ''}
                                 ${item.note ? `<span class="text-xs italic text-slate-500 font-bold break-words">Note: ${item.note}</span>` : ''}
@@ -1038,7 +1074,7 @@
                 takenContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Nessun prodotto spuntato.</p>';
             } else {
                 taken.forEach(i => {
-                    takenContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-emerald-200 text-xs md:text-sm font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(Qtà: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
+                    takenContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-emerald-200 text-sm font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(Qtà: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
                 });
             }
 
@@ -1046,7 +1082,7 @@
                 missingContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Tutti i prodotti sono stati presi!</p>';
             } else {
                 missing.forEach(i => {
-                    missingContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-amber-200 text-xs md:text-sm font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(Qtà: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
+                    missingContainer.innerHTML += `<div class="bg-white p-2.5 rounded-xl border border-amber-200 text-sm font-extrabold text-slate-800 break-words">${i.name} ${i.qty ? `(Qtà: ${i.qty})` : ''} ${i.note ? `- ${i.note}` : ''}</div>`;
                 });
             }
 
@@ -1117,13 +1153,13 @@
 
                 let itemsHtml = '';
                 h.items.forEach(i => {
-                    itemsHtml += `<span class="bg-white border border-slate-200 text-slate-800 text-xs md:text-sm font-extrabold px-2.5 py-1 rounded-lg">${i.name} ${i.qty ? `(${i.qty})` : ''} ${i.note ? `[${i.note}]` : ''}</span> `;
+                    itemsHtml += `<span class="bg-white border border-slate-200 text-slate-800 text-sm font-extrabold px-3 py-1.5 rounded-xl">${i.name} ${i.qty ? `(${i.qty})` : ''} ${i.note ? `[${i.note}]` : ''}</span> `;
                 });
 
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200 flex-wrap gap-2">
                         <div>
-                            <span class="font-extrabold text-slate-900 text-sm">${h.date}</span>
+                            <span class="font-extrabold text-slate-900 text-base">${h.date}</span>
                             <span class="text-xs text-slate-500 font-bold ml-2">👤 ${h.author}</span>
                         </div>
                         <div class="flex items-center gap-2">
@@ -1131,7 +1167,7 @@
                             <button onclick="removeHistoryItem(${hIdx})" class="btn-pro bg-rose-50 hover:bg-rose-100 text-rose-600 px-2.5 py-1 rounded-xl text-xs font-extrabold border border-rose-200">🗑️ Elimina Spesa</button>
                         </div>
                     </div>
-                    <div class="flex flex-wrap gap-1.5">
+                    <div class="flex flex-wrap gap-2">
                         ${itemsHtml}
                     </div>
                 `;
@@ -1199,19 +1235,19 @@
                 let itemsHtml = '';
                 cat.items.forEach((item, idx) => {
                     itemsHtml += `
-                        <div class="flex items-center justify-between p-2 bg-white/90 rounded-xl border border-slate-200/60 shadow-2xs gap-2">
-                            <span class="font-extrabold text-slate-900 text-sm md:text-base min-w-0 break-words">${item}</span>
-                            <button onclick="removeProductFromCatalog('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-bold p-1 text-base shrink-0">✕</button>
+                        <div class="flex items-center justify-between p-3 bg-white/95 rounded-xl border border-slate-200/80 shadow-2xs gap-2">
+                            <span class="font-extrabold text-slate-900 text-base min-w-0 break-words">${item}</span>
+                            <button onclick="removeProductFromCatalog('${catKey}', ${idx})" class="text-rose-500 hover:text-rose-700 font-bold p-1 text-lg shrink-0">✕</button>
                         </div>
                     `;
                 });
 
                 card.innerHTML = `
-                    <div class="${cat.headerBg} p-3 font-extrabold text-sm flex items-center justify-between">
+                    <div class="${cat.headerBg} p-3.5 font-extrabold text-base flex items-center justify-between shadow-xs">
                         <span>${cat.title}</span>
-                        <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full">${cat.items.length}</span>
+                        <span class="text-xs bg-white/20 px-2.5 py-0.5 rounded-full">${cat.items.length}</span>
                     </div>
-                    <div class="p-3 space-y-2 flex-grow">
+                    <div class="p-3 space-y-2.5 flex-grow">
                         ${itemsHtml}
                     </div>
                 `;
