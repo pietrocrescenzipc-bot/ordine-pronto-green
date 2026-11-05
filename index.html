@@ -115,7 +115,7 @@
                 <p id="txtSelectName" class="text-slate-500 text-sm mt-1.5">Seleziona il tuo nome e scegli un'operazione.</p>
             </div>
 
-            <!-- Selettore Lingua Interfaccia ben visibile -->
+            <!-- Selettore Lingua Interfaccia -->
             <div class="max-w-2xl mx-auto mb-8 bg-amber-50/90 p-4 rounded-2xl border-2 border-amber-300 flex items-center justify-between shadow-xs">
                 <span class="font-extrabold text-amber-950 text-xs md:text-sm uppercase tracking-wider">🌐 Lingua App / ভাষা নির্বাচন করুন:</span>
                 <select id="appLangSelect" onchange="changeAppLanguage(this.value)" class="p-2.5 border-2 border-amber-400 rounded-xl text-sm font-extrabold bg-white text-slate-900 focus:outline-none shadow-xs cursor-pointer">
@@ -471,6 +471,7 @@
             items: [] 
         };
 
+        // Modifica fondamentale: all'avvio forziamo sempre la lingua italiana ('it') a meno che l'utente non l'abbia cambiata esplicitamente prima
         let currentLang = localStorage.getItem('galleon_lang_v10') || 'it';
         let history = [];
         let isSyncing = false;
@@ -820,6 +821,7 @@
                     `;
                 });
 
+                // RISOLUZIONE DEFINITIVA: Controlla esplicitamente la lingua attiva per l'intestazione del reparto
                 const displayTitle = (currentLang === 'bn' && cat.titleBn) ? cat.titleBn : cat.title;
 
                 card.innerHTML = `
