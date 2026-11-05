@@ -471,8 +471,8 @@
             items: [] 
         };
 
-        // Modifica fondamentale: all'avvio forziamo sempre la lingua italiana ('it') a meno che l'utente non l'abbia cambiata esplicitamente prima
-        let currentLang = localStorage.getItem('galleon_lang_v10') || 'it';
+        // FORZATURA ASSOLUTA: all'avvio la lingua è sempre l'italiano ('it')
+        let currentLang = 'it';
         let history = [];
         let isSyncing = false;
 
@@ -529,7 +529,6 @@
 
         function changeAppLanguage(lang) {
             currentLang = lang;
-            localStorage.setItem('galleon_lang_v10', lang);
             applyLanguage();
             initCatalogCategories();
             populateCategorySelect();
@@ -821,7 +820,6 @@
                     `;
                 });
 
-                // RISOLUZIONE DEFINITIVA: Controlla esplicitamente la lingua attiva per l'intestazione del reparto
                 const displayTitle = (currentLang === 'bn' && cat.titleBn) ? cat.titleBn : cat.title;
 
                 card.innerHTML = `
